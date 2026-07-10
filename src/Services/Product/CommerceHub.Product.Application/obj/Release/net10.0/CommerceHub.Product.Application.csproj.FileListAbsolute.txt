@@ -15,3 +15,8 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Applicati
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\refint\CommerceHub.Product.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\ref\CommerceHub.Product.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Messaging.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.sourcelink.json

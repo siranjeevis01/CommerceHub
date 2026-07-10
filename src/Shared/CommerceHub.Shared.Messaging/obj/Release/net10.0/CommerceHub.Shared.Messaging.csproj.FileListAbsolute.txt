@@ -10,3 +10,7 @@ D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Releas
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Release\net10.0\refint\CommerceHub.Shared.Messaging.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Release\net10.0\CommerceHub.Shared.Messaging.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Release\net10.0\ref\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Release\net10.0\CommerceHub.Shared.Messaging.sourcelink.json
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Release\net10.0\Commerce.B19AA2F5.Up2Date

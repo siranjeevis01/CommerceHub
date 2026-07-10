@@ -10,3 +10,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.ServiceDefaults\obj\Release
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.ServiceDefaults\obj\Release\net10.0\refint\CommerceHub.ServiceDefaults.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.ServiceDefaults\obj\Release\net10.0\CommerceHub.ServiceDefaults.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.ServiceDefaults\obj\Release\net10.0\ref\CommerceHub.ServiceDefaults.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.ServiceDefaults\obj\Release\net10.0\CommerceHub.ServiceDefaults.sourcelink.json

@@ -17,3 +17,6 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Appli
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\obj\Release\net10.0\refint\CommerceHub.Analytics.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\obj\Release\net10.0\CommerceHub.Analytics.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\obj\Release\net10.0\ref\CommerceHub.Analytics.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Application\obj\Release\net10.0\CommerceHub.Analytics.Application.sourcelink.json

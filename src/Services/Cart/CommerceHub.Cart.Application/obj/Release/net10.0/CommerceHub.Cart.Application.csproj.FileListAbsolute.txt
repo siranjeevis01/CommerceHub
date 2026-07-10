@@ -15,3 +15,8 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj\Release\net10.0\refint\CommerceHub.Cart.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj\Release\net10.0\CommerceHub.Cart.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj\Release\net10.0\ref\CommerceHub.Cart.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Release\net10.0\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Release\net10.0\CommerceHub.Shared.Messaging.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj\Release\net10.0\CommerceHub.Cart.Application.sourcelink.json

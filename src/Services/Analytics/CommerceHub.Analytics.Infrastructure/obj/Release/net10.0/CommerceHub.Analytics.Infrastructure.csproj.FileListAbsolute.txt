@@ -36,3 +36,10 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infra
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\obj\Release\net10.0\CommerceHub.Analytics.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\obj\Release\net10.0\CommerceHub.Analytics.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\obj\Release\net10.0\ref\CommerceHub.Analytics.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Analytics.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Analytics.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\obj\Release\net10.0\CommerceHub.Analytics.Infrastructure.sourcelink.json

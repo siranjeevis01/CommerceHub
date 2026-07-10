@@ -17,3 +17,6 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Appli
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\obj\Release\net10.0\refint\CommerceHub.Inventory.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\obj\Release\net10.0\CommerceHub.Inventory.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\obj\Release\net10.0\ref\CommerceHub.Inventory.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Application\obj\Release\net10.0\CommerceHub.Inventory.Application.sourcelink.json

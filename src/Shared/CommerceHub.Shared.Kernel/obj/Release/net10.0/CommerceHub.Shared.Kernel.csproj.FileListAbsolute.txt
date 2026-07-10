@@ -10,3 +10,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Kernel\obj\Release\n
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Kernel\obj\Release\net10.0\refint\CommerceHub.Shared.Kernel.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Kernel\obj\Release\net10.0\CommerceHub.Shared.Kernel.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Kernel\obj\Release\net10.0\ref\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Kernel\obj\Release\net10.0\CommerceHub.Shared.Kernel.sourcelink.json

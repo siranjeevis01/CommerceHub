@@ -17,3 +17,10 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infra
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\obj\Release\net10.0\CommerceHub.Inventory.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\obj\Release\net10.0\CommerceHub.Inventory.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\obj\Release\net10.0\ref\CommerceHub.Inventory.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Inventory.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Inventory.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Infrastructure\obj\Release\net10.0\CommerceHub.Inventory.Infrastructure.sourcelink.json

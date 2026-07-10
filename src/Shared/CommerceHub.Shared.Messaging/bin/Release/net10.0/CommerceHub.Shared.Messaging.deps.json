@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "CommerceHub.Shared.Messaging/1.0.0": {
         "dependencies": {
+          "CommerceHub.Shared.Contracts": "1.0.0",
           "MassTransit": "8.3.0",
           "MassTransit.EntityFrameworkCore": "8.3.0",
           "MassTransit.RabbitMQ": "8.3.0",
@@ -265,6 +266,17 @@
             "fileVersion": "6.8.1.0"
           }
         }
+      },
+      "CommerceHub.Shared.Contracts/1.0.0": {
+        "dependencies": {
+          "MassTransit": "8.3.0"
+        },
+        "runtime": {
+          "CommerceHub.Shared.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -427,6 +439,11 @@
       "sha512": "sha512-jNsmGgmCNw2S/NzskeN2ijtGywtH4Sk/G6jWUTD5sY9SrC27Xz6BsLIiB8hdsfjeyWCa4j4GvCIGkpE8wrjU1Q==",
       "path": "rabbitmq.client/6.8.1",
       "hashPath": "rabbitmq.client.6.8.1.nupkg.sha512"
+    },
+    "CommerceHub.Shared.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

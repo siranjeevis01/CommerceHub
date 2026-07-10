@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domai
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\refint\CommerceHub.Inventory.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\ref\CommerceHub.Inventory.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.sourcelink.json

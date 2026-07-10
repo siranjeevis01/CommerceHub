@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domai
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Release\net10.0\refint\CommerceHub.Analytics.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Release\net10.0\CommerceHub.Analytics.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Release\net10.0\ref\CommerceHub.Analytics.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Release\net10.0\CommerceHub.Analytics.Domain.sourcelink.json

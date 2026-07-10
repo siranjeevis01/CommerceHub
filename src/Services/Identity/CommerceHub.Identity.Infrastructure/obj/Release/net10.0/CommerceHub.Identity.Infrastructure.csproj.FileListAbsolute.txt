@@ -17,3 +17,10 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrast
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\obj\Release\net10.0\CommerceHub.Identity.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\obj\Release\net10.0\CommerceHub.Identity.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\obj\Release\net10.0\ref\CommerceHub.Identity.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Identity.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Identity.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\obj\Release\net10.0\CommerceHub.Identity.Infrastructure.sourcelink.json

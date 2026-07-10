@@ -17,3 +17,6 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Applicati
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\obj\Release\net10.0\refint\CommerceHub.Payment.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\obj\Release\net10.0\CommerceHub.Payment.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\obj\Release\net10.0\ref\CommerceHub.Payment.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Application\obj\Release\net10.0\CommerceHub.Payment.Application.sourcelink.json

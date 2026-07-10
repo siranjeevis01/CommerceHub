@@ -59,3 +59,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\ApiGateway\CommerceHub.Gateway\obj\Release\net
 D:\PROJECT\Dotnet\CommerceHub\src\ApiGateway\CommerceHub.Gateway\obj\Release\net10.0\CommerceHub.Gateway.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\ApiGateway\CommerceHub.Gateway\obj\Release\net10.0\CommerceHub.Gateway.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\ApiGateway\CommerceHub.Gateway\obj\Release\net10.0\ref\CommerceHub.Gateway.dll
+D:\PROJECT\Dotnet\CommerceHub\src\ApiGateway\CommerceHub.Gateway\obj\Release\net10.0\CommerceHub.Gateway.sourcelink.json

@@ -15,3 +15,8 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\ob
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\obj\Release\net10.0\CommerceHub.Cms.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\obj\Release\net10.0\CommerceHub.Cms.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\obj\Release\net10.0\ref\CommerceHub.Cms.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Release\net10.0\CommerceHub.Cms.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Release\net10.0\CommerceHub.Cms.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\obj\Release\net10.0\CommerceHub.Cms.Infrastructure.sourcelink.json

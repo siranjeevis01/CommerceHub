@@ -17,3 +17,6 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\obj\Release\net10.0\refint\CommerceHub.Notification.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\obj\Release\net10.0\CommerceHub.Notification.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\obj\Release\net10.0\ref\CommerceHub.Notification.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Application\obj\Release\net10.0\CommerceHub.Notification.Application.sourcelink.json

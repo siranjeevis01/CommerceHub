@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Domain\ob
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Domain\obj\Release\net10.0\refint\CommerceHub.Payment.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Domain\obj\Release\net10.0\CommerceHub.Payment.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Domain\obj\Release\net10.0\ref\CommerceHub.Payment.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Payment\CommerceHub.Payment.Domain\obj\Release\net10.0\CommerceHub.Payment.Domain.sourcelink.json

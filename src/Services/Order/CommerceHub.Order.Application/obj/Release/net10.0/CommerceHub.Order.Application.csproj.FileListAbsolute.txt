@@ -17,3 +17,6 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\o
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\obj\Release\net10.0\refint\CommerceHub.Order.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\obj\Release\net10.0\CommerceHub.Order.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\obj\Release\net10.0\ref\CommerceHub.Order.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Application\obj\Release\net10.0\CommerceHub.Order.Application.sourcelink.json

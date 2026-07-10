@@ -17,3 +17,10 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructur
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\obj\Release\net10.0\CommerceHub.Order.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\obj\Release\net10.0\CommerceHub.Order.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\obj\Release\net10.0\ref\CommerceHub.Order.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Order.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Order.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\obj\Release\net10.0\CommerceHub.Order.Infrastructure.sourcelink.json
