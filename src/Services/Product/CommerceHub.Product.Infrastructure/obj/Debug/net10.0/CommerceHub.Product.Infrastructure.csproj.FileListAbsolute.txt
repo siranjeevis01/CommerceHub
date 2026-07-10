@@ -23,3 +23,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Infrastru
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Infrastructure\bin\Debug\net10.0\CommerceHub.Product.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Infrastructure\obj\Debug\net10.0\CommerceHub.Product.Infrastructure.sourcelink.json

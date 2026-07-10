@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Domain\
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Domain\obj\Debug\net10.0\refint\CommerceHub.Identity.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Domain\obj\Debug\net10.0\CommerceHub.Identity.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Domain\obj\Debug\net10.0\ref\CommerceHub.Identity.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Domain\obj\Debug\net10.0\CommerceHub.Identity.Domain.sourcelink.json

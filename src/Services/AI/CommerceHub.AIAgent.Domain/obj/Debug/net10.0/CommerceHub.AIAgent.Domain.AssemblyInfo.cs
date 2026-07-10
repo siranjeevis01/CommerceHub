@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CommerceHub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+55f2e55deffd716e796896d87571306f24bea957")]
 [assembly: System.Reflection.AssemblyProductAttribute("CommerceHub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CommerceHub.AIAgent.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

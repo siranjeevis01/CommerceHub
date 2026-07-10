@@ -132,3 +132,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Api\bin\Debug\n
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Api\bin\Debug\net10.0\zh\Hangfire.Core.resources.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Api\obj\Debug\net10.0\CommerceHub.Cart.Api.sourcelink.json

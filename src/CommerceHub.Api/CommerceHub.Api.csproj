@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.Api</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Shared libraries -->
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\CommerceHub.Shared.Kernel\CommerceHub.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\Shared\CommerceHub.Shared.Messaging\CommerceHub.Shared.Messaging.csproj" />
+    <ProjectReference Include="..\Shared\CommerceHub.Shared.Contracts\CommerceHub.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\Shared\CommerceHub.ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <!-- All API projects (controllers + transitive DI) -->
+  <ItemGroup>
+    <ProjectReference Include="..\ApiGateway\CommerceHub.Gateway\CommerceHub.Gateway.csproj" />
+    <ProjectReference Include="..\Services\Identity\CommerceHub.Identity.Api\CommerceHub.Identity.Api.csproj" />
+    <ProjectReference Include="..\Services\Product\CommerceHub.Product.Api\CommerceHub.Product.Api.csproj" />
+    <ProjectReference Include="..\Services\Order\CommerceHub.Order.Api\CommerceHub.Order.Api.csproj" />
+    <ProjectReference Include="..\Services\Cart\CommerceHub.Cart.Api\CommerceHub.Cart.Api.csproj" />
+    <ProjectReference Include="..\Services\Payment\CommerceHub.Payment.Api\CommerceHub.Payment.Api.csproj" />
+    <ProjectReference Include="..\Services\Vendor\CommerceHub.Vendor.Api\CommerceHub.Vendor.Api.csproj" />
+    <ProjectReference Include="..\Services\Inventory\CommerceHub.Inventory.Api\CommerceHub.Inventory.Api.csproj" />
+    <ProjectReference Include="..\Services\Notification\CommerceHub.Notification.Api\CommerceHub.Notification.Api.csproj" />
+    <ProjectReference Include="..\Services\CMS\CommerceHub.Cms.Api\CommerceHub.Cms.Api.csproj" />
+    <ProjectReference Include="..\Services\Analytics\CommerceHub.Analytics.Api\CommerceHub.Analytics.Api.csproj" />
+    <ProjectReference Include="..\Services\AI\CommerceHub.AIAgent.Api\CommerceHub.AIAgent.Api.csproj" />
+  </ItemGroup>
+
+  <!-- Direct Domain references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Order\CommerceHub.Order.Domain\CommerceHub.Order.Domain.csproj" />
+    <ProjectReference Include="..\Services\Analytics\CommerceHub.Analytics.Domain\CommerceHub.Analytics.Domain.csproj" />
+  </ItemGroup>
+
+  <!-- Explicit Infrastructure references (for DbContext DI registration) -->
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Identity\CommerceHub.Identity.Infrastructure\CommerceHub.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Product\CommerceHub.Product.Infrastructure\CommerceHub.Product.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Order\CommerceHub.Order.Infrastructure\CommerceHub.Order.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Cart\CommerceHub.Cart.Infrastructure\CommerceHub.Cart.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Payment\CommerceHub.Payment.Infrastructure\CommerceHub.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Vendor\CommerceHub.Vendor.Infrastructure\CommerceHub.Vendor.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Inventory\CommerceHub.Inventory.Infrastructure\CommerceHub.Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Notification\CommerceHub.Notification.Infrastructure\CommerceHub.Notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\CMS\CommerceHub.Cms.Infrastructure\CommerceHub.Cms.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\Analytics\CommerceHub.Analytics.Infrastructure\CommerceHub.Analytics.Infrastructure.csproj" />
+    <ProjectReference Include="..\Services\AI\CommerceHub.AIAgent.Infrastructure\CommerceHub.AIAgent.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <!-- Explicit Application references (for MediatR/AutoMapper/FluentValidation DI) -->
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Identity\CommerceHub.Identity.Application\CommerceHub.Identity.Application.csproj" />
+    <ProjectReference Include="..\Services\Product\CommerceHub.Product.Application\CommerceHub.Product.Application.csproj" />
+    <ProjectReference Include="..\Services\Order\CommerceHub.Order.Application\CommerceHub.Order.Application.csproj" />
+    <ProjectReference Include="..\Services\Cart\CommerceHub.Cart.Application\CommerceHub.Cart.Application.csproj" />
+    <ProjectReference Include="..\Services\Payment\CommerceHub.Payment.Application\CommerceHub.Payment.Application.csproj" />
+    <ProjectReference Include="..\Services\Vendor\CommerceHub.Vendor.Application\CommerceHub.Vendor.Application.csproj" />
+    <ProjectReference Include="..\Services\Inventory\CommerceHub.Inventory.Application\CommerceHub.Inventory.Application.csproj" />
+    <ProjectReference Include="..\Services\Notification\CommerceHub.Notification.Application\CommerceHub.Notification.Application.csproj" />
+    <ProjectReference Include="..\Services\CMS\CommerceHub.Cms.Application\CommerceHub.Cms.Application.csproj" />
+    <ProjectReference Include="..\Services\Analytics\CommerceHub.Analytics.Application\CommerceHub.Analytics.Application.csproj" />
+    <ProjectReference Include="..\Services\AI\CommerceHub.AIAgent.Application\CommerceHub.AIAgent.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
+    <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.0" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.3.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="10.0.7" />
+  </ItemGroup>
+</Project>

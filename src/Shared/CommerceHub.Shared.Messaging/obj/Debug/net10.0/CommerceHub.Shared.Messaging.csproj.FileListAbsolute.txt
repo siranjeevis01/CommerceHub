@@ -13,3 +13,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\Commerce.B19AA2F5.Up2Date
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.sourcelink.json

@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Domain\obj\Debug\net10.0\refint\CommerceHub.Notification.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Domain\obj\Debug\net10.0\CommerceHub.Notification.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Domain\obj\Debug\net10.0\ref\CommerceHub.Notification.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Domain\obj\Debug\net10.0\CommerceHub.Notification.Domain.sourcelink.json

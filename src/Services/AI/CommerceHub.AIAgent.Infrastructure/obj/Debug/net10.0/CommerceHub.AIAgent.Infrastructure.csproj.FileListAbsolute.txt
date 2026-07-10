@@ -19,3 +19,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Infrastructure
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Infrastructure\obj\Debug\net10.0\refint\CommerceHub.AIAgent.Infrastructure.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Infrastructure\obj\Debug\net10.0\CommerceHub.AIAgent.Infrastructure.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Infrastructure\obj\Debug\net10.0\ref\CommerceHub.AIAgent.Infrastructure.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Infrastructure\obj\Debug\net10.0\CommerceHub.AIAgent.Infrastructure.sourcelink.json

@@ -232,3 +232,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Api\bin\Debug
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Api\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Api\obj\Debug\net10.0\CommerceHub.Order.Api.sourcelink.json

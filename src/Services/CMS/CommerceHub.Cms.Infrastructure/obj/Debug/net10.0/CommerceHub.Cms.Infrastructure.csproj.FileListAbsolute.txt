@@ -19,3 +19,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bi
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Debug\net10.0\CommerceHub.Cms.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Infrastructure\obj\Debug\net10.0\CommerceHub.Cms.Infrastructure.sourcelink.json

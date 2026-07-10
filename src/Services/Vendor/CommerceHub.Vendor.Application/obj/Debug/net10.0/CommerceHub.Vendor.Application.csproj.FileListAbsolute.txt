@@ -19,3 +19,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Application
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Application\obj\Debug\net10.0\ref\CommerceHub.Vendor.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Application\obj\Debug\net10.0\CommerceHub.Vendor.Application.sourcelink.json

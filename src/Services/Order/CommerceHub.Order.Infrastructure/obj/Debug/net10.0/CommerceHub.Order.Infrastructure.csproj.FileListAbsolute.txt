@@ -23,3 +23,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructur
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Debug\net10.0\CommerceHub.Order.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Infrastructure\obj\Debug\net10.0\CommerceHub.Order.Infrastructure.sourcelink.json

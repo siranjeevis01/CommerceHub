@@ -17,3 +17,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Application\ob
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Application\obj\Debug\net10.0\refint\CommerceHub.AIAgent.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Application\obj\Debug\net10.0\CommerceHub.AIAgent.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Application\obj\Debug\net10.0\ref\CommerceHub.AIAgent.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\AI\CommerceHub.AIAgent.Application\obj\Debug\net10.0\CommerceHub.AIAgent.Application.sourcelink.json

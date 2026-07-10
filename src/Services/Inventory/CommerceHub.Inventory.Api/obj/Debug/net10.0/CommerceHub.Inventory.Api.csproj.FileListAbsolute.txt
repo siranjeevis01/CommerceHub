@@ -232,3 +232,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Api\b
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Api\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Api\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Api\obj\Debug\net10.0\CommerceHub.Inventory.Api.sourcelink.json

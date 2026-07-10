@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Domain\obj\
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Domain\obj\Debug\net10.0\refint\CommerceHub.Vendor.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Domain\obj\Debug\net10.0\CommerceHub.Vendor.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Domain\obj\Debug\net10.0\ref\CommerceHub.Vendor.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Vendor\CommerceHub.Vendor.Domain\obj\Debug\net10.0\CommerceHub.Vendor.Domain.sourcelink.json

@@ -15,3 +15,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Application\obj\D
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Application\obj\Debug\net10.0\refint\CommerceHub.Cms.Application.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Application\obj\Debug\net10.0\CommerceHub.Cms.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Application\obj\Debug\net10.0\ref\CommerceHub.Cms.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\CMS\CommerceHub.Cms.Application\obj\Debug\net10.0\CommerceHub.Cms.Application.sourcelink.json

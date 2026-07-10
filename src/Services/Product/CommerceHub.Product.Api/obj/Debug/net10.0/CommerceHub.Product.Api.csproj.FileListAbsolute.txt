@@ -232,3 +232,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Api\bin\D
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Api\bin\Debug\net10.0\runtimes\win-x64\native\krb5_64.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Api\bin\Debug\net10.0\runtimes\win-x64\native\krbcc64.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Api\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Api\obj\Debug\net10.0\CommerceHub.Product.Api.sourcelink.json

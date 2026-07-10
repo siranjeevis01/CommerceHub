@@ -9,3 +9,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debu
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\refint\CommerceHub.Cart.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\ref\CommerceHub.Cart.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.sourcelink.json

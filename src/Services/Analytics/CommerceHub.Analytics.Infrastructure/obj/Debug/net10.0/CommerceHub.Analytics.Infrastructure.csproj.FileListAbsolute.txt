@@ -42,3 +42,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infra
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Debug\net10.0\CommerceHub.Analytics.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Infrastructure\obj\Debug\net10.0\CommerceHub.Analytics.Infrastructure.sourcelink.json

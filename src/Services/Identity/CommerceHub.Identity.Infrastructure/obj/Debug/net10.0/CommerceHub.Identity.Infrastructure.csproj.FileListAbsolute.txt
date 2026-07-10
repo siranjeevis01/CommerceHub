@@ -23,3 +23,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrast
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Debug\net10.0\CommerceHub.Identity.Application.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Infrastructure\obj\Debug\net10.0\CommerceHub.Identity.Infrastructure.sourcelink.json

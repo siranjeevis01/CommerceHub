@@ -23,3 +23,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Infrastructure\obj\Debug\net10.0\CommerceHub.Notification.Infrastructure.genruntimeconfig.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Infrastructure\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Infrastructure\obj\Debug\net10.0\CommerceHub.Notification.Infrastructure.sourcelink.json

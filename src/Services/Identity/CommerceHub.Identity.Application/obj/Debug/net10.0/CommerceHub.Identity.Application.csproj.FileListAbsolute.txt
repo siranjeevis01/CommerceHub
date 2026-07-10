@@ -19,3 +19,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Applica
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Application\bin\Debug\net10.0\CommerceHub.Shared.Messaging.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Identity\CommerceHub.Identity.Application\obj\Debug\net10.0\CommerceHub.Identity.Application.sourcelink.json

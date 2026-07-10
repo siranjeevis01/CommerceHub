@@ -19,3 +19,4 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Debug\net10.0\CommerceHub.Shared.Messaging.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Application\obj\Debug\net10.0\CommerceHub.Cart.Application.sourcelink.json
