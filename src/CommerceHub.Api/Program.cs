@@ -170,84 +170,90 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddProductInfrastructure(builder.Configuration);
 builder.Services.AddOrderInfrastructure(builder.Configuration);
 
-var redisConn = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING") ?? "localhost:6379";
-builder.Services.AddCartInfrastructure(redisConn);
+var redisConn = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING") ?? "";
+
+// Redis-backed services (Cart, Notification)
+if (!string.IsNullOrWhiteSpace(redisConn))
+{
+    builder.Services.AddCartInfrastructure(redisConn);
+    builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConn));
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConn;
+        options.InstanceName = "CommerceHub_";
+    });
+    builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddSignalR()
+        .AddJsonProtocol()
+        .AddStackExchangeRedis(redisConn);
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConn;
+        options.InstanceName = "CommerceHub_Notifications_";
+    });
+}
+else
+{
+    builder.Services.AddSignalR().AddJsonProtocol();
+    builder.Services.AddDistributedMemoryCache();
+}
 
 builder.Services.AddPaymentInfrastructure(builder.Configuration);
 builder.Services.AddVendorInfrastructure(builder.Configuration);
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 
-// Notification: Redis + Infrastructure
-builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConn));
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = redisConn;
-    options.InstanceName = "CommerceHub_Notifications_";
-});
-builder.Services.AddInfrastructure(builder.Configuration);
-
 builder.Services.AddCmsInfrastructure(builder.Configuration);
 builder.Services.AddAnalyticsInfrastructure(builder.Configuration);
 builder.Services.AddAIAgentInfrastructure(builder.Configuration);
 
-// ========== SHARED REDIS ==========
-builder.Services.AddStackExchangeRedisCache(options =>
+// ========== MASS TRANSIT (optional: only if RABBITMQ_HOST is set) ==========
+var rabbitHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+if (!string.IsNullOrWhiteSpace(rabbitHost))
 {
-    options.Configuration = redisConn;
-    options.InstanceName = "CommerceHub_";
-});
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<CommerceHub.Payment.Api.Consumers.ProcessPaymentConsumer>();
+        x.AddConsumer<CommerceHub.Analytics.Application.Consumers.AnalyticsEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Api.Consumers.OrderEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Api.Consumers.PaymentEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Api.Consumers.InventoryEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Api.Consumers.VendorEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendEmailNotificationConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendPushNotificationConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendSmsNotificationConsumer>();
 
-// ========== SIGNALR ==========
-builder.Services.AddSignalR()
-    .AddJsonProtocol()
-    .AddStackExchangeRedis(redisConn);
-
-// ========== MASS TRANSIT ==========
-builder.Services.AddMassTransit(x =>
-{
-    // Consumers
-    x.AddConsumer<CommerceHub.Payment.Api.Consumers.ProcessPaymentConsumer>();
-    x.AddConsumer<CommerceHub.Analytics.Application.Consumers.AnalyticsEventConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Api.Consumers.OrderEventConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Api.Consumers.PaymentEventConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Api.Consumers.InventoryEventConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Api.Consumers.VendorEventConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendEmailNotificationConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendPushNotificationConsumer>();
-    x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendSmsNotificationConsumer>();
-
-    // Order saga
-    x.AddSagaStateMachine<OrderStateMachine, OrderState>()
-        .EntityFrameworkRepository(r =>
-        {
-            r.ConcurrencyMode = ConcurrencyMode.Optimistic;
-            r.AddDbContext<OrderStateDbContext, OrderStateDbContext>((provider, builder) =>
+        x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+            .EntityFrameworkRepository(r =>
             {
-                var connectionString = Environment.GetEnvironmentVariable("ORDER_DB_CONNECTION")
-                    ?? throw new InvalidOperationException("Order database connection string missing");
-                builder.UseMySQL(connectionString, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5));
+                r.ConcurrencyMode = ConcurrencyMode.Optimistic;
+                r.AddDbContext<OrderStateDbContext, OrderStateDbContext>((provider, builder) =>
+                {
+                    var connectionString = Environment.GetEnvironmentVariable("ORDER_DB_CONNECTION")
+                        ?? throw new InvalidOperationException("Order database connection string missing");
+                    builder.UseMySQL(connectionString, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5));
+                });
             });
-        });
 
-    x.AddEntityFrameworkOutbox<OrderDbContext>(o =>
-    {
-        o.QueryDelay = TimeSpan.FromSeconds(10);
-        o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
-        o.UseBusOutbox();
-    });
-
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost", h =>
+        x.AddEntityFrameworkOutbox<OrderDbContext>(o =>
         {
-            h.Username(Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest");
-            h.Password(Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest");
+            o.QueryDelay = TimeSpan.FromSeconds(10);
+            o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
+            o.UseBusOutbox();
         });
-        cfg.UseMessageRetry(r => r.Exponential(5,
-            TimeSpan.FromMilliseconds(200), TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(5)));
-        cfg.ConfigureEndpoints(context);
+
+        x.UsingRabbitMq((context, cfg) =>
+        {
+            cfg.Host(rabbitHost, h =>
+            {
+                h.Username(Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest");
+                h.Password(Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest");
+            });
+            cfg.UseMessageRetry(r => r.Exponential(5,
+                TimeSpan.FromMilliseconds(200), TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(5)));
+            cfg.ConfigureEndpoints(context);
+        });
     });
-});
+}
 
 // ========== HEALTH CHECKS ==========
 builder.Services.AddHealthChecks();
