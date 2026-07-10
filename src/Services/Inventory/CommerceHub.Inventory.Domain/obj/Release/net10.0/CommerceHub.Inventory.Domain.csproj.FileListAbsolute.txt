@@ -5,8 +5,8 @@ D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domai
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.AssemblyInfoInputs.cache
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.AssemblyInfo.cs
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.sourcelink.json
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\refint\CommerceHub.Inventory.Domain.dll
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.pdb
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\ref\CommerceHub.Inventory.Domain.dll
-D:\PROJECT\Dotnet\CommerceHub\src\Services\Inventory\CommerceHub.Inventory.Domain\obj\Release\net10.0\CommerceHub.Inventory.Domain.sourcelink.json
