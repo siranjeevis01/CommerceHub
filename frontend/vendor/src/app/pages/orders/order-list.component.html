@@ -1,0 +1,61 @@
+<div class="page-header">
+  <h1>Orders</h1>
+</div>
+
+<div class="filters-bar">
+  <select class="form-select" style="width:160px" (change)="onStatusFilter($any($event.target).value)">
+    <option value="">All Orders</option>
+    <option value="pending">Pending</option>
+    <option value="processing">Processing</option>
+    <option value="shipped">Shipped</option>
+    <option value="delivered">Delivered</option>
+    <option value="cancelled">Cancelled</option>
+  </select>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="card" *ngIf="orders$ | async as response">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of response.data" routerLink="/orders/{{ order.id }}" class="clickable">
+          <td class="fw-semibold">#{{ order.orderNumber }}</td>
+          <td>Customer #{{ order.userId }}</td>
+          <td>{{ order.items.length }}</td>
+          <td class="fw-semibold">${{ order.totalAmount.toFixed(2) }}</td>
+          <td><app-status-badge [status]="order.status"></app-status-badge></td>
+          <td><app-status-badge [status]="order.paymentStatus"></app-status-badge></td>
+          <td>{{ order.createdAt | date:'MMM d, y h:mm a' }}</td>
+        </tr>
+        <tr *ngIf="response.data.length === 0">
+          <td colspan="7">
+            <app-empty-state icon="cart" title="No orders found" message="Orders from customers will appear here."></app-empty-state>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="response.total > response.pageSize">
+    <div class="table-info">Page {{ page }} of {{ response.totalPages }}</div>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="page <= 1"><a class="page-link" (click)="onPageChange(page - 1)">Previous</a></li>
+        <li class="page-item" *ngFor="let p of getPages(response.totalPages)" [class.active]="p === page"><a class="page-link" (click)="onPageChange(p)">{{ p }}</a></li>
+        <li class="page-item" [class.disabled]="page >= response.totalPages"><a class="page-link" (click)="onPageChange(page + 1)">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>

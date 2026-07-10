@@ -1,0 +1,150 @@
+<div class="profile-page py-4">
+  <div class="container">
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <i class="bi bi-person-circle fs-2 text-primary"></i>
+      <div>
+        <h4 class="fw-bold mb-0">My Profile</h4>
+        <small class="text-muted">Manage your account information and security</small>
+      </div>
+    </div>
+
+    <app-loading-spinner *ngIf="loading" text="Loading profile..."></app-loading-spinner>
+
+    <div class="row g-4" *ngIf="!loading">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white py-3">
+            <h5 class="fw-semibold mb-0">Personal Information</h5>
+          </div>
+          <div class="card-body p-4">
+            <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">First Name</label>
+                  <input type="text" class="form-control" formControlName="firstName"
+                         [class.is-invalid]="submitted && pf['firstName'].errors">
+                  <div class="invalid-feedback" *ngIf="submitted && pf['firstName'].errors?.['required']">Required</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">Last Name</label>
+                  <input type="text" class="form-control" formControlName="lastName"
+                         [class.is-invalid]="submitted && pf['lastName'].errors">
+                  <div class="invalid-feedback" *ngIf="submitted && pf['lastName'].errors?.['required']">Required</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">Email</label>
+                  <input type="email" class="form-control" formControlName="email" readonly>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">Phone Number</label>
+                  <input type="tel" class="form-control" formControlName="phoneNumber"
+                         [class.is-invalid]="submitted && pf['phoneNumber'].errors">
+                  <div class="invalid-feedback" *ngIf="submitted && pf['phoneNumber'].errors?.['pattern']">Invalid number</div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button type="submit" class="btn btn-primary px-4" [disabled]="savingProfile">
+                  <span class="spinner-border spinner-border-sm me-2" *ngIf="savingProfile"></span>
+                  {{ savingProfile ? 'Saving...' : 'Save Changes' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-4">
+          <div class="card-header bg-white py-3">
+            <h5 class="fw-semibold mb-0">Change Password</h5>
+          </div>
+          <div class="card-body p-4">
+            <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" novalidate>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small fw-medium">Current Password</label>
+                  <div class="input-group">
+                    <input [type]="showCurrentPassword ? 'text' : 'password'" class="form-control"
+                           formControlName="currentPassword"
+                           [class.is-invalid]="passwordSubmitted && pwf['currentPassword'].errors">
+                    <button class="btn btn-outline-secondary" type="button" (click)="showCurrentPassword = !showCurrentPassword">
+                      <i class="bi" [class.bi-eye]="!showCurrentPassword" [class.bi-eye-slash]="showCurrentPassword"></i>
+                    </button>
+                    <div class="invalid-feedback" *ngIf="passwordSubmitted && pwf['currentPassword'].errors?.['required']">Required</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">New Password</label>
+                  <div class="input-group">
+                    <input [type]="showNewPassword ? 'text' : 'password'" class="form-control"
+                           formControlName="newPassword"
+                           [class.is-invalid]="passwordSubmitted && pwf['newPassword'].errors">
+                    <button class="btn btn-outline-secondary" type="button" (click)="showNewPassword = !showNewPassword">
+                      <i class="bi" [class.bi-eye]="!showNewPassword" [class.bi-eye-slash]="showNewPassword"></i>
+                    </button>
+                    <div class="invalid-feedback" *ngIf="passwordSubmitted && pwf['newPassword'].errors?.['required']">Required</div>
+                    <div class="invalid-feedback" *ngIf="passwordSubmitted && pwf['newPassword'].errors?.['minlength']">Min 8 characters</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-medium">Confirm New Password</label>
+                  <div class="input-group">
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
+                           formControlName="confirmNewPassword"
+                           [class.is-invalid]="passwordSubmitted && pwf['confirmNewPassword'].errors">
+                    <button class="btn btn-outline-secondary" type="button" (click)="showConfirmPassword = !showConfirmPassword">
+                      <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+                    </button>
+                    <div class="invalid-feedback" *ngIf="passwordSubmitted && pwf['confirmNewPassword'].errors?.['required']">Required</div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button type="submit" class="btn btn-outline-primary px-4" [disabled]="changingPassword">
+                  <span class="spinner-border spinner-border-sm me-2" *ngIf="changingPassword"></span>
+                  {{ changingPassword ? 'Changing...' : 'Change Password' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="avatar-wrapper mb-3">
+              <div class="avatar-circle bg-primary text-white mx-auto">
+                <span class="fs-2 fw-bold">{{ user?.firstName?.charAt(0) }}{{ user?.lastName?.charAt(0) }}</span>
+              </div>
+            </div>
+            <h5 class="fw-semibold mb-1">{{ user?.firstName }} {{ user?.lastName }}</h5>
+            <p class="text-muted small mb-3">{{ user?.email }}</p>
+            <div class="d-flex flex-wrap justify-content-center gap-1 mb-3">
+              <span class="badge bg-light text-dark" *ngFor="let role of user?.roles">{{ role }}</span>
+            </div>
+            <p class="text-muted small mb-0">
+              <i class="bi bi-calendar3 me-1"></i>
+              Member since {{ user?.createdAt | date:'MMM yyyy' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-3">
+          <div class="card-body p-4">
+            <h6 class="fw-semibold mb-3">Quick Links</h6>
+            <div class="d-grid gap-2">
+              <a routerLink="/profile/orders" class="btn btn-outline-secondary btn-sm text-start">
+                <i class="bi bi-box me-2"></i>My Orders
+              </a>
+              <a routerLink="/profile/wishlist" class="btn btn-outline-secondary btn-sm text-start">
+                <i class="bi bi-heart me-2"></i>Wishlist
+              </a>
+              <a routerLink="/profile/addresses" class="btn btn-outline-secondary btn-sm text-start">
+                <i class="bi bi-geo-alt me-2"></i>Addresses
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

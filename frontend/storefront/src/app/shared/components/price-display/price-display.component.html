@@ -1,0 +1,7 @@
+<div class="price-display">
+  <span class="current-price fw-bold">{{formatPrice(price)}}</span>
+  <span class="compare-price text-muted text-decoration-line-through ms-2" *ngIf="comparePrice && comparePrice > price">
+    {{formatPrice(comparePrice)}}
+  </span>
+  <span class="badge bg-danger ms-2" *ngIf="discountPercent">-{{discountPercent}}%</span>
+</div>

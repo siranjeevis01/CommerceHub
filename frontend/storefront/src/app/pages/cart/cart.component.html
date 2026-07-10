@@ -1,0 +1,89 @@
+<div class="container py-4">
+  <app-breadcrumb [items]="[{label: 'Shopping Cart'}]"></app-breadcrumb>
+  <h2 class="fw-bold mb-4">Shopping Cart</h2>
+
+  <ng-container *ngIf="cart$ | async as cart">
+    <div *ngIf="cart.items.length > 0; else emptyCart">
+      <div class="row">
+        <!-- Cart Items -->
+        <div class="col-lg-8">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-semibold">{{cart.itemCount}} item(s)</span>
+                <button class="btn btn-outline-danger btn-sm" (click)="clearCart()">Clear Cart</button>
+              </div>
+              <hr>
+              <div class="cart-item d-flex gap-3 py-3 border-bottom" *ngFor="let item of cart.items">
+                <div class="cart-item-image flex-shrink-0">
+                  <img [src]="item.imageUrl" [alt]="item.name" class="rounded" width="80" height="80" style="object-fit: cover;">
+                </div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="mb-1">{{item.name}}</h6>
+                      <small class="text-muted">Unit: {{item.unitPrice | currency}}</small>
+                    </div>
+                    <strong>{{item.totalPrice | currency}}</strong>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <app-quantity-selector [quantity]="item.quantity" (quantityChange)="updateQuantity(item, $event)"></app-quantity-selector>
+                    <button class="btn btn-sm btn-outline-danger" (click)="removeItem(item)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-start">
+            <a routerLink="/products" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-left me-1"></i> Continue Shopping</a>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">Order Summary</h5>
+
+              <!-- Coupon -->
+              <div class="input-group input-group-sm mb-3">
+                <input type="text" class="form-control" placeholder="Coupon code" [(ngModel)]="couponCode">
+                <button class="btn btn-outline-primary" (click)="applyCoupon()">Apply</button>
+              </div>
+
+              <hr>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Subtotal</span>
+                <span>{{getSubtotal(cart) | currency}}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Shipping</span>
+                <span *ngIf="getShipping(cart) > 0; else freeShipping">{{getShipping(cart) | currency}}</span>
+                <ng-template #freeShipping><span class="text-success">Free</span></ng-template>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Tax (8%)</span>
+                <span>{{getTax(cart) | currency}}</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between fw-bold mb-3">
+                <span>Total</span>
+                <span class="text-primary">{{getTotal(cart) | currency}}</span>
+              </div>
+              <a routerLink="/checkout" class="btn btn-primary w-100">
+                <i class="bi bi-lock me-1"></i> Proceed to Checkout
+              </a>
+              <small class="text-muted d-block text-center mt-2"><i class="bi bi-shield-check me-1"></i> Secure checkout</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <app-empty-state icon="bi-cart" title="Your cart is empty" message="Looks like you haven't added anything to your cart yet." [actionLabel]="'Start Shopping'" [actionLink]="'/products'"></app-empty-state>
+    </ng-template>
+  </ng-container>
+</div>

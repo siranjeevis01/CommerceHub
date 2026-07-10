@@ -1,0 +1,25 @@
+replicaCount: 3
+image:
+  repository: commercehub/payment
+  tag: latest
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+env:
+  PAYMENT_DB_CONNECTION: "server=mysql;database=commercehub_payment;user=root;password=rootpassword"
+  RABBITMQ_HOST: "rabbitmq"
+  RABBITMQ_USER: "guest"
+  RABBITMQ_PASS: "guest"

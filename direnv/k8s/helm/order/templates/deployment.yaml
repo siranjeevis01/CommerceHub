@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "commercehub-order.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "commercehub-order.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "commercehub-order.name" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "commercehub-order.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: SEQ_URL
+              value: "http://seq:80"
+            - name: JAEGER_AGENT_HOST
+              value: "jaeger"
+            - name: ORDER_DB_CONNECTION
+              value: {{ .Values.env.ORDER_DB_CONNECTION }}
+            - name: RABBITMQ_HOST
+              value: {{ .Values.env.RABBITMQ_HOST }}
+            - name: RABBITMQ_USER
+              value: {{ .Values.env.RABBITMQ_USER }}
+            - name: RABBITMQ_PASS
+              value: {{ .Values.env.RABBITMQ_PASS }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 15
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "commercehub-order.fullname" . }}-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "commercehub-order.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}

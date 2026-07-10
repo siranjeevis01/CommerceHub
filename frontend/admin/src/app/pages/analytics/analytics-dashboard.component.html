@@ -1,0 +1,55 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Analytics</h1>
+      <p>Platform performance and growth metrics</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-sm" [ngClass]="dateRange === '7d' ? 'btn-primary' : 'btn-outline-secondary'" (click)="changeRange('7d')">7D</button>
+      <button class="btn btn-sm" [ngClass]="dateRange === '30d' ? 'btn-primary' : 'btn-outline-secondary'" (click)="changeRange('30d')">30D</button>
+      <button class="btn btn-sm" [ngClass]="dateRange === '90d' ? 'btn-primary' : 'btn-outline-secondary'" (click)="changeRange('90d')">90D</button>
+      <button class="btn btn-sm" [ngClass]="dateRange === '1y' ? 'btn-primary' : 'btn-outline-secondary'" (click)="changeRange('1y')">1Y</button>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+    <div class="analytics-metrics">
+      <div class="metric-card" *ngFor="let m of metrics">
+        <div class="metric-label">{{ m.label }}</div>
+        <div class="metric-value">{{ m.value | number }}</div>
+        <div class="metric-change" [class.text-success]="m.trend === 'up'" [class.text-danger]="m.trend === 'down'">
+          <i [class]="m.trend === 'up' ? 'bi bi-arrow-up' : m.trend === 'down' ? 'bi bi-arrow-down' : 'bi bi-dash'"></i>
+          {{ m.change }}%
+        </div>
+      </div>
+      <div class="metric-card" *ngIf="metrics.length === 0">
+        <div class="metric-label">Loading metrics...</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="card">
+        <div class="card-header"><h5>Revenue</h5></div>
+        <div class="card-body"><div class="chart-box"><canvas id="revenueChart"></canvas></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h5>Orders</h5></div>
+        <div class="card-body"><div class="chart-box"><canvas id="ordersChart"></canvas></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h5>Top Products</h5></div>
+        <div class="card-body"><div class="chart-box"><canvas id="productsChart"></canvas></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h5>User Growth</h5></div>
+        <div class="card-body"><div class="chart-box"><canvas id="usersChart"></canvas></div></div>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,37 @@
+<div class="container py-4">
+  <app-breadcrumb [items]="[{label: 'Wishlist'}]"></app-breadcrumb>
+  <h2 class="fw-bold mb-4">My Wishlist</h2>
+
+  <ng-container *ngIf="wishlistItems$ | async as items; else loadingWishlist">
+    <div *ngIf="items.length > 0; else emptyWishlist">
+      <div class="product-grid">
+        <div class="card product-card" *ngFor="let product of items">
+          <a [routerLink]="['/products', product.slug]">
+            <div class="image-wrapper">
+              <img [src]="product.imageUrl" [alt]="product.name" class="card-img-top" style="aspect-ratio: 1; object-fit: cover;">
+            </div>
+          </a>
+          <div class="card-body">
+            <h6 class="card-title text-truncate">{{product.name}}</h6>
+            <app-price-display [price]="product.price" [comparePrice]="product.comparePrice"></app-price-display>
+            <app-product-rating [rating]="product.ratings" [count]="product.reviewCount"></app-product-rating>
+            <div class="d-flex gap-2 mt-2">
+              <button class="btn btn-primary btn-sm flex-fill" (click)="addToCart(product)">
+                <i class="bi bi-cart-plus me-1"></i> Add to Cart
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="removeFromWishlist(product)" title="Remove">
+                <i class="bi bi-heartbreak"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #emptyWishlist>
+      <app-empty-state icon="bi-heart" title="Your wishlist is empty" message="Save items you love to your wishlist and come back anytime." [actionLabel]="'Browse Products'" [actionLink]="'/products'"></app-empty-state>
+    </ng-template>
+  </ng-container>
+  <ng-template #loadingWishlist>
+    <div class="text-center py-5" *ngIf="isLoading"><div class="spinner-border text-primary"></div></div>
+  </ng-template>
+</div>

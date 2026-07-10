@@ -1,0 +1,377 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: commercehub-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: commercehub
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - commercehub-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: commercehub-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redispass}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - commercehub-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redispass", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: commercehub-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - commercehub-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: commercehub-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - commercehub-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: commercehub-postgres
+    environment:
+      POSTGRES_DB: commercehub_analytics
+      POSTGRES_USER: commercehub
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - commercehub-network
+
+  seq:
+    image: datalust/seq:latest
+    container_name: commercehub-seq
+    environment:
+      ACCEPT_EULA: Y
+    ports:
+      - "5341:80"
+    volumes:
+      - seq_data:/data
+    networks:
+      - commercehub-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: commercehub-jaeger
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    networks:
+      - commercehub-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:14269/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  identity-service:
+    build:
+      context: .
+      dockerfile: src/Services/Identity/CommerceHub.Identity.Api/Dockerfile
+    container_name: commercehub-identity
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - IDENTITY_DB_CONNECTION=server=mysql;database=commercehub_identity;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
+      - JWT_KEY=${JWT_KEY}
+      - JWT_ISSUER=CommerceHub
+      - JWT_AUDIENCE=CommerceHubClient
+      - SEQ_URL=http://seq:80
+      - JAEGER_AGENT_HOST=jaeger
+    ports:
+      - "5001:8080"
+    depends_on: { mysql: { condition: service_healthy }, rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  product-service:
+    build:
+      context: .
+      dockerfile: src/Services/Product/CommerceHub.Product.Api/Dockerfile
+    container_name: commercehub-product
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - PRODUCT_DB_CONNECTION=server=mysql;database=commercehub_products;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - SEQ_URL=http://seq:80
+      - JAEGER_AGENT_HOST=jaeger
+    ports:
+      - "5002:8080"
+    depends_on: { mysql: { condition: service_healthy }, elasticsearch: { condition: service_healthy }, rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  order-service:
+    build:
+      context: .
+      dockerfile: src/Services/Order/CommerceHub.Order.Api/Dockerfile
+    container_name: commercehub-order
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ORDER_DB_CONNECTION=server=mysql;database=commercehub_orders;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - SEQ_URL=http://seq:80
+      - JAEGER_AGENT_HOST=jaeger
+    ports:
+      - "5003:8080"
+    depends_on: { mysql: { condition: service_healthy }, rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  cart-service:
+    build:
+      context: .
+      dockerfile: src/Services/Cart/CommerceHub.Cart.Api/Dockerfile
+    container_name: commercehub-cart
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
+      - RABBITMQ_HOST=rabbitmq
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5004:8080"
+    depends_on: { redis: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: src/Services/Payment/CommerceHub.Payment.Api/Dockerfile
+    container_name: commercehub-payment
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - PAYMENT_DB_CONNECTION=server=mysql;database=commercehub_payments;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5005:8080"
+    depends_on: { mysql: { condition: service_healthy }, rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  vendor-service:
+    build:
+      context: .
+      dockerfile: src/Services/Vendor/CommerceHub.Vendor.Api/Dockerfile
+    container_name: commercehub-vendor
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - VENDOR_DB_CONNECTION=server=mysql;database=commercehub_vendors;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5006:8080"
+    depends_on: { mysql: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: src/Services/Inventory/CommerceHub.Inventory.Api/Dockerfile
+    container_name: commercehub-inventory
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - INVENTORY_DB_CONNECTION=server=mysql;database=commercehub_inventory;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5007:8080"
+    depends_on: { mysql: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: src/Services/Notification/CommerceHub.Notification.Api/Dockerfile
+    container_name: commercehub-notification
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
+      - RABBITMQ_HOST=rabbitmq
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL}
+      - SMTP_FROM_NAME=${SMTP_FROM_NAME}
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID}
+      - WHATSAPP_ACCESS_TOKEN=${WHATSAPP_ACCESS_TOKEN}
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5008:8080"
+    depends_on: { rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  cms-service:
+    build:
+      context: .
+      dockerfile: src/Services/CMS/CommerceHub.Cms.Api/Dockerfile
+    container_name: commercehub-cms
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - CMS_DB_CONNECTION=server=mysql;database=commercehub_cms;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5009:8080"
+    depends_on: { mysql: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  ai-agent-service:
+    build:
+      context: .
+      dockerfile: src/Services/AI/CommerceHub.AIAgent.Api/Dockerfile
+    container_name: commercehub-ai-agent
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - AI_DB_CONNECTION=server=mysql;database=commercehub_ai;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
+      - JWT_KEY=${JWT_KEY}
+      - JWT_ISSUER=CommerceHub
+      - JWT_AUDIENCE=CommerceHubClient
+      - PRODUCT_SERVICE_URL=http://commercehub-product:8080/
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5011:8080"
+    depends_on: { mysql: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: src/Services/Analytics/CommerceHub.Analytics.Api/Dockerfile
+    container_name: commercehub-analytics
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ANALYTICS_DB_CONNECTION=Host=postgres;Database=commercehub_analytics;Username=commercehub;Password=${POSTGRES_PASSWORD:-postgrespass}
+      - RABBITMQ_HOST=rabbitmq
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5010:8080"
+    depends_on: { postgres: { condition: service_started }, rabbitmq: { condition: service_healthy } }
+    networks:
+      - commercehub-network
+    restart: always
+
+  gateway:
+    build:
+      context: .
+      dockerfile: src/ApiGateway/CommerceHub.Gateway/Dockerfile
+    container_name: commercehub-gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - JWT_KEY=${JWT_KEY}
+      - JWT_ISSUER=CommerceHub
+      - JWT_AUDIENCE=CommerceHubClient
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - OTLP_EXPORTER_ENDPOINT=${OTLP_EXPORTER_ENDPOINT}
+      - SEQ_URL=http://seq:80
+    ports:
+      - "5000:8080"
+    depends_on:
+      identity-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      order-service:
+        condition: service_started
+      cart-service:
+        condition: service_started
+      payment-service:
+        condition: service_started
+      vendor-service:
+        condition: service_started
+      inventory-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
+      cms-service:
+        condition: service_started
+      ai-agent-service:
+        condition: service_started
+      analytics-service:
+        condition: service_started
+    networks:
+      - commercehub-network
+    restart: always
+
+networks:
+  commercehub-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
+  elasticsearch_data:
+  rabbitmq_data:
+  postgres_data:
+  seq_data:

@@ -1,0 +1,15 @@
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Messaging.deps.json
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Messaging.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.csproj.AssemblyReference.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.AssemblyInfoInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.AssemblyInfo.cs
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\refint\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\CommerceHub.Shared.Messaging.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\ref\CommerceHub.Shared.Messaging.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\bin\Debug\net10.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Shared\CommerceHub.Shared.Messaging\obj\Debug\net10.0\Commerce.B19AA2F5.Up2Date

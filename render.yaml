@@ -1,0 +1,185 @@
+services:
+  - type: web
+    name: commercehub-gateway
+    runtime: docker
+    dockerfilePath: src/ApiGateway/CommerceHub.Gateway/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: JWT_KEY
+        sync: false
+      - key: JWT_ISSUER
+        value: CommerceHub
+      - key: JWT_AUDIENCE
+        value: CommerceHubClient
+      - key: ALLOWED_ORIGINS
+        value: "*"
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-identity
+    runtime: docker
+    dockerfilePath: src/Services/Identity/CommerceHub.Identity.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: IDENTITY_DB_CONNECTION
+        sync: false
+      - key: REDIS_CONNECTION_STRING
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+      - key: JWT_KEY
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-product
+    runtime: docker
+    dockerfilePath: src/Services/Product/CommerceHub.Product.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: PRODUCT_DB_CONNECTION
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-order
+    runtime: docker
+    dockerfilePath: src/Services/Order/CommerceHub.Order.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ORDER_DB_CONNECTION
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-ai-agent
+    runtime: docker
+    dockerfilePath: src/Services/AI/CommerceHub.AIAgent.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: AI_DB_CONNECTION
+        sync: false
+      - key: JWT_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: REDIS_CONNECTION_STRING
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+      - key: PRODUCT_SERVICE_URL
+        value: https://commercehub-product.onrender.com
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-vendor
+    runtime: docker
+    dockerfilePath: src/Services/Vendor/CommerceHub.Vendor.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: VENDOR_DB_CONNECTION
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-inventory
+    runtime: docker
+    dockerfilePath: src/Services/Inventory/CommerceHub.Inventory.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: INVENTORY_DB_CONNECTION
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-payment
+    runtime: docker
+    dockerfilePath: src/Services/Payment/CommerceHub.Payment.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: PAYMENT_DB_CONNECTION
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-notification
+    runtime: docker
+    dockerfilePath: src/Services/Notification/CommerceHub.Notification.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: REDIS_CONNECTION_STRING
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-cms
+    runtime: docker
+    dockerfilePath: src/Services/CMS/CommerceHub.Cms.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: CMS_DB_CONNECTION
+        sync: false
+      - key: REDIS_CONNECTION_STRING
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-analytics
+    runtime: docker
+    dockerfilePath: src/Services/Analytics/CommerceHub.Analytics.Api/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ANALYTICS_DB_CONNECTION
+        sync: false
+      - key: RABBITMQ_HOST
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  - type: web
+    name: commercehub-frontend
+    runtime: docker
+    dockerfilePath: frontend/Dockerfile
+    envVars:
+      - key: API_BASE_URL
+        value: https://commercehub-gateway.onrender.com
+    autoDeploy: true

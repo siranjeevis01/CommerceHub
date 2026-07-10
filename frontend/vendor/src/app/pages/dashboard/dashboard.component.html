@@ -1,0 +1,123 @@
+<div class="page-header">
+  <h1>Dashboard</h1>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="stats-grid" *ngIf="stats$ | async as stats">
+  <app-stat-card label="Total Products" [value]="stats.totalProducts" icon="box-seam" color="primary"></app-stat-card>
+  <app-stat-card label="Active Listings" [value]="stats.activeListings" icon="check-circle" color="success"></app-stat-card>
+  <app-stat-card label="Total Orders" [value]="stats.totalOrders" icon="cart-check" color="info"></app-stat-card>
+  <app-stat-card label="Monthly Revenue" [value]="stats.monthlyRevenue" prefix="$" icon="currency-dollar" color="primary"></app-stat-card>
+  <app-stat-card label="Yearly Revenue" [value]="stats.yearlyRevenue" prefix="$" icon="graph-up-arrow" color="success"></app-stat-card>
+  <app-stat-card label="Average Rating" [value]="stats.averageRating.toFixed(1)" icon="star" color="warning"></app-stat-card>
+</div>
+
+<div class="dashboard-grid">
+  <div class="card chart-card">
+    <div class="card-header">Sales Overview (Last 30 Days)</div>
+    <div class="card-body chart-container">
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Low Stock Alerts</div>
+    <div class="card-body p-0">
+      <div class="list-group list-group-flush" *ngIf="(lowStockProducts$ | async)?.length; else noLowStock">
+        <div class="list-group-item d-flex align-items-center gap-3" *ngFor="let p of lowStockProducts$ | async">
+          <img [src]="p.imageUrl || 'https://via.placeholder.com/40'" class="product-thumb" (error)="$event.target.src='https://via.placeholder.com/40'">
+          <div class="flex-grow-1">
+            <div class="fw-semibold">{{ p.name }}</div>
+            <small class="text-muted">SKU: {{ p.sku }}</small>
+          </div>
+          <span class="badge bg-danger">{{ p.stockQuantity }} left</span>
+        </div>
+      </div>
+      <ng-template #noLowStock>
+        <div class="text-center text-success p-4">
+          <i class="bi bi-check-circle fs-3"></i>
+          <p class="mb-0 mt-2">All products are well stocked</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-grid-2">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>Recent Orders</span>
+      <a routerLink="/orders" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="card-body p-0">
+      <table class="table mb-0" *ngIf="(recentOrders$ | async)?.length; else noOrders">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of recentOrders$ | async" routerLink="/orders/{{ order.id }}" class="clickable">
+            <td class="fw-semibold">#{{ order.orderNumber }}</td>
+            <td>{{ order.items.length }}</td>
+            <td>${{ order.totalAmount.toFixed(2) }}</td>
+            <td><app-status-badge [status]="order.status"></app-status-badge></td>
+            <td>{{ order.createdAt | date:'MMM d, y' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noOrders>
+        <app-empty-state icon="cart" title="No orders yet" message="Orders will appear here when customers purchase your products."></app-empty-state>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>Top Products</span>
+      <a routerLink="/products" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="card-body p-0">
+      <div class="list-group list-group-flush" *ngIf="(topProducts$ | async)?.length; else noTopProducts">
+        <div class="list-group-item d-flex align-items-center gap-3" *ngFor="let p of topProducts$ | async">
+          <img [src]="p.imageUrl || 'https://via.placeholder.com/40'" class="product-thumb" (error)="$event.target.src='https://via.placeholder.com/40'">
+          <div class="flex-grow-1">
+            <div class="fw-semibold">{{ p.name }}</div>
+            <small class="text-muted">${{ p.price.toFixed(2) }} | ★ {{ p.ratings.toFixed(1) }}</small>
+          </div>
+        </div>
+      </div>
+      <ng-template #noTopProducts>
+        <app-empty-state icon="box" title="No products yet"></app-empty-state>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header">Recent Reviews</div>
+  <div class="card-body p-0">
+    <div class="list-group list-group-flush" *ngIf="(recentReviews$ | async)?.length; else noReviews">
+      <div class="list-group-item" *ngFor="let r of recentReviews$ | async">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="fw-semibold">{{ r.userName }}</div>
+            <div class="stars">
+              <span *ngFor="let s of [1,2,3,4,5]" [class.star-empty]="s > r.rating">★</span>
+            </div>
+            <p class="mb-0 mt-1">{{ r.comment }}</p>
+          </div>
+          <small class="text-muted">{{ r.createdAt | date:'MMM d, y' }}</small>
+        </div>
+      </div>
+    </div>
+    <ng-template #noReviews>
+      <app-empty-state icon="star" title="No reviews yet"></app-empty-state>
+    </ng-template>
+  </div>
+</div>

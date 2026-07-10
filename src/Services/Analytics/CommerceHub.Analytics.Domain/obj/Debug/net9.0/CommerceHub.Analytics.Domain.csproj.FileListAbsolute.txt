@@ -1,0 +1,11 @@
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\bin\Debug\net9.0\CommerceHub.Analytics.Domain.deps.json
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\bin\Debug\net9.0\CommerceHub.Analytics.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\bin\Debug\net9.0\CommerceHub.Analytics.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.AssemblyInfoInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.AssemblyInfo.cs
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\refint\CommerceHub.Analytics.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\CommerceHub.Analytics.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Analytics\CommerceHub.Analytics.Domain\obj\Debug\net9.0\ref\CommerceHub.Analytics.Domain.dll

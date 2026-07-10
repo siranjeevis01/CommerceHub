@@ -1,0 +1,55 @@
+# Environment files (secrets)
+.env
+.env.*.local
+.env.production
+.env.dev
+.env.staging
+
+# Build outputs
+**/bin/
+**/obj/
+**/[Bb]in/
+**/[Oo]bj/
+out/
+publish/
+app/
+
+# Logs
+/Logs/
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.vs/
+*.vscode/
+.idea/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Database files
+*.mdf
+*.ldf
+*.db
+
+# Test results
+/TestResults/
+
+# Hangfire data
+/hangfire/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/.angular/
+
+# Temp files
+*.tmp
+*.temp
+
+# Backup files
+*.sql
+*.backup

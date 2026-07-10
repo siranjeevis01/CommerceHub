@@ -1,0 +1,102 @@
+<div class="data-table-wrapper">
+  <div class="table-toolbar" *ngIf="filters.length > 0">
+    <div class="filters-row">
+      <ng-container *ngFor="let f of filters">
+        <div class="filter-item" [ngSwitch]="f.type">
+          <input *ngSwitchCase="'text'" class="form-control form-control-sm" [placeholder]="f.placeholder || 'Search...'"
+            [(ngModel)]="currentFilters[f.key]" (ngModelChange)="onFilterChange()">
+          <select *ngSwitchCase="'select'" class="form-select form-select-sm" [(ngModel)]="currentFilters[f.key]" (ngModelChange)="onFilterChange()">
+            <option [value]="undefined">{{ f.placeholder || 'All' }}</option>
+            <option *ngFor="let opt of f.options" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <button class="btn btn-sm btn-outline-secondary" *ngIf="Object.keys(currentFilters).length > 0" (click)="clearAllFilters()">
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="loading-overlay" *ngIf="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="error-state" *ngIf="error">
+      <i class="bi bi-exclamation-triangle"></i>
+      <p>{{ error }}</p>
+      <button class="btn btn-primary btn-sm" (click)="filterChange.emit(currentFilters)">Retry</button>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && !error && data.length === 0">
+      <i class="bi bi-inbox"></i>
+      <h5>{{ emptyMessage }}</h5>
+      <p *ngIf="Object.keys(currentFilters).length > 0">Try adjusting your filters</p>
+    </div>
+
+    <table class="table" *ngIf="!loading && !error && data.length > 0">
+      <thead>
+        <tr>
+          <th *ngIf="selectable" style="width: 40px">
+            <input type="checkbox" class="form-check-input" [checked]="isAllSelected()" (change)="toggleSelectAll()">
+          </th>
+          <th *ngFor="let col of columns" [style.width]="col.width" (click)="toggleSort(col.key)" [class.sortable]="col.sortable">
+            {{ col.label }}
+            <span class="sort-icon" *ngIf="col.sortable && sortKey === col.key">
+              {{ sortDir === 'asc' ? '\u25B2' : '\u25BC' }}
+            </span>
+          </th>
+          <th *ngIf="actions.length > 0 || actionTemplate" style="width: 80px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data" (click)="onRowClick(row)" [class.clickable]="rowClickable">
+          <td *ngIf="selectable" (click)="$event.stopPropagation()">
+            <input type="checkbox" class="form-check-input" [checked]="isSelected(row)" (change)="toggleSelect(row)">
+          </td>
+          <td *ngFor="let col of columns">
+            <span *ngIf="col.type !== 'badge'">{{ formatValue(row, col) }}</span>
+            <app-status-badge *ngIf="col.type === 'badge'" [status]="row[col.key]"></app-status-badge>
+          </td>
+          <td *ngIf="actions.length > 0 || actionTemplate" (click)="$event.stopPropagation()">
+            <ng-container *ngIf="actionTemplate" [ngTemplateOutlet]="actionTemplate" [ngTemplateOutletContext]="{ $implicit: row }"></ng-container>
+            <div class="action-btns" *ngIf="actions.length > 0">
+              <ng-container *ngFor="let act of actions">
+                <button *ngIf="!act.visible || act.visible(row)" class="btn btn-sm btn-icon" [ngClass]="act.class || 'btn-outline-secondary'"
+                  [title]="act.label" (click)="act.handler(row)">
+                  <i [ngClass]="act.icon"></i>
+                </button>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="total > 0">
+    <div class="table-info">
+      Showing {{ ((page - 1) * pageSize) + 1 }} - {{ Math.min(page * pageSize, total) }} of {{ total }}
+    </div>
+    <div class="pagination-controls">
+      <select class="form-select form-select-sm" style="width: auto" [ngModel]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+        <option *ngFor="let s of pageSizeOptions" [value]="s">{{ s }} / page</option>
+      </select>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="page <= 1">
+            <a class="page-link" (click)="page > 1 && pageChange.emit(page - 1)">&laquo;</a>
+          </li>
+          <li class="page-item" *ngFor="let p of displayPages" [class.active]="p === page">
+            <a class="page-link" (click)="pageChange.emit(p)">{{ p }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="page >= totalPages">
+            <a class="page-link" (click)="page < totalPages && pageChange.emit(page + 1)">&raquo;</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

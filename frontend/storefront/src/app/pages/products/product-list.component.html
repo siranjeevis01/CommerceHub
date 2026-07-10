@@ -1,0 +1,107 @@
+<div class="container py-3">
+  <app-breadcrumb [items]="categorySlug ? [{label: 'Products', url: '/products'}, {label: categorySlug}] : [{label: 'Products'}]"></app-breadcrumb>
+
+  <div class="row">
+    <!-- Mobile filter toggle -->
+    <div class="col-12 d-lg-none mb-2">
+      <button class="btn btn-outline-secondary w-100" (click)="showFilters = !showFilters">
+        <i class="bi bi-funnel me-1"></i> Filters
+        <span class="badge bg-primary ms-1" *ngIf="selectedCategory || selectedBrand || minPrice || maxPrice || minRating > 0">!</span>
+      </button>
+    </div>
+
+    <!-- Sidebar filters -->
+    <div class="col-lg-3" [class.d-none]="!showFilters" [class.d-lg-block]="true">
+      <div class="card p-3 sticky-sidebar">
+        <h6 class="fw-bold mb-3">Filters</h6>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Category</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedCategory">
+            <option value="">All Categories</option>
+            <option *ngFor="let cat of categories$ | async" [value]="cat.slug">{{cat.name}}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Brand</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedBrand">
+            <option value="">All Brands</option>
+            <option *ngFor="let brand of brands$ | async" [value]="brand.slug">{{brand.name}}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Price Range</label>
+          <div class="d-flex gap-2">
+            <input type="number" class="form-control form-control-sm" placeholder="Min" [(ngModel)]="minPrice">
+            <input type="number" class="form-control form-control-sm" placeholder="Max" [(ngModel)]="maxPrice">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Minimum Rating</label>
+          <div class="d-flex gap-1 flex-wrap">
+            <button *ngFor="let r of [1,2,3,4,5]" class="btn btn-sm" [class.btn-warning]="minRating === r" [class.btn-outline-warning]="minRating !== r" (click)="minRating = minRating === r ? 0 : r">
+              {{r}}<i class="bi bi-star-fill ms-1 small"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary btn-sm" (click)="applyFilters()">Apply Filters</button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div class="col-lg-9">
+      <!-- Toolbar -->
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <small class="text-muted" *ngIf="products$ | async as p; else loadingCount">{{p.total}} products found</small>
+          <ng-template #loadingCount><small class="text-muted">Loading...</small></ng-template>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="sortBy" (change)="onSortChange()">
+            <option value="newest">Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="popularity">Most Popular</option>
+            <option value="name">Name A-Z</option>
+          </select>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-secondary" [class.active]="viewMode === 'grid'" (click)="toggleView('grid')" title="Grid view"><i class="bi bi-grid-3x3-gap-fill"></i></button>
+            <button class="btn btn-outline-secondary" [class.active]="viewMode === 'list'" (click)="toggleView('list')" title="List view"><i class="bi bi-list-ul"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <app-loading-overlay [isLoading]="false"></app-loading-overlay>
+
+      <!-- Products -->
+      <ng-container *ngIf="products$ | async as result; else loadingProducts">
+        <div *ngIf="result.data.length > 0; else noProducts">
+          <div [class.product-grid]="viewMode === 'grid'" [class.list-view]="viewMode === 'list'">
+            <app-product-card *ngFor="let product of result.data" [product]="product" [viewMode]="viewMode" (addToCart)="addToCart($event)"></app-product-card>
+          </div>
+          <app-pagination-footer
+            [currentPage]="result.page"
+            [totalPages]="result.totalPages"
+            [total]="result.total"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)">
+          </app-pagination-footer>
+        </div>
+        <ng-template #noProducts>
+          <app-empty-state icon="bi-search" title="No products found" message="Try adjusting your filters or search terms."></app-empty-state>
+        </ng-template>
+      </ng-container>
+      <ng-template #loadingProducts>
+        <div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Loading products...</p></div>
+      </ng-template>
+    </div>
+  </div>
+</div>

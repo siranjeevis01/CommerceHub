@@ -1,0 +1,10 @@
+<div class="quantity-selector input-group input-group-sm" [class.disabled]="disabled">
+  <button class="btn btn-outline-secondary" type="button" (click)="decrease()" [disabled]="quantity <= min || disabled">
+    <i class="bi bi-dash"></i>
+  </button>
+  <input type="number" class="form-control text-center" [value]="quantity" [min]="min" [max]="max" [disabled]="disabled"
+         (input)="onInputChange($any($event).target.value)" (blur)="onInputChange($any($event).target.value)">
+  <button class="btn btn-outline-secondary" type="button" (click)="increase()" [disabled]="quantity >= max || disabled">
+    <i class="bi bi-plus"></i>
+  </button>
+</div>

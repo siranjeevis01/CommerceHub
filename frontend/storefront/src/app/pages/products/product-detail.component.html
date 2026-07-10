@@ -1,0 +1,162 @@
+<app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
+
+<div class="container py-3" *ngIf="product$ | async as product; else errorState">
+  <app-breadcrumb [items]="[
+    {label: 'Products', url: '/products'},
+    {label: product.categoryName, url: getCategoryUrl(product.categoryName)},
+    {label: product.name}
+  ]"></app-breadcrumb>
+
+  <div class="row g-4" *ngIf="!isLoading && !error">
+    <!-- Image Gallery -->
+    <div class="col-md-6">
+      <div class="main-image mb-3 position-relative">
+        <div class="image-wrapper rounded border overflow-hidden">
+          <img [src]="product.images[selectedImage] || product.imageUrl" [alt]="product.name" class="img-fluid w-100" style="cursor: crosshair;" (error)="onImageError($event)">
+        </div>
+      </div>
+      <div class="thumbnails d-flex gap-2 flex-wrap" *ngIf="product.images.length > 0">
+        <div class="thumbnail-item border rounded overflow-hidden" *ngFor="let img of product.images; let i = index" [class.active]="i === selectedImage" (click)="selectedImage = i">
+          <img [src]="img" [alt]="product.name + ' ' + i" class="img-fluid" width="70" height="70" (error)="onImageError($event)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-md-6">
+      <h1 class="h3 fw-bold mb-1">{{product.name}}</h1>
+      <app-product-rating [rating]="product.ratings" [count]="product.reviewCount" [size]="'md'"></app-product-rating>
+
+      <hr>
+
+      <app-price-display [price]="currentPrice || product.price" [comparePrice]="product.comparePrice"></app-price-display>
+
+      <p class="text-muted mt-2">{{product.shortDescription}}</p>
+
+      <div class="mb-3">
+        <small class="text-muted">SKU: <strong>{{selectedVariant?.sku || product.sku}}</strong></small>
+      </div>
+
+      <!-- Variants -->
+      <div class="mb-3" *ngIf="product.variants.length > 0">
+        <div *ngIf="product.variants[0].color">
+          <label class="form-label small fw-semibold">Color</label>
+          <div class="d-flex gap-2 flex-wrap mb-2">
+            <button class="btn btn-sm border" *ngFor="let v of product.variants" [class.btn-primary]="selectedVariant?.id === v.id" [class.text-white]="selectedVariant?.id === v.id" (click)="selectVariant(v)">
+              {{v.color}}
+            </button>
+          </div>
+        </div>
+        <div *ngIf="product.variants[0].size">
+          <label class="form-label small fw-semibold">Size</label>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-sm border" *ngFor="let v of product.variants" [class.btn-primary]="selectedVariant?.id === v.id" [class.text-white]="selectedVariant?.id === v.id" (click)="selectVariant(v)">
+              {{v.size}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Quantity</label>
+        <app-quantity-selector [quantity]="quantity" [max]="stockQuantity" (quantityChange)="quantity = $event"></app-quantity-selector>
+        <small class="text-muted d-block mt-1">{{stockQuantity}} in stock</small>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-primary flex-fill" (click)="addToCart()" [disabled]="stockQuantity === 0">
+          <i class="bi bi-cart-plus me-1"></i> Add to Cart
+        </button>
+        <button class="btn btn-success flex-fill" (click)="buyNow()" [disabled]="stockQuantity === 0">
+          <i class="bi bi-lightning-fill me-1"></i> Buy Now
+        </button>
+      </div>
+
+      <div class="alert alert-danger py-2 small" *ngIf="stockQuantity === 0">
+        <i class="bi bi-exclamation-triangle me-1"></i> This product is currently out of stock.
+      </div>
+
+      <!-- Short info -->
+      <div class="small text-muted">
+        <div><i class="bi bi-truck me-1"></i> Free shipping on orders over $50</div>
+        <div><i class="bi bi-arrow-return-left me-1"></i> 30-day easy returns</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="mt-5" *ngIf="!isLoading">
+    <ul class="nav nav-tabs">
+      <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'description'" (click)="activeTab = 'description'">Description</a></li>
+      <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'reviews'" (click)="activeTab = 'reviews'">Reviews ({{product.reviewCount}})</a></li>
+      <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'shipping'" (click)="activeTab = 'shipping'">Shipping Info</a></li>
+    </ul>
+    <div class="tab-content p-4 border border-top-0 rounded-bottom bg-white">
+      <div *ngIf="activeTab === 'description'">
+        <p>{{product.description}}</p>
+        <div class="mt-3" *ngIf="product.tags.length > 0">
+          <strong class="small">Tags:</strong>
+          <span class="badge bg-light text-dark me-1" *ngFor="let tag of product.tags">{{tag}}</span>
+        </div>
+      </div>
+      <div *ngIf="activeTab === 'reviews'">
+        <ng-container *ngIf="reviews$ | async as reviews; else reviewsLoading">
+          <div *ngIf="reviews.length > 0; else noReviews">
+            <div class="mb-3 d-flex align-items-center gap-2">
+              <h5 class="mb-0">{{product.ratings}}</h5>
+              <app-product-rating [rating]="product.ratings" [showCount]="false" [size]="'md'"></app-product-rating>
+              <small class="text-muted">({{product.reviewCount}} reviews)</small>
+            </div>
+            <div class="review-item border-bottom pb-3 mb-3" *ngFor="let review of reviews">
+              <div class="d-flex justify-content-between">
+                <strong class="small">{{review.userName}}</strong>
+                <small class="text-muted">{{review.createdAt | date}}</small>
+              </div>
+              <app-product-rating [rating]="review.rating" [showCount]="false"></app-product-rating>
+              <h6 class="mt-1 mb-1">{{review.title}}</h6>
+              <p class="small mb-0">{{review.comment}}</p>
+            </div>
+          </div>
+          <ng-template #noReviews>
+            <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+          </ng-template>
+        </ng-container>
+        <ng-template #reviewsLoading>
+          <div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+        </ng-template>
+      </div>
+      <div *ngIf="activeTab === 'shipping'">
+        <h6>Shipping Policy</h6>
+        <ul class="small">
+          <li>Free standard shipping on orders over $50</li>
+          <li>Standard shipping: 5-7 business days ($5.99)</li>
+          <li>Express shipping: 2-3 business days ($12.99)</li>
+          <li>Orders are processed within 1-2 business days</li>
+          <li>International shipping available for select countries</li>
+        </ul>
+        <h6>Return Policy</h6>
+        <ul class="small">
+          <li>30-day easy return window</li>
+          <li>Items must be unused and in original packaging</li>
+          <li>Free returns on defective items</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <section class="mt-5" *ngIf="relatedProducts$ | async as related">
+    <h3 class="section-title">Related Products</h3>
+    <div class="product-grid">
+      <app-product-card *ngFor="let rp of related.slice(0, 4)" [product]="rp"></app-product-card>
+    </div>
+  </section>
+</div>
+
+<ng-template #errorState>
+  <div class="container py-5" *ngIf="error && !isLoading">
+    <app-empty-state icon="bi-exclamation-triangle" title="Product not found" message="The product you are looking for does not exist or has been removed." [actionLabel]="'Browse Products'" [actionLink]="'/products'"></app-empty-state>
+  </div>
+</ng-template>

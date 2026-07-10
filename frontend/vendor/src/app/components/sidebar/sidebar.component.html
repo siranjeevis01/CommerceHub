@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <span class="brand-icon">C</span>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">CommerceHub</span>
+      <span class="brand-role">Vendor Panel</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main Menu</div>
+    <a *ngFor="let item of navItems"
+       class="nav-item"
+       routerLink="{{ item.route }}"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }">
+      <i class="bi bi-{{ item.icon }}"></i>
+      <span class="nav-label">{{ item.label }}</span>
+      <span class="nav-badge" *ngIf="item.badge">{{ item.badge }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-info">
+      <small>CommerceHub v1.0</small>
+    </div>
+  </div>
+</aside>

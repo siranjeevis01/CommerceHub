@@ -1,0 +1,6 @@
+<div class="product-rating" [class.text-sm]="size === 'sm'" [class.text-md]="size === 'md'" [class.text-lg]="size === 'lg'">
+  <span *ngFor="let star of stars" class="star" [class.filled]="star <= Math.floor(rating)" [class.half]="star === Math.ceil(rating) && rating % 1 >= 0.5">
+    <i [class]="starClass(star)"></i>
+  </span>
+  <span class="ms-1 text-muted" *ngIf="showCount">({{count}})</span>
+</div>

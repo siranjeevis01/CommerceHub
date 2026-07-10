@@ -1,0 +1,63 @@
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.order-history {
+  grid-column: 1 / -1;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+
+  &:last-child { border-bottom: none; }
+  span:first-child { color: var(--text-secondary); font-weight: 500; }
+}
+
+.roles-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.role-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(79,110,247,0.1);
+  color: var(--primary-color);
+}
+
+.role-editor {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.role-toggle {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+
+  &:hover { border-color: var(--primary-color); color: var(--primary-color); }
+  &.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}

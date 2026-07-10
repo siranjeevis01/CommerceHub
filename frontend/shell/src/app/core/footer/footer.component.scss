@@ -1,0 +1,28 @@
+.hover-light:hover {
+  color: white !important;
+  transition: color var(--transition);
+}
+
+.text-primary-light {
+  color: var(--primary-light);
+}
+
+.list-unstyled a {
+  transition: color var(--transition);
+  padding: 2px 0;
+  display: inline-block;
+}
+
+hr {
+  opacity: 0.15;
+}
+
+@media (max-width: 767.98px) {
+  footer {
+    text-align: center;
+  }
+
+  .d-flex.gap-2 {
+    justify-content: center;
+  }
+}

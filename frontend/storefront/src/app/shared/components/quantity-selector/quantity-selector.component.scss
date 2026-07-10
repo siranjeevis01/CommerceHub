@@ -1,0 +1,21 @@
+.quantity-selector {
+  max-width: 140px;
+
+  &.disabled {
+    opacity: 0.6;
+  }
+
+  input[type=number] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    -moz-appearance: textfield;
+    min-width: 48px;
+  }
+
+  .btn {
+    padding: 0.25rem 0.5rem;
+  }
+}

@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &.active {
+    color: #fff;
+  }
+}
+
+.dropdown-item {
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  i {
+    width: 1.25rem;
+  }
+}
+
+footer {
+  a {
+    transition: color 0.2s;
+
+    &:hover {
+      color: #fff !important;
+    }
+  }
+}

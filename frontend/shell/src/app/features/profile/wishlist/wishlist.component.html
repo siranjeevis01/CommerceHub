@@ -1,0 +1,51 @@
+<div class="wishlist-page py-4">
+  <div class="container">
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <i class="bi bi-heart fs-2 text-primary"></i>
+      <div>
+        <h4 class="fw-bold mb-0">My Wishlist</h4>
+        <small class="text-muted">{{ items.length }} saved {{ items.length === 1 ? 'item' : 'items' }}</small>
+      </div>
+    </div>
+
+    <app-loading-spinner *ngIf="loading" text="Loading wishlist..."></app-loading-spinner>
+
+    <div class="row g-3" *ngIf="!loading">
+      <div class="col-12" *ngIf="items.length === 0">
+        <div class="text-center py-5">
+          <i class="bi bi-heartbreak fs-1 text-muted d-block mb-2"></i>
+          <h5 class="text-muted">Your wishlist is empty</h5>
+          <p class="text-muted small">Save items you love by clicking the heart icon on any product.</p>
+          <a routerLink="/storefront" class="btn btn-primary mt-2">Start Shopping</a>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" *ngFor="let product of items">
+        <div class="card product-card h-100 border-0 shadow-sm">
+          <div class="product-img-wrapper">
+            <img [src]="product.imageUrl || 'https://placehold.co/300x300/e2e8f0/64748b?text=Product'"
+                 class="card-img-top" [alt]="product.name">
+            <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle"
+                    (click)="removeFromWishlist(product.id)"
+                    title="Remove from wishlist">
+              <i class="bi bi-heart-fill text-danger"></i>
+            </button>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <small class="text-muted text-truncate">{{ product.brandName }}</small>
+            <h6 class="card-title mb-1 text-truncate">
+              <a [routerLink]="'/storefront/product/' + product.slug" class="text-decoration-none text-dark">
+                {{ product.name }}
+              </a>
+            </h6>
+            <app-star-rating [rating]="product.ratings" [readonly]="true" size="sm"></app-star-rating>
+            <app-price-display [price]="product.price" [comparePrice]="product.comparePrice" size="sm"></app-price-display>
+            <button class="btn btn-primary btn-sm mt-2 w-100" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus me-1"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

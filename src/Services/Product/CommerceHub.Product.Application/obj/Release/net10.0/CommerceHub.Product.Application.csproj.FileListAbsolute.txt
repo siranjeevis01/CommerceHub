@@ -1,0 +1,17 @@
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Product.Application.deps.json
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Product.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Product.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Product.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Kernel.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Product.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\bin\Release\net10.0\CommerceHub.Shared.Kernel.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.csproj.AssemblyReference.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.AssemblyInfoInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.AssemblyInfo.cs
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\Commerce.AACF7F76.Up2Date
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\refint\CommerceHub.Product.Application.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\CommerceHub.Product.Application.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Product\CommerceHub.Product.Application\obj\Release\net10.0\ref\CommerceHub.Product.Application.dll

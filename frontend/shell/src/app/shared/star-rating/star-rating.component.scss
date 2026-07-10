@@ -1,0 +1,28 @@
+.star-rating {
+  font-size: 1rem;
+  line-height: 1;
+
+  &.star-rating-sm { font-size: 0.75rem; }
+  &.star-rating-lg { font-size: 1.25rem; }
+
+  .star {
+    color: #d1d5db;
+    transition: color var(--transition);
+
+    &.full, &.half {
+      color: #f59e0b;
+    }
+
+    &.clickable {
+      cursor: pointer;
+
+      &:hover {
+        color: #f59e0b;
+      }
+    }
+  }
+
+  .rating-text {
+    font-size: 0.85em;
+  }
+}

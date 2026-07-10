@@ -1,0 +1,88 @@
+<div class="fade-in">
+  <nav class="breadcrumb-nav">
+    <a routerLink="/users">Users</a>
+    <span class="separator">/</span>
+    <span class="current">{{ user?.firstName }} {{ user?.lastName }}</span>
+  </nav>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="user && !error">
+    <div class="page-header">
+      <div>
+        <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+        <p>{{ user.email }}</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn" [ngClass]="user.isActive ? 'btn-outline-warning' : 'btn-outline-success'" (click)="toggleUserStatus()">
+          <i [class]="user.isActive ? 'bi bi-pause-circle' : 'bi bi-play-circle'"></i>
+          {{ user.isActive ? 'Suspend' : 'Activate' }}
+        </button>
+        <button class="btn btn-outline-danger" (click)="deleteUser()">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="card">
+        <div class="card-header"><h5>Profile Information</h5></div>
+        <div class="card-body">
+          <div class="info-row"><span>Name</span><span>{{ user.firstName }} {{ user.lastName }}</span></div>
+          <div class="info-row"><span>Email</span><span>{{ user.email }}</span></div>
+          <div class="info-row"><span>Phone</span><span>{{ user.phoneNumber || '-' }}</span></div>
+          <div class="info-row"><span>Status</span><span><app-status-badge [status]="user.isActive ? 'active' : 'inactive'"></app-status-badge></span></div>
+          <div class="info-row"><span>Joined</span><span>{{ user.createdAt | date:'MMM d, y' }}</span></div>
+          <div class="info-row"><span>User ID</span><span>#{{ user.id }}</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5>Roles</h5>
+          <button class="btn btn-sm btn-outline-primary" (click)="editingRoles = !editingRoles">
+            <i class="bi bi-pencil"></i> Edit
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="roles-list">
+            <span class="role-badge" *ngFor="let role of user.roles">{{ role }}</span>
+            <span *ngIf="user.roles.length === 0" class="text-secondary">No roles assigned</span>
+          </div>
+          <div class="role-editor" *ngIf="editingRoles">
+            <label class="form-label">Available Roles</label>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="role-toggle" *ngFor="let role of availableRoles" [class.active]="user.roles.includes(role)"
+                (click)="updateRole(role, !user.roles.includes(role))">
+                {{ role }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card order-history">
+        <div class="card-header"><h5>Order History</h5></div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead><tr><th>Order #</th><th>Status</th><th>Total</th><th>Date</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let o of orders">
+                <td><a [routerLink]="['/orders', o.id]">#{{ o.orderNumber }}</a></td>
+                <td><app-status-badge [status]="o.status"></app-status-badge></td>
+                <td>${{ o.totalAmount.toFixed(2) }}</td>
+                <td>{{ o.createdAt | date:'MMM d, y' }}</td>
+              </tr>
+              <tr *ngIf="orders.length === 0"><td colspan="4" class="text-center text-secondary py-3">No orders</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

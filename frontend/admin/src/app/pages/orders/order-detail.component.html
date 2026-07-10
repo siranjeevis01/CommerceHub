@@ -1,0 +1,112 @@
+<div class="fade-in">
+  <nav class="breadcrumb-nav">
+    <a routerLink="/orders">Orders</a>
+    <span class="separator">/</span>
+    <span class="current" *ngIf="order">Order #{{ order.orderNumber }}</span>
+  </nav>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="order && !error">
+    <div class="page-header">
+      <div>
+        <h1>Order #{{ order.orderNumber }}</h1>
+        <p>Placed on {{ order.createdAt | date:'MMMM d, y \'at\' h:mm a' }}</p>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <app-status-badge [status]="order.status" size="md"></app-status-badge>
+        <app-status-badge [status]="order.paymentStatus" size="md"></app-status-badge>
+      </div>
+    </div>
+
+    <div class="order-grid">
+      <div class="card">
+        <div class="card-header"><h5>Order Items</h5></div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let item of order.items">
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <img *ngIf="item.imageUrl" [src]="item.imageUrl" class="item-img">
+                    <span>{{ item.productName }}</span>
+                  </div>
+                </td>
+                <td>${{ item.unitPrice.toFixed(2) }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal.toFixed(2) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <div class="totals">
+            <div class="total-row"><span>Subtotal</span><span>${{ order.subtotal.toFixed(2) }}</span></div>
+            <div class="total-row"><span>Shipping</span><span>${{ order.shippingCost.toFixed(2) }}</span></div>
+            <div class="total-row" *ngIf="order.discount"><span>Discount</span><span>-${{ order.discount.toFixed(2) }}</span></div>
+            <div class="total-row"><span>Tax</span><span>${{ order.tax.toFixed(2) }}</span></div>
+            <div class="total-row total"><span>Total</span><span>${{ order.totalAmount.toFixed(2) }}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Update Status</h5></div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Order Status</label>
+            <select class="form-select" [(ngModel)]="selectedStatus">
+              <option *ngFor="let s of statusOptions" [value]="s">{{ s | titlecase }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tracking Note</label>
+            <textarea class="form-control" [(ngModel)]="trackingNote" rows="2" placeholder="Optional tracking update note"></textarea>
+          </div>
+          <button class="btn btn-primary w-100" (click)="updateStatus()" [disabled]="selectedStatus === order.status">
+            Update Status
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Shipping Address</h5></div>
+        <div class="card-body">
+          <p style="white-space: pre-line; font-size: 13px;">{{ order.shippingAddress || 'No address provided' }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Payment Info</h5></div>
+        <div class="card-body">
+          <div class="info-row"><span>Method</span><span>{{ order.paymentMethod || 'N/A' }}</span></div>
+          <div class="info-row"><span>Status</span><span><app-status-badge [status]="order.paymentStatus"></app-status-badge></span></div>
+        </div>
+      </div>
+
+      <div class="card tracking-card">
+        <div class="card-header"><h5>Tracking Timeline</h5></div>
+        <div class="card-body">
+          <div class="timeline" *ngIf="order.tracking.length > 0">
+            <div class="timeline-item" *ngFor="let t of order.tracking">
+              <div class="timeline-dot" [ngClass]="getStatusClass(t.status)"></div>
+              <div class="timeline-content">
+                <span class="timeline-status">{{ t.status | titlecase }}</span>
+                <span class="timeline-note" *ngIf="t.note">{{ t.note }}</span>
+                <span class="timeline-date">{{ t.updatedAt | date:'MMM d, y h:mm a' }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="order.tracking.length === 0">
+            <p class="mb-0">No tracking updates yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

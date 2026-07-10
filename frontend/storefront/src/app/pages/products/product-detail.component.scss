@@ -1,0 +1,51 @@
+.main-image {
+  .image-wrapper {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+
+    img {
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+.thumbnails {
+  .thumbnail-item {
+    cursor: pointer;
+    transition: border-color 0.2s;
+    width: 70px;
+    height: 70px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &.active, &:hover {
+      border-color: #0d6efd !important;
+    }
+  }
+}
+
+.nav-tabs {
+  .nav-link {
+    cursor: pointer;
+    color: #495057;
+    font-weight: 500;
+
+    &.active {
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main-image .image-wrapper {
+    height: 280px;
+  }
+}

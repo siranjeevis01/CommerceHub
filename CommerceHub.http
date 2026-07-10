@@ -1,0 +1,25 @@
+@Gateway_HostAddress = http://localhost:5000
+@Identity_HostAddress = http://localhost:5203
+@Product_HostAddress = http://localhost:5204
+@Order_HostAddress = http://localhost:5205
+
+### Health Check
+GET {{Gateway_HostAddress}}/health
+Accept: application/json
+
+### Identity - Login
+POST {{Identity_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@commercehub.com",
+  "password": "Admin@123"
+}
+
+### Product - Get All Products
+GET {{Product_HostAddress}}/api/v1/products
+Accept: application/json
+
+### Order - Get All Orders
+GET {{Order_HostAddress}}/api/v1/orders
+Accept: application/json

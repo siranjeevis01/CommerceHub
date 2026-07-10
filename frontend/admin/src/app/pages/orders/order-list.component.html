@@ -1,0 +1,30 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Orders</h1>
+      <p>View and manage all orders on the platform</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <app-data-table
+        [columns]="columns"
+        [data]="orders"
+        [total]="total"
+        [page]="page"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        [error]="error"
+        [filters]="filters"
+        sortKey="createdAt"
+        sortDir="desc"
+        emptyMessage="No orders found"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (filterChange)="onFilterChange($event)"
+        (rowClick)="router.navigate(['/orders', $event.id])"
+      ></app-data-table>
+    </div>
+  </div>
+</div>

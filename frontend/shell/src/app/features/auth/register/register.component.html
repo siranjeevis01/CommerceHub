@@ -1,0 +1,135 @@
+<div class="auth-page">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-80">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <i class="bi bi-person-plus fs-1 text-primary"></i>
+              <h3 class="fw-bold mt-2">Create Account</h3>
+              <p class="text-muted small">Join CommerceHub and start shopping</p>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName" class="form-label small fw-medium">First Name</label>
+                  <input type="text" class="form-control" id="firstName"
+                         formControlName="firstName" placeholder="John"
+                         [class.is-invalid]="submitted && f['firstName'].errors">
+                  <div class="invalid-feedback" *ngIf="submitted && f['firstName'].errors?.['required']">
+                    First name is required
+                  </div>
+                  <div class="invalid-feedback" *ngIf="submitted && f['firstName'].errors?.['minlength']">
+                    Minimum 2 characters
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="lastName" class="form-label small fw-medium">Last Name</label>
+                  <input type="text" class="form-control" id="lastName"
+                         formControlName="lastName" placeholder="Doe"
+                         [class.is-invalid]="submitted && f['lastName'].errors">
+                  <div class="invalid-feedback" *ngIf="submitted && f['lastName'].errors?.['required']">
+                    Last name is required
+                  </div>
+                  <div class="invalid-feedback" *ngIf="submitted && f['lastName'].errors?.['minlength']">
+                    Minimum 2 characters
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="regEmail" class="form-label small fw-medium">Email Address</label>
+                <input type="email" class="form-control" id="regEmail"
+                       formControlName="email" placeholder="you@example.com"
+                       [class.is-invalid]="submitted && f['email'].errors">
+                <div class="invalid-feedback" *ngIf="submitted && f['email'].errors?.['required']">
+                  Email is required
+                </div>
+                <div class="invalid-feedback" *ngIf="submitted && f['email'].errors?.['email']">
+                  Please enter a valid email
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="phoneNumber" class="form-label small fw-medium">Phone Number (optional)</label>
+                <input type="tel" class="form-control" id="phoneNumber"
+                       formControlName="phoneNumber" placeholder="+1 234 567 8900"
+                       [class.is-invalid]="submitted && f['phoneNumber'].errors">
+                <div class="invalid-feedback" *ngIf="submitted && f['phoneNumber'].errors?.['pattern']">
+                  Please enter a valid phone number
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="regPassword" class="form-label small fw-medium">Password</label>
+                <div class="input-group">
+                  <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="regPassword"
+                         formControlName="password" placeholder="Create a strong password"
+                         [class.is-invalid]="submitted && f['password'].errors">
+                  <button class="btn btn-outline-secondary" type="button"
+                          (click)="showPassword = !showPassword">
+                    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                  </button>
+                  <div class="invalid-feedback" *ngIf="submitted && f['password'].errors?.['required']">
+                    Password is required
+                  </div>
+                  <div class="invalid-feedback" *ngIf="submitted && f['password'].errors?.['minlength']">
+                    Minimum 8 characters
+                  </div>
+                  <div class="invalid-feedback" *ngIf="submitted && f['password'].errors?.['weakPassword']">
+                    Must include uppercase, lowercase, number, and special character
+                  </div>
+                </div>
+                <div class="mt-2" *ngIf="f['password'].value">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="progress flex-grow-1" style="height: 4px;">
+                      <div class="progress-bar" [class]="getStrengthClass()"
+                           [style.width.%]="passwordStrength" role="progressbar">
+                      </div>
+                    </div>
+                    <small class="ms-2 text-muted">{{ getStrengthLabel() }}</small>
+                  </div>
+                  <ul class="list-unstyled mb-0" *ngIf="passwordFeedback.length > 0">
+                    <li *ngFor="let fb of passwordFeedback" class="text-muted small">
+                      <i class="bi bi-x-circle me-1 text-danger"></i>{{ fb }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="confirmPassword" class="form-label small fw-medium">Confirm Password</label>
+                <div class="input-group">
+                  <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirmPassword"
+                         formControlName="confirmPassword" placeholder="Repeat your password"
+                         [class.is-invalid]="submitted && f['confirmPassword'].errors">
+                  <button class="btn btn-outline-secondary" type="button"
+                          (click)="showConfirmPassword = !showConfirmPassword">
+                    <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+                  </button>
+                  <div class="invalid-feedback" *ngIf="submitted && f['confirmPassword'].errors?.['required']">
+                    Please confirm your password
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['confirmPassword'].errors?.['mustMatch']">
+                    Passwords do not match
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 py-2 fw-medium" [disabled]="loading">
+                <span class="spinner-border spinner-border-sm me-2" *ngIf="loading" role="status"></span>
+                {{ loading ? 'Creating account...' : 'Create Account' }}
+              </button>
+            </form>
+
+            <p class="text-center text-muted small mt-4 mb-0">
+              Already have an account?
+              <a routerLink="/auth/login" class="fw-medium">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

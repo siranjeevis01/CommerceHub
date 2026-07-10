@@ -1,0 +1,11 @@
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\bin\Debug\net10.0\CommerceHub.Cart.Domain.deps.json
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\bin\Debug\net10.0\CommerceHub.Cart.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\bin\Debug\net10.0\CommerceHub.Cart.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.AssemblyInfoInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.AssemblyInfo.cs
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\refint\CommerceHub.Cart.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\CommerceHub.Cart.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Cart\CommerceHub.Cart.Domain\obj\Debug\net10.0\ref\CommerceHub.Cart.Domain.dll

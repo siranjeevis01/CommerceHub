@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.auth-page {
+  padding: 3rem 0;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+}
+
+.min-vh-80 {
+  min-height: 80vh;
+}
+
+.card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.form-control {
+  padding: 0.7rem 1rem;
+}
+
+.btn-outline-dark, .btn-outline-primary {
+  border-radius: var(--radius);
+  transition: all var(--transition);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  span {
+    padding: 0 1rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .card-body {
+    padding: 2rem 1.5rem !important;
+  }
+}

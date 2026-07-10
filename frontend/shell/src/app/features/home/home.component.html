@@ -1,0 +1,172 @@
+<div class="home-page">
+  <section class="hero-section">
+    <div class="container position-relative">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="display-4 fw-bold mb-3">Discover Premium Products at Unbeatable Prices</h1>
+          <p class="lead mb-4 opacity-90">Shop from thousands of trusted vendors and enjoy fast delivery, secure payments, and exclusive deals.</p>
+          <div class="d-flex flex-wrap gap-3">
+            <a routerLink="/storefront" class="btn btn-light btn-lg px-4 fw-semibold">
+              <i class="bi bi-bag me-2"></i>Shop Now
+            </a>
+            <a routerLink="/storefront/deals" class="btn btn-outline-light btn-lg px-4 fw-semibold">
+              <i class="bi bi-fire me-2"></i>View Deals
+            </a>
+          </div>
+          <div class="d-flex gap-4 mt-4">
+            <div>
+              <h4 class="fw-bold mb-0">10K+</h4>
+              <small class="opacity-75">Products</small>
+            </div>
+            <div>
+              <h4 class="fw-bold mb-0">500+</h4>
+              <small class="opacity-75">Vendors</small>
+            </div>
+            <div>
+              <h4 class="fw-bold mb-0">50K+</h4>
+              <small class="opacity-75">Happy Customers</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block text-end">
+          <img src="https://placehold.co/600x400/4f46e5/ffffff?text=CommerceHub" alt="Shopping" class="img-fluid rounded-4 shadow-lg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title">Featured Categories</h2>
+        <a routerLink="/storefront/categories" class="btn btn-outline-primary btn-sm">View All</a>
+      </div>
+      <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of (categories$ | async)?.data || []">
+          <a class="card category-card text-decoration-none h-100" routerLink="/storefront/category/{{ cat.slug }}">
+            <div class="card-body text-center">
+              <div class="category-icon mb-2">
+                <i class="bi bi-box fs-2"></i>
+              </div>
+              <h6 class="fw-semibold mb-1">{{ cat.name }}</h6>
+              <small class="text-muted">{{ (cat.description || '') | slice:0:60 }}{{ (cat.description || '').length > 60 ? '...' : '' }}</small>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title">Featured Products</h2>
+        <a routerLink="/storefront" class="btn btn-outline-primary btn-sm">View All</a>
+      </div>
+      <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-3" *ngFor="let product of (featuredProducts$ | async)?.data || []">
+          <div class="card product-card h-100 border-0 shadow-sm">
+            <div class="product-img-wrapper">
+              <img [src]="product.imageUrl || 'https://placehold.co/300x300/e2e8f0/64748b?text=Product'"
+                   class="card-img-top" [alt]="product.name">
+              <span class="badge bg-danger position-absolute top-0 start-0 m-2" *ngIf="product.comparePrice">
+                -{{ ((product.comparePrice - product.price) / product.comparePrice * 100) | number:'1.0-0' }}%
+              </span>
+              <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle wishlist-btn"
+                      (click)="$event.preventDefault()">
+                <i class="bi bi-heart"></i>
+              </button>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <small class="text-muted text-truncate">{{ product.brandName }}</small>
+              <h6 class="card-title mb-1 text-truncate">
+                <a [routerLink]="'/storefront/product/' + product.slug" class="text-decoration-none text-dark stretched-link">
+                  {{ product.name }}
+                </a>
+              </h6>
+              <app-star-rating [rating]="product.ratings" [readonly]="true" size="sm"></app-star-rating>
+              <app-price-display [price]="product.price" [comparePrice]="product.comparePrice" size="sm"></app-price-display>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+      <h2 class="fw-bold mb-3">Join Our Vendor Community</h2>
+      <p class="lead mb-4 opacity-90 mx-auto" style="max-width: 600px;">
+        Start selling your products on CommerceHub and reach thousands of customers. We provide the tools you need to succeed.
+      </p>
+      <a routerLink="/auth/register?role=vendor" class="btn btn-light btn-lg px-5 fw-semibold">
+        Become a Vendor <i class="bi bi-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title">Hot Deals</h2>
+        <a routerLink="/storefront/deals" class="btn btn-outline-primary btn-sm">View All</a>
+      </div>
+      <div class="row g-3">
+        <div class="col-6 col-md-3" *ngFor="let deal of (deals$ | async)?.data || []">
+          <div class="card product-card h-100 border-0 shadow-sm">
+            <div class="product-img-wrapper">
+              <img [src]="deal.imageUrl || 'https://placehold.co/300x300/e2e8f0/64748b?text=Deal'"
+                   class="card-img-top" [alt]="deal.name">
+              <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                -{{ (( (deal.comparePrice ?? 0) - deal.price) / (deal.comparePrice ?? 1) * 100) | number:'1.0-0' }}%
+              </span>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h6 class="card-title mb-1 text-truncate">
+                <a [routerLink]="'/storefront/product/' + deal.slug" class="text-decoration-none text-dark stretched-link">
+                  {{ deal.name }}
+                </a>
+              </h6>
+              <app-price-display [price]="deal.price" [comparePrice]="deal.comparePrice" size="sm"></app-price-display>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-3 col-6 text-center">
+          <div class="p-3">
+            <i class="bi bi-truck fs-1 text-primary mb-2 d-block"></i>
+            <h6 class="fw-semibold">Free Shipping</h6>
+            <small class="text-muted">On orders over $50</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <div class="p-3">
+            <i class="bi bi-shield-check fs-1 text-primary mb-2 d-block"></i>
+            <h6 class="fw-semibold">Secure Payment</h6>
+            <small class="text-muted">100% secure transactions</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <div class="p-3">
+            <i class="bi bi-arrow-counterclockwise fs-1 text-primary mb-2 d-block"></i>
+            <h6 class="fw-semibold">Easy Returns</h6>
+            <small class="text-muted">30-day return policy</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+          <div class="p-3">
+            <i class="bi bi-headset fs-1 text-primary mb-2 d-block"></i>
+            <h6 class="fw-semibold">24/7 Support</h6>
+            <small class="text-muted">Dedicated customer service</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

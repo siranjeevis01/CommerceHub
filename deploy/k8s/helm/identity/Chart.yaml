@@ -1,0 +1,6 @@
+apiVersion: v2
+name: identity
+description: CommerceHub Identity Service - User authentication, authorization, role management
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

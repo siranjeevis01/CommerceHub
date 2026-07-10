@@ -1,0 +1,111 @@
+<div class="page-header">
+  <h1>Products</h1>
+  <div class="page-actions">
+    <a routerLink="/products/create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Product</a>
+  </div>
+</div>
+
+<div class="filters-bar">
+  <div class="search-box">
+    <i class="bi bi-search search-icon"></i>
+    <input type="text" class="form-control" placeholder="Search by name or SKU..."
+           (input)="onSearch($any($event.target).value)">
+  </div>
+  <select class="form-select" style="width:140px" (change)="onStatusFilter($any($event.target).value)">
+    <option value="">All Status</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+    <option value="draft">Draft</option>
+  </select>
+  <select class="form-select" style="width:160px" (change)="onStockFilter($any($event.target).value)">
+    <option value="">All Stock Levels</option>
+    <option value="low">Low Stock (&lt;10)</option>
+    <option value="out">Out of Stock</option>
+    <option value="in">In Stock</option>
+  </select>
+
+  <div class="bulk-actions" *ngIf="selectedIds.size > 0">
+    <span class="text-muted me-2">{{ selectedIds.size }} selected</span>
+    <button class="btn btn-sm btn-outline-success" (click)="bulkAction('activate')">Activate</button>
+    <button class="btn btn-sm btn-outline-warning" (click)="bulkAction('deactivate')">Deactivate</button>
+    <button class="btn btn-sm btn-outline-danger" (click)="bulkAction('delete')">Delete</button>
+  </div>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="card" *ngIf="products$ | async as response">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:36px">
+            <input type="checkbox" [checked]="selectedIds.size === response.data.length && response.data.length > 0"
+                   (change)="toggleAll(response.data)">
+          </th>
+          <th style="width:60px">Image</th>
+          <th>Name</th>
+          <th>SKU</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th style="width:120px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of response.data">
+          <td><input type="checkbox" [checked]="selectedIds.has(product.id)" (change)="toggleSelect(product.id)"></td>
+          <td>
+            <img [src]="product.imageUrl || 'https://via.placeholder.com/48'" class="product-thumb" (error)="$event.target.src='https://via.placeholder.com/48'">
+          </td>
+          <td>
+            <a routerLink="/products/{{ product.id }}" class="fw-semibold">{{ product.name }}</a>
+            <div class="text-muted small">{{ product.categoryName }}</div>
+          </td>
+          <td><code>{{ product.sku }}</code></td>
+          <td class="fw-semibold">${{ product.price.toFixed(2) }}
+            <span *ngIf="product.comparePrice" class="text-muted text-decoration-line-through small ms-1">${{ product.comparePrice.toFixed(2) }}</span>
+          </td>
+          <td>
+            <span [class.text-danger]="product.stockQuantity <= 5" [class.text-warning]="product.stockQuantity > 5 && product.stockQuantity <= 10" class="fw-semibold">
+              {{ product.stockQuantity }}
+            </span>
+          </td>
+          <td><app-status-badge [status]="product.isActive ? 'active' : 'inactive'"></app-status-badge></td>
+          <td>
+            <div class="action-btns">
+              <a routerLink="/products/{{ product.id }}/edit" class="btn btn-sm btn-outline-primary" title="Edit"><i class="bi bi-pencil"></i></a>
+              <a routerLink="/products/{{ product.id }}" class="btn btn-sm btn-outline-info" title="View"><i class="bi bi-eye"></i></a>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(product.id)" title="Delete"><i class="bi bi-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="response.data.length === 0">
+          <td colspan="8">
+            <app-empty-state icon="box-seam" title="No products found"
+              [message]="searchTerm ? 'Try a different search term' : 'Add your first product to get started'"
+              actionLabel="Add Product" actionRoute="/products/create">
+            </app-empty-state>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="response.total > response.pageSize">
+    <div class="table-info">Showing {{ ((page - 1) * pageSize) + 1 }}-{{ Math.min(page * pageSize, response.total) }} of {{ response.total }}</div>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="page <= 1">
+          <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let p of getPages(response.totalPages)" [class.active]="p === page">
+          <a class="page-link" (click)="onPageChange(p)">{{ p }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="page >= response.totalPages">
+          <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

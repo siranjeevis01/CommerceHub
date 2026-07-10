@@ -1,0 +1,218 @@
+<div class="container py-4">
+  <app-breadcrumb [items]="[{label: 'Cart', url: '/cart'}, {label: 'Checkout'}]"></app-breadcrumb>
+  <h2 class="fw-bold mb-4">Checkout</h2>
+
+  <!-- Steps indicator -->
+  <div class="d-flex justify-content-center mb-4">
+    <div class="checkout-steps d-flex gap-3">
+      <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Shipping</span>
+      </div>
+      <div class="step-line" [class.active]="currentStep > 1"></div>
+      <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+        <div class="step-circle">2</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="step-line" [class.active]="currentStep > 2"></div>
+      <div class="step" [class.active]="currentStep >= 3">
+        <div class="step-circle">3</div>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <!-- Step 1: Shipping -->
+      <div class="card" *ngIf="currentStep === 1">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Shipping Address</h5>
+          <form [formGroup]="shippingForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small">First Name *</label>
+                <input type="text" class="form-control" formControlName="firstName" [class.is-invalid]="shippingForm.get('firstName')?.touched && shippingForm.get('firstName')?.invalid">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small">Last Name *</label>
+                <input type="text" class="form-control" formControlName="lastName" [class.is-invalid]="shippingForm.get('lastName')?.touched && shippingForm.get('lastName')?.invalid">
+              </div>
+              <div class="col-12">
+                <label class="form-label small">Street Address *</label>
+                <input type="text" class="form-control" formControlName="street" [class.is-invalid]="shippingForm.get('street')?.touched && shippingForm.get('street')?.invalid">
+              </div>
+              <div class="col-md-5">
+                <label class="form-label small">City *</label>
+                <input type="text" class="form-control" formControlName="city" [class.is-invalid]="shippingForm.get('city')?.touched && shippingForm.get('city')?.invalid">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small">State *</label>
+                <input type="text" class="form-control" formControlName="state" [class.is-invalid]="shippingForm.get('state')?.touched && shippingForm.get('state')?.invalid">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small">ZIP Code *</label>
+                <input type="text" class="form-control" formControlName="zipCode" [class.is-invalid]="shippingForm.get('zipCode')?.touched && shippingForm.get('zipCode')?.invalid">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small">Country</label>
+                <select class="form-select" formControlName="country">
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small">Phone</label>
+                <input type="tel" class="form-control" formControlName="phone">
+              </div>
+            </div>
+          </form>
+          <div class="mt-4">
+            <button class="btn btn-primary" (click)="nextStep()">Continue to Payment</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div class="card" *ngIf="currentStep === 2">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Payment Method</h5>
+          <form [formGroup]="paymentForm">
+            <div class="payment-options mb-3">
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'credit_card'" (click)="selectPayment('credit_card')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'credit_card'">
+                <i class="bi bi-credit-card fs-4 me-2"></i>
+                <div>
+                  <strong>Credit Card</strong>
+                  <small class="d-block text-muted">Visa, Mastercard, Amex</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'paypal'" (click)="selectPayment('paypal')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'paypal'">
+                <i class="bi bi-paypal fs-4 me-2"></i>
+                <div>
+                  <strong>PayPal</strong>
+                  <small class="d-block text-muted">Pay with your PayPal account</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded cursor-pointer" [class.border-primary]="selectedPayment === 'stripe'" (click)="selectPayment('stripe')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'stripe'">
+                <i class="bi bi-stripe fs-4 me-2"></i>
+                <div>
+                  <strong>Stripe</strong>
+                  <small class="d-block text-muted">Secure payment processing</small>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="selectedPayment === 'credit_card'" class="mt-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small">Name on Card</label>
+                  <input type="text" class="form-control" formControlName="cardName">
+                </div>
+                <div class="col-12">
+                  <label class="form-label small">Card Number</label>
+                  <input type="text" class="form-control" formControlName="cardNumber" placeholder="**** **** **** ****">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small">Expiry Date</label>
+                  <input type="text" class="form-control" formControlName="cardExpiry" placeholder="MM/YY">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small">CVV</label>
+                  <input type="text" class="form-control" formControlName="cardCvv" placeholder="***">
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-outline-secondary" (click)="prevStep()">Back</button>
+            <button class="btn btn-primary" (click)="nextStep()">Review Order</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="card" *ngIf="currentStep === 3">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Order Review</h5>
+
+          <h6 class="fw-semibold">Shipping To</h6>
+          <p class="small mb-3">{{shippingForm.value.firstName}} {{shippingForm.value.lastName}}<br>
+            {{shippingForm.value.street}}<br>
+            {{shippingForm.value.city}}, {{shippingForm.value.state}} {{shippingForm.value.zipCode}}</p>
+
+          <h6 class="fw-semibold">Payment Method</h6>
+          <p class="small mb-3">
+            <ng-container [ngSwitch]="selectedPayment">
+              <span *ngSwitchCase="'credit_card'"><i class="bi bi-credit-card me-1"></i> Credit Card ending in ****{{paymentForm.value.cardNumber?.slice(-4)}}</span>
+              <span *ngSwitchCase="'paypal'"><i class="bi bi-paypal me-1"></i> PayPal</span>
+              <span *ngSwitchCase="'stripe'"><i class="bi bi-stripe me-1"></i> Stripe</span>
+            </ng-container>
+          </p>
+
+          <hr>
+          <h6 class="fw-semibold">Items</h6>
+          <ng-container *ngIf="cart$ | async as cart">
+            <div class="review-item d-flex justify-content-between align-items-center mb-2" *ngFor="let item of cart.items">
+              <div class="d-flex align-items-center gap-2">
+                <img [src]="item.imageUrl" width="40" height="40" class="rounded" style="object-fit: cover;">
+                <div>
+                  <small class="fw-semibold d-block">{{item.name}}</small>
+                  <small class="text-muted">Qty: {{item.quantity}} x {{item.unitPrice | currency}}</small>
+                </div>
+              </div>
+              <small class="fw-bold">{{item.totalPrice | currency}}</small>
+            </div>
+          </ng-container>
+          <hr>
+          <div class="d-flex justify-content-between mb-1"><small>Subtotal</small><small>{{getSubtotal(cart$ | async) | currency}}</small></div>
+          <div class="d-flex justify-content-between mb-1"><small>Shipping</small><small class="text-success">Free</small></div>
+          <div class="d-flex justify-content-between mb-1"><small>Tax</small><small>{{getTax(cart$ | async) | currency}}</small></div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold mb-3"><span>Total</span><span class="text-primary">{{getTotal(cart$ | async) | currency}}</span></div>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" (click)="prevStep()">Back</button>
+            <button class="btn btn-success flex-fill" (click)="placeOrder()" [disabled]="isSubmitting">
+              <span *ngIf="isSubmitting"><span class="spinner-border spinner-border-sm me-1"></span> Processing...</span>
+              <span *ngIf="!isSubmitting"><i class="bi bi-check2-circle me-1"></i> Place Order</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar summary (minimal) -->
+    <div class="col-lg-4">
+      <div class="card" *ngIf="cart$ | async as cart">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Order Summary</h6>
+          <div *ngFor="let item of cart.items" class="d-flex justify-content-between mb-2 small">
+            <span class="text-truncate me-2">{{item.name}} x{{item.quantity}}</span>
+            <span>{{item.totalPrice | currency}}</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between small">
+            <span>Subtotal</span>
+            <span>{{getSubtotal(cart) | currency}}</span>
+          </div>
+          <div class="d-flex justify-content-between small">
+            <span>Shipping</span>
+            <span class="text-success">Free</span>
+          </div>
+          <div class="d-flex justify-content-between small">
+            <span>Tax</span>
+            <span>{{getTax(cart) | currency}}</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span class="text-primary">{{getTotal(cart) | currency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

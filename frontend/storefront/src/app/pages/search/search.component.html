@@ -1,0 +1,56 @@
+<div class="container py-4">
+  <app-breadcrumb [items]="[{label: 'Search'}]"></app-breadcrumb>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8 col-lg-6">
+      <form (ngSubmit)="onSearch()">
+        <div class="input-group input-group-lg">
+          <input type="search" class="form-control" placeholder="Search products..." [formControl]="searchControl">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-search me-1"></i> Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-container *ngIf="results$ | async as results">
+    <!-- Search meta + toolbar -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2" *ngIf="hasSearched">
+      <small class="text-muted">{{results.total}} result(s) for "{{searchControl.value}}"</small>
+      <div class="d-flex align-items-center gap-2">
+        <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="sortBy" (change)="onSortChange()">
+          <option value="relevance">Relevance</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="newest">Newest</option>
+        </select>
+        <div class="btn-group btn-group-sm">
+          <button class="btn btn-outline-secondary" [class.active]="viewMode === 'grid'" (click)="toggleView('grid')"><i class="bi bi-grid-3x3-gap-fill"></i></button>
+          <button class="btn btn-outline-secondary" [class.active]="viewMode === 'list'" (click)="toggleView('list')"><i class="bi bi-list-ul"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <ng-container *ngIf="hasSearched; else initialPrompt">
+      <div *ngIf="results.data.length > 0; else noResults">
+        <div [class.product-grid]="viewMode === 'grid'" [class.list-view]="viewMode === 'list'">
+          <app-product-card *ngFor="let product of results.data" [product]="product" [viewMode]="viewMode" (addToCart)="addToCart($event)"></app-product-card>
+        </div>
+        <app-pagination-footer
+          [currentPage]="results.page"
+          [totalPages]="results.totalPages"
+          [total]="results.total"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)">
+        </app-pagination-footer>
+      </div>
+      <ng-template #noResults>
+        <app-empty-state icon="bi-search" title="No results found" message="Try a different search term or browse our categories." [actionLabel]="'Browse Products'" [actionLink]="'/products'"></app-empty-state>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #initialPrompt>
+      <app-empty-state icon="bi-search" title="What are you looking for?" message="Type a keyword above to find products across our store."></app-empty-state>
+    </ng-template>
+  </ng-container>
+</div>

@@ -1,0 +1,108 @@
+<div class="address-page py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-geo-alt fs-2 text-primary"></i>
+        <div>
+          <h4 class="fw-bold mb-0">My Addresses</h4>
+          <small class="text-muted">Manage your shipping addresses</small>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="openAddForm()" *ngIf="!showForm">
+        <i class="bi bi-plus-lg me-1"></i>Add Address
+      </button>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4" *ngIf="showForm">
+      <div class="card-body p-4">
+        <h5 class="fw-semibold mb-3">{{ editingId ? 'Edit Address' : 'New Address' }}</h5>
+        <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-medium">Street Address</label>
+              <input type="text" class="form-control" formControlName="street"
+                     [class.is-invalid]="submitted && f['street'].errors">
+              <div class="invalid-feedback" *ngIf="submitted && f['street'].errors">Required</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-medium">City</label>
+              <input type="text" class="form-control" formControlName="city"
+                     [class.is-invalid]="submitted && f['city'].errors">
+              <div class="invalid-feedback" *ngIf="submitted && f['city'].errors">Required</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-medium">State</label>
+              <input type="text" class="form-control" formControlName="state"
+                     [class.is-invalid]="submitted && f['state'].errors">
+              <div class="invalid-feedback" *ngIf="submitted && f['state'].errors">Required</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-medium">ZIP Code</label>
+              <input type="text" class="form-control" formControlName="zipCode"
+                     [class.is-invalid]="submitted && f['zipCode'].errors">
+              <div class="invalid-feedback" *ngIf="submitted && f['zipCode'].errors?.['required']">Required</div>
+              <div class="invalid-feedback" *ngIf="submitted && f['zipCode'].errors?.['pattern']">Invalid ZIP</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-medium">Country</label>
+              <input type="text" class="form-control" formControlName="country"
+                     [class.is-invalid]="submitted && f['country'].errors">
+              <div class="invalid-feedback" *ngIf="submitted && f['country'].errors">Required</div>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="isDefault" formControlName="isDefault">
+                <label class="form-check-label" for="isDefault">Set as default address</label>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4" [disabled]="saving">
+              <span class="spinner-border spinner-border-sm me-2" *ngIf="saving"></span>
+              {{ saving ? 'Saving...' : (editingId ? 'Update' : 'Add') }}
+            </button>
+            <button type="button" class="btn btn-light" (click)="cancelForm()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <app-loading-spinner *ngIf="loading" text="Loading addresses..."></app-loading-spinner>
+
+    <div class="row g-3" *ngIf="!loading">
+      <div class="col-12" *ngIf="addresses.length === 0">
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-geo-alt fs-1 d-block mb-2"></i>
+          <p>No addresses saved yet. Add one to get started.</p>
+        </div>
+      </div>
+      <div class="col-md-6" *ngFor="let addr of addresses">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <span class="fw-semibold">{{ addr.street }}</span>
+                <span class="badge bg-primary ms-2" *ngIf="addr.isDefault">Default</span>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-link btn-sm text-decoration-none p-0" data-bs-toggle="dropdown">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                  <li><a class="dropdown-item" href="#" (click)="$event.preventDefault(); openEditForm(addr)">Edit</a></li>
+                  <li><a class="dropdown-item" href="#" (click)="$event.preventDefault(); setDefault(addr.id)" *ngIf="!addr.isDefault">Set as Default</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="#" (click)="$event.preventDefault(); deleteAddress(addr.id)">Delete</a></li>
+                </ul>
+              </div>
+            </div>
+            <p class="text-muted small mb-0">
+              {{ addr.city }}, {{ addr.state }} {{ addr.zipCode }}
+            </p>
+            <p class="text-muted small">{{ addr.country }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

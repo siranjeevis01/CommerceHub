@@ -1,0 +1,50 @@
+{
+  "name": "commercehub-storefront",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ng serve storefront",
+    "build": "ng build storefront",
+    "test": "ng test storefront",
+    "lint": "ng lint storefront"
+  },
+  "dependencies": {
+    "@angular/animations": "^20.0.0",
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/forms": "^20.0.0",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/platform-browser-dynamic": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "@aspnet/signalr": "^1.1.4",
+    "bootstrap": "^5.3.0",
+    "@popperjs/core": "^2.11.0",
+    "ngx-toastr": "^19.0.0",
+    "ngx-pagination": "^7.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.6.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.0.0",
+    "@angular/cli": "^20.0.0",
+    "@angular/compiler-cli": "^20.0.0",
+    "@angular/localize": "^20.0.0",
+    "typescript": "~5.6.0",
+    "ngx-build-plus": "^20.0.0",
+    "@angular-builders/custom-webpack": "^20.0.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-merge": "^6.0.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "jasmine-core": "~5.1.0",
+    "jasmine-spec-reporter": "~7.0.0",
+    "protractor": "~7.0.0",
+    "ts-node": "~10.9.0"
+  }
+}

@@ -1,0 +1,55 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1050;
+}
+
+.confirm-dialog {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1051;
+}
+
+.dialog-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+
+  .dialog-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  &.dialog-danger .dialog-icon { color: var(--danger-color); }
+  &.dialog-warning .dialog-icon { color: var(--warning-color); }
+  &.dialog-info .dialog-icon { color: var(--info-color); }
+
+  h5 {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+
+    .btn {
+      min-width: 100px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.product-rating {
+  display: inline-flex;
+  align-items: center;
+
+  &.text-sm { font-size: 0.8rem; }
+  &.text-md { font-size: 1rem; }
+  &.text-lg { font-size: 1.25rem; }
+
+  .star {
+    color: #e0e0e0;
+    margin-right: 1px;
+
+    i.bi-star-fill { color: #ffc107; }
+    i.bi-star-half { color: #ffc107; }
+  }
+}

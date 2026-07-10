@@ -1,0 +1,19 @@
+<div class="stat-card card" [class.stat-loading]="loading">
+  <div class="stat-body">
+    <div class="stat-info">
+      <div class="stat-label">{{ label }}</div>
+      <div class="stat-value" *ngIf="!loading">{{ formattedValue }}</div>
+      <div class="stat-skeleton" *ngIf="loading"></div>
+      <div class="stat-trend" *ngIf="trend !== undefined && !loading">
+        <span class="trend-value" [class.trend-up]="trendUp" [class.trend-down]="!trendUp">
+          <i class="bi bi-arrow-{{ trendUp ? 'up' : 'down' }}"></i>
+          {{ trend }}%
+        </span>
+        <span class="trend-label" *ngIf="trendLabel">{{ trendLabel }}</span>
+      </div>
+    </div>
+    <div class="stat-icon" [class]="'icon-' + color" *ngIf="icon">
+      <i class="bi bi-{{ icon }}"></i>
+    </div>
+  </div>
+</div>

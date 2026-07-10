@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h1>Payouts</h1>
+  <div class="page-actions">
+    <button class="btn btn-primary" (click)="requestPayout()" [disabled]="(summary$ | async)?.availableForPayout === 0">
+      <i class="bi bi-wallet2"></i> Request Payout
+    </button>
+  </div>
+</div>
+
+<div class="payout-summary-grid" *ngIf="summary$ | async as summary">
+  <div class="summary-card balance">
+    <div class="summary-label">Current Balance</div>
+    <div class="summary-value">${{ (summary.currentBalance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+  <div class="summary-card pending">
+    <div class="summary-label">Pending</div>
+    <div class="summary-value">${{ (summary.pendingAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+  <div class="summary-card available">
+    <div class="summary-label">Available for Payout</div>
+    <div class="summary-value text-success">${{ (summary.availableForPayout || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="card" *ngIf="payouts$ | async as response">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Payout #</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Processed Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payout of response.data">
+          <td class="fw-semibold">{{ payout.payoutNumber }}</td>
+          <td class="fw-semibold">${{ payout.amount.toFixed(2) }}</td>
+          <td><app-status-badge [status]="payout.status"></app-status-badge></td>
+          <td>{{ payout.createdAt | date:'MMM d, y' }}</td>
+          <td>{{ payout.processedAt ? (payout.processedAt | date:'MMM d, y') : '-' }}</td>
+        </tr>
+        <tr *ngIf="response.data.length === 0">
+          <td colspan="5">
+            <app-empty-state icon="wallet2" title="No payouts yet"
+              message="Your payout history will appear here once you receive payments from orders.">
+            </app-empty-state>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="response.total > response.pageSize">
+    <div class="table-info">Page {{ page }} of {{ response.totalPages }}</div>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="page <= 1"><a class="page-link" (click)="onPageChange(page - 1)">Previous</a></li>
+        <li class="page-item" *ngFor="let p of getPages(response.totalPages)" [class.active]="p === page"><a class="page-link" (click)="onPageChange(p)">{{ p }}</a></li>
+        <li class="page-item" [class.disabled]="page >= response.totalPages"><a class="page-link" (click)="onPageChange(page + 1)">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [show]="showConfirmDialog"
+  title="Request Payout"
+  message="Are you sure you want to request a payout for your available balance?"
+  confirmText="Request Payout"
+  confirmClass="btn-primary"
+  (confirm)="confirmPayout()"
+  (cancel)="showConfirmDialog = false">
+</app-confirm-dialog>

@@ -1,0 +1,40 @@
+<div class="rich-text-editor">
+  <label class="editor-label" *ngIf="label">{{ label }}</label>
+  <div class="editor-wrapper" [style.height]="height">
+    <div class="editor-toolbar">
+      <button type="button" class="toolbar-btn" title="Bold" (click)="execCmd('bold')"><b>B</b></button>
+      <button type="button" class="toolbar-btn" title="Italic" (click)="execCmd('italic')"><i>I</i></button>
+      <button type="button" class="toolbar-btn" title="Underline" (click)="execCmd('underline')"><u>U</u></button>
+      <span class="toolbar-separator"></span>
+      <button type="button" class="toolbar-btn" title="Heading 1" (click)="execCmd('formatBlock', '<h1>')">H1</button>
+      <button type="button" class="toolbar-btn" title="Heading 2" (click)="execCmd('formatBlock', '<h2>')">H2</button>
+      <button type="button" class="toolbar-btn" title="Paragraph" (click)="execCmd('formatBlock', '<p>')">P</button>
+      <span class="toolbar-separator"></span>
+      <button type="button" class="toolbar-btn" title="Bullet list" (click)="execCmd('insertUnorderedList')">
+        <i class="bi bi-list-ul"></i>
+      </button>
+      <button type="button" class="toolbar-btn" title="Numbered list" (click)="execCmd('insertOrderedList')">
+        <i class="bi bi-list-ol"></i>
+      </button>
+      <span class="toolbar-separator"></span>
+      <button type="button" class="toolbar-btn" title="Insert link" (click)="insertLink()">
+        <i class="bi bi-link-45deg"></i>
+      </button>
+      <button type="button" class="toolbar-btn" title="Insert image" (click)="insertImage()">
+        <i class="bi bi-image"></i>
+      </button>
+      <span class="toolbar-separator"></span>
+      <button type="button" class="toolbar-btn" title="Toggle HTML view" (click)="showHtml = !showHtml">
+        <code>&lt;/&gt;</code>
+      </button>
+    </div>
+    <div class="editor-content" [class.html-view]="showHtml">
+      <div id="rte-content" class="rte-content" contenteditable="true"
+        [innerHTML]="value" (input)="onInput()" [attr.placeholder]="placeholder"
+        *ngIf="!showHtml" [class.disabled]="disabled">
+      </div>
+      <textarea class="rte-html" *ngIf="showHtml" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)"
+        [placeholder]="placeholder" [disabled]="disabled"></textarea>
+    </div>
+  </div>
+</div>

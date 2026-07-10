@@ -1,0 +1,95 @@
+<div class="ai-chat-widget" [class.open]="isOpen" [class.minimized]="isMinimized">
+  <!-- Chat Button -->
+  <button class="chat-toggle btn btn-primary rounded-circle shadow" (click)="toggleChat()">
+    <i class="bi bi-chat-dots"></i>
+    <span class="badge bg-danger" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window card shadow-lg" *ngIf="isOpen">
+    <!-- Header -->
+    <div class="chat-header card-header d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-robot me-2"></i>
+        <span class="fw-bold">AI Assistant</span>
+      </div>
+      <div class="btn-group btn-group-sm">
+        <button class="btn btn-light btn-sm" (click)="minimizeChat()">
+          <i class="bi" [class.bi-dash-lg]="!isMinimized" [class.bi-plus-lg]="isMinimized"></i>
+        </button>
+        <button class="btn btn-light btn-sm" (click)="toggleChat()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages card-body" #chatMessages *ngIf="!isMinimized">
+      <div *ngFor="let msg of messages" class="message mb-3" [class.user-message]="msg.role === 'user'" [class.ai-message]="msg.role === 'ai'">
+        <div class="message-bubble" [class.bg-primary]="msg.role === 'user'" [class.bg-light]="msg.role === 'ai'">
+          <div class="message-content">{{ msg.content }}</div>
+
+          <!-- Recommendations -->
+          <div *ngIf="msg.recommendations && msg.recommendations.length > 0" class="recommendations mt-2">
+            <div class="text-muted small mb-1">Recommendations:</div>
+            <div class="d-flex flex-wrap gap-1">
+              <span *ngFor="let rec of msg.recommendations" class="badge bg-info text-dark">
+                {{ rec.productName }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Search Results -->
+          <div *ngIf="msg.searchResults && msg.searchResults.length > 0" class="search-results mt-2">
+            <div class="text-muted small mb-1">Products found:</div>
+            <div *ngFor="let product of msg.searchResults.slice(0, 3)" class="product-hit d-flex align-items-center p-1 border-bottom">
+              <img *ngIf="product.mainImageUrl" [src]="product.mainImageUrl" class="me-2" style="width: 32px; height: 32px; object-fit: cover;">
+              <div class="small">
+                <a [routerLink]="'/products/' + product.slug" class="text-decoration-none">{{ product.name }}</a>
+                <div class="text-primary fw-bold">\${{ product.price.toFixed(2) }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="message-time text-end">
+            <small class="text-muted">{{ msg.timestamp | date:'shortTime' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="message ai-message mb-3" *ngIf="isTyping">
+        <div class="message-bubble bg-light">
+          <div class="typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions px-3 pb-1 d-flex flex-wrap gap-1" *ngIf="!isMinimized && messages.length <= 1">
+      <button class="btn btn-outline-primary btn-sm" (click)="quickSearch('Find me trending products')">Trending</button>
+      <button class="btn btn-outline-primary btn-sm" (click)="quickSearch('I need recommendations')">Recommend</button>
+      <button class="btn btn-outline-primary btn-sm" (click)="quickSearch('Where is my order?')">My Order</button>
+      <button class="btn btn-outline-primary btn-sm" (click)="quickSearch('Help me find a gift')">Gift Ideas</button>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input card-footer" *ngIf="!isMinimized">
+      <div class="input-group">
+        <input
+          #messageInput
+          class="form-control form-control-sm"
+          placeholder="Ask me anything..."
+          [(ngModel)]="currentMessage"
+          (keydown)="handleKeydown($event)"
+          [disabled]="isTyping"
+        >
+        <button class="btn btn-primary btn-sm" (click)="sendMessage()" [disabled]="!currentMessage.trim() || isTyping">
+          <i class="bi bi-send"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

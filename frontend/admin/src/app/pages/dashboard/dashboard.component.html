@@ -1,0 +1,152 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome to CommerceHub Admin. Here's what's happening today.</p>
+    </div>
+    <button class="btn btn-outline-primary" (click)="retry()" [disabled]="loading">
+      <i class="bi bi-arrow-clockwise"></i> Refresh
+    </button>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading && !stats.totalUsers">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+  </div>
+
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="!error">
+    <div class="stats-grid">
+      <app-stat-card label="Total Users" [value]="stats.totalUsers" icon="bi bi-people" color="primary" [change]="12.5"></app-stat-card>
+      <app-stat-card label="Total Vendors" [value]="stats.totalVendors" icon="bi bi-shop" color="success" [change]="8.3"></app-stat-card>
+      <app-stat-card label="Total Products" [value]="stats.totalProducts" icon="bi bi-box-seam" color="info" [change]="-2.1"></app-stat-card>
+      <app-stat-card label="Total Orders" [value]="stats.totalOrders" icon="bi bi-cart" color="warning" [change]="15.7"></app-stat-card>
+      <app-stat-card label="Revenue" [value]="stats.totalRevenue" icon="bi bi-currency-dollar" color="success" prefix="$" [change]="22.4"></app-stat-card>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="card chart-card">
+        <div class="card-header">
+          <h5>Revenue Overview</h5>
+          <span class="text-secondary" style="font-size:12px">Monthly</span>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5>Recent Orders</h5>
+          <a class="btn btn-sm btn-primary" routerLink="/orders">View All</a>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of recentOrders">
+                  <td><a [routerLink]="['/orders', order.id]">#{{ order.orderNumber }}</a></td>
+                  <td>User #{{ order.userId }}</td>
+                  <td><app-status-badge [status]="order.status"></app-status-badge></td>
+                  <td>${{ order.totalAmount.toFixed(2) }}</td>
+                  <td>{{ order.createdAt | date:'MMM d, y' }}</td>
+                </tr>
+                <tr *ngIf="recentOrders.length === 0">
+                  <td colspan="5" class="text-center text-secondary py-3">No recent orders</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid-3">
+      <div class="card">
+        <div class="card-header"><h5>Top Products</h5></div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead>
+              <tr><th>Product</th><th>Sales</th><th>Revenue</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of topProducts; let i = index">
+                <td><span class="rank-badge">{{ i + 1 }}</span> {{ p.name }}</td>
+                <td>{{ p.sales }}</td>
+                <td>${{ p.revenue.toFixed(2) }}</td>
+              </tr>
+              <tr *ngIf="topProducts.length === 0">
+                <td colspan="3" class="text-center text-secondary py-3">No data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5>Vendor Approval Queue</h5>
+          <span class="badge bg-warning" *ngIf="stats.pendingVendors > 0">{{ stats.pendingVendors }} pending</span>
+        </div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead><tr><th>Store</th><th>Email</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr *ngFor="let v of pendingVendors">
+                <td>{{ v.storeName }}</td>
+                <td>{{ v.email }}</td>
+                <td>
+                  <button class="btn btn-sm btn-success me-1" (click)="approveVendor(v.id)">Approve</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="rejectVendor(v.id)">Reject</button>
+                </td>
+              </tr>
+              <tr *ngIf="pendingVendors.length === 0">
+                <td colspan="3" class="text-center text-secondary py-3">No pending vendors</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>System Health</h5></div>
+        <div class="card-body">
+          <div class="health-item">
+            <span>CPU Usage</span>
+            <div class="progress"><div class="progress-bar" [class.bg-success]="systemHealth.cpu < 60" [class.bg-warning]="systemHealth.cpu >= 60 && systemHealth.cpu < 85" [class.bg-danger]="systemHealth.cpu >= 85" [style.width.%]="systemHealth.cpu"></div></div>
+            <span>{{ systemHealth.cpu }}%</span>
+          </div>
+          <div class="health-item">
+            <span>Memory</span>
+            <div class="progress"><div class="progress-bar" [class.bg-success]="systemHealth.memory < 60" [class.bg-warning]="systemHealth.memory >= 60 && systemHealth.memory < 85" [class.bg-danger]="systemHealth.memory >= 85" [style.width.%]="systemHealth.memory"></div></div>
+            <span>{{ systemHealth.memory }}%</span>
+          </div>
+          <div class="health-item">
+            <span>Disk</span>
+            <div class="progress"><div class="progress-bar" [class.bg-success]="systemHealth.disk < 60" [class.bg-warning]="systemHealth.disk >= 60 && systemHealth.disk < 85" [class.bg-danger]="systemHealth.disk >= 85" [style.width.%]="systemHealth.disk"></div></div>
+            <span>{{ systemHealth.disk }}%</span>
+          </div>
+          <div class="health-status mt-3">
+            <span class="badge" [ngClass]="'bg-' + getHealthColor(systemHealth.status)">{{ systemHealth.status }}</span>
+            <span class="text-secondary ms-2">Uptime: {{ systemHealth.uptime }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

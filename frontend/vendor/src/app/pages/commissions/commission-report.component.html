@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h1>Commissions</h1>
+  <div class="page-actions">
+    <button class="btn btn-outline-primary" (click)="exportCSV()"><i class="bi bi-download"></i> Export</button>
+  </div>
+</div>
+
+<div class="commission-summary" *ngIf="summary$ | async as summary">
+  <div class="summary-card">
+    <div class="summary-label">Total Commissions</div>
+    <div class="summary-value">${{ (summary.total || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">This Month</div>
+    <div class="summary-value">${{ (summary.thisMonth || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Pending</div>
+    <div class="summary-value text-warning">${{ (summary.pending || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
+  </div>
+</div>
+
+<div class="filters-bar">
+  <div>
+    <label class="form-label mb-0 me-2">From:</label>
+    <input type="date" class="form-control form-control-sm d-inline-block" style="width:auto" [(ngModel)]="startDate">
+  </div>
+  <div>
+    <label class="form-label mb-0 me-2">To:</label>
+    <input type="date" class="form-control form-control-sm d-inline-block" style="width:auto" [(ngModel)]="endDate">
+  </div>
+  <button class="btn btn-sm btn-primary" (click)="filter()">Filter</button>
+  <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()">Clear</button>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="card" *ngIf="commissions$ | async as response">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Product</th>
+          <th>Order Amount</th>
+          <th>Rate</th>
+          <th>Commission</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of response.data">
+          <td class="fw-semibold">#{{ c.orderNumber }}</td>
+          <td>{{ c.productName }}</td>
+          <td>${{ c.orderAmount.toFixed(2) }}</td>
+          <td>{{ (c.commissionRate * 100).toFixed(1) }}%</td>
+          <td class="fw-semibold">${{ c.commissionAmount.toFixed(2) }}</td>
+          <td><app-status-badge [status]="c.status"></app-status-badge></td>
+          <td>{{ c.createdAt | date:'MMM d, y' }}</td>
+        </tr>
+        <tr *ngIf="response.data.length === 0">
+          <td colspan="7">
+            <app-empty-state icon="percent" title="No commissions found" message="Commissions are calculated when orders are completed."></app-empty-state>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="response.total > response.pageSize">
+    <div class="table-info">Page {{ page }} of {{ response.totalPages }}</div>
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="page <= 1"><a class="page-link" (click)="onPageChange(page - 1)">Previous</a></li>
+        <li class="page-item" *ngFor="let p of getPages(response.totalPages)" [class.active]="p === page"><a class="page-link" (click)="onPageChange(p)">{{ p }}</a></li>
+        <li class="page-item" [class.disabled]="page >= response.totalPages"><a class="page-link" (click)="onPageChange(page + 1)">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>

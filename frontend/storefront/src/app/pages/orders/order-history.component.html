@@ -1,0 +1,53 @@
+<div class="container py-4">
+  <app-breadcrumb [items]="[{label: 'My Orders'}]"></app-breadcrumb>
+  <h2 class="fw-bold mb-4">My Orders</h2>
+
+  <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
+
+  <ng-container *ngIf="orders$ | async as result">
+    <div *ngIf="result.data.length > 0; else noOrders" class="card">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Order #</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Payment</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of result.data">
+              <td class="fw-semibold small">{{order.orderNumber}}</td>
+              <td class="small">{{order.createdAt | date:'mediumDate'}}</td>
+              <td class="small">{{order.items.length}}</td>
+              <td class="fw-semibold">{{order.totalAmount | currency}}</td>
+              <td><span class="badge {{getStatusClass(order.status)}}">{{order.status}}</span></td>
+              <td class="small">
+                <span class="badge bg-light text-dark">{{order.paymentStatus}}</span>
+              </td>
+              <td>
+                <a [routerLink]="['/orders', order.id]" class="btn btn-sm btn-outline-primary">View</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination-footer
+        [currentPage]="result.page"
+        [totalPages]="result.totalPages"
+        [total]="result.total"
+        [pageSize]="result.pageSize"
+        (pageChange)="onPageChange($event)">
+      </app-pagination-footer>
+    </div>
+
+    <ng-template #noOrders>
+      <app-empty-state icon="bi-box" title="No orders yet" message="You have not placed any orders yet." [actionLabel]="'Start Shopping'" [actionLink]="'/products'"></app-empty-state>
+    </ng-template>
+  </ng-container>
+</div>

@@ -1,0 +1,37 @@
+replicaCount: 3
+image:
+  repository: ghcr.io/commercehub/commercehub/analytics-service
+  tag: latest
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+env:
+  ASPNETCORE_ENVIRONMENT: Production
+envFromSecrets:
+  - ANALYTICS_DB_CONNECTION
+envFromConfigMap:
+  - RABBITMQ_HOST
+  - SEQ_URL
+  - OTLP_EXPORTER_ENDPOINT
+resources:
+  requests: { memory: "256Mi", cpu: "250m" }
+  limits: { memory: "512Mi", cpu: "500m" }
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [analytics]
+          topologyKey: kubernetes.io/hostname

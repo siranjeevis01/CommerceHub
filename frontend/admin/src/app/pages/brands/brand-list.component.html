@@ -1,0 +1,70 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Brands</h1>
+      <p>Manage product brands</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateForm()"><i class="bi bi-plus-lg"></i> Add Brand</button>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <div class="card" *ngIf="showForm">
+    <div class="card-header"><h5>{{ editingBrand ? 'Edit Brand' : 'New Brand' }}</h5></div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control" [(ngModel)]="formName" (input)="generateSlug()">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Slug</label>
+          <input class="form-control" [(ngModel)]="formSlug">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Logo URL</label>
+          <input class="form-control" [(ngModel)]="formLogoUrl" placeholder="https://...">
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="brandActive" [(ngModel)]="formIsActive">
+          <label class="form-check-label" for="brandActive">Active</label>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" (click)="saveBrand()">{{ editingBrand ? 'Update' : 'Create' }}</button>
+        <button class="btn btn-outline-secondary" (click)="cancelForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-grid" *ngIf="!loading && !error">
+    <div class="brand-card" *ngFor="let brand of brands">
+      <div class="brand-logo">
+        <img *ngIf="brand.logoUrl" [src]="brand.logoUrl" [alt]="brand.name">
+        <i *ngIf="!brand.logoUrl" class="bi bi-tag"></i>
+      </div>
+      <div class="brand-info">
+        <h6>{{ brand.name }}</h6>
+        <code>{{ brand.slug }}</code>
+      </div>
+      <div class="brand-actions">
+        <div class="form-check form-switch mb-2">
+          <input class="form-check-input" type="checkbox" [checked]="brand.isActive" (change)="toggleBrand(brand)">
+        </div>
+        <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditForm(brand)"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-outline-danger" (click)="deleteBrand(brand)"><i class="bi bi-trash"></i></button>
+      </div>
+    </div>
+    <div class="empty-state" *ngIf="brands.length === 0">
+      <i class="bi bi-tags"></i>
+      <h5>No brands</h5>
+      <p>Create your first brand</p>
+    </div>
+  </div>
+</div>

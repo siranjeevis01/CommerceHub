@@ -1,0 +1,20 @@
+<div class="modal-backdrop" *ngIf="visible" (click)="onBackdropClick()"></div>
+<div class="confirm-dialog" *ngIf="visible" [class.fade-in]="visible">
+  <div class="dialog-box" [ngClass]="'dialog-' + type">
+    <div class="dialog-icon">
+      <i *ngIf="type === 'danger'" class="bi bi-exclamation-triangle-fill"></i>
+      <i *ngIf="type === 'warning'" class="bi bi-exclamation-circle-fill"></i>
+      <i *ngIf="type === 'info'" class="bi bi-info-circle-fill"></i>
+    </div>
+    <h5>{{ title }}</h5>
+    <p>{{ message }}</p>
+    <div class="dialog-actions">
+      <button class="btn btn-outline-secondary" [disabled]="loading" (click)="cancel.emit()">{{ cancelText }}</button>
+      <button class="btn" [ngClass]="'btn-' + (type === 'danger' ? 'danger' : type === 'warning' ? 'warning' : 'primary')"
+        [disabled]="loading" (click)="confirm.emit()">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

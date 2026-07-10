@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CommerceHub.AIAgent.Domain</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\CommerceHub.Shared.Kernel\CommerceHub.Shared.Kernel.csproj" />
+  </ItemGroup>
+</Project>

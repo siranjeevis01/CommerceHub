@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.Product.Api</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7" />
+    <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.0" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.3.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.17.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommerceHub.Product.Application\CommerceHub.Product.Application.csproj" />
+    <ProjectReference Include="..\CommerceHub.Product.Infrastructure\CommerceHub.Product.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\CommerceHub.ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\Shared\CommerceHub.Shared.Messaging\CommerceHub.Shared.Messaging.csproj" />
+  </ItemGroup>
+</Project>

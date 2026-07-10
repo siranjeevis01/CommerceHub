@@ -1,0 +1,78 @@
+<app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
+
+<div class="container py-4" *ngIf="vendor$ | async as vendor; else errorState">
+  <!-- Vendor Banner -->
+  <div class="vendor-banner rounded-3 overflow-hidden mb-4 position-relative" [style.backgroundImage]="'url(' + (vendor.bannerUrl || 'assets/images/vendor-banner.jpg') + ')'">
+    <div class="banner-overlay p-4 d-flex align-items-end">
+      <div class="d-flex align-items-center gap-3">
+        <img [src]="vendor.logoUrl" [alt]="vendor.storeName" class="rounded-circle border border-2 border-white" width="80" height="80" style="object-fit: cover;">
+        <div class="text-white">
+          <h3 class="fw-bold mb-1">{{vendor.storeName}}</h3>
+          <div class="d-flex align-items-center gap-3 small">
+            <span><i class="bi bi-star-fill text-warning me-1"></i>{{vendor.rating}}</span>
+            <span><i class="bi bi-box-seam me-1"></i>{{vendor.productCount}} products</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vendor Info -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3 small">
+        <div class="col-md-4">
+          <i class="bi bi-info-circle me-1"></i> {{vendor.description}}
+        </div>
+        <div class="col-md-3" *ngIf="vendor.email">
+          <i class="bi bi-envelope me-1"></i> {{vendor.email}}
+        </div>
+        <div class="col-md-2" *ngIf="vendor.phone">
+          <i class="bi bi-telephone me-1"></i> {{vendor.phone}}
+        </div>
+        <div class="col-md-3" *ngIf="vendor.address">
+          <i class="bi bi-geo-alt me-1"></i> {{vendor.address}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <h4 class="fw-bold mb-3">Products</h4>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <small class="text-muted" *ngIf="products$ | async as p">{{p.total}} products</small>
+    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="sortBy" (change)="onSortChange()">
+      <option value="newest">Newest</option>
+      <option value="price_asc">Price: Low to High</option>
+      <option value="price_desc">Price: High to Low</option>
+      <option value="popularity">Popularity</option>
+    </select>
+  </div>
+
+  <ng-container *ngIf="products$ | async as result; else productsLoading">
+    <div *ngIf="result.data.length > 0; else noProducts">
+      <div class="product-grid">
+        <app-product-card *ngFor="let product of result.data" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
+      </div>
+      <app-pagination-footer
+        [currentPage]="result.page"
+        [totalPages]="result.totalPages"
+        [total]="result.total"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)">
+      </app-pagination-footer>
+    </div>
+    <ng-template #noProducts>
+      <app-empty-state icon="bi-box" title="No products yet" message="This vendor hasn't listed any products yet."></app-empty-state>
+    </ng-template>
+  </ng-container>
+  <ng-template #productsLoading>
+    <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+  </ng-template>
+</div>
+
+<ng-template #errorState>
+  <div class="container py-5" *ngIf="vendorError && !isLoading">
+    <app-empty-state icon="bi-shop" title="Store not found" message="The vendor store you're looking for doesn't exist." [actionLabel]="'Browse Products'" [actionLink]="'/products'"></app-empty-state>
+  </div>
+</ng-template>

@@ -1,0 +1,13 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+@Component({
+  standalone: false,
+  selector: 'app-loading-overlay',
+  templateUrl: './loading-overlay.component.html',
+  styleUrls: ['./loading-overlay.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LoadingOverlayComponent {
+  @Input() show = false;
+  @Input() message = 'Loading...';
+}

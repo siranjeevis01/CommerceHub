@@ -1,0 +1,170 @@
+<div class="fade-in">
+  <nav class="breadcrumb-nav">
+    <a routerLink="/products">Products</a>
+    <span class="separator">/</span>
+    <span class="current">{{ isEdit ? 'Edit Product' : 'Create Product' }}</span>
+  </nav>
+
+  <div class="page-header">
+    <h1>{{ isEdit ? 'Edit Product' : 'Create New Product' }}</h1>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="ngOnInit()">Retry</button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-grid">
+      <div class="card">
+        <div class="card-header"><h5>Basic Information</h5></div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Product Name *</label>
+            <input class="form-control" formControlName="name" (input)="generateSlug()" [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+            <div class="invalid-feedback">Product name is required</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Slug *</label>
+            <input class="form-control" formControlName="slug" [class.is-invalid]="form.get('slug')?.invalid && form.get('slug')?.touched">
+            <div class="invalid-feedback">Slug is required</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <app-rich-text-editor [value]="form.get('description')?.value || ''" (valueChange)="form.patchValue({description: $event})" [height]="'200px'"></app-rich-text-editor>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Short Description</label>
+            <textarea class="form-control" formControlName="shortDescription" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Pricing & Inventory</h5></div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Price *</label>
+              <div class="input-group"><span class="input-group-text">$</span><input type="number" step="0.01" class="form-control" formControlName="price"></div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Compare Price</label>
+              <div class="input-group"><span class="input-group-text">$</span><input type="number" step="0.01" class="form-control" formControlName="comparePrice"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">SKU *</label>
+              <input class="form-control" formControlName="sku" [class.is-invalid]="form.get('sku')?.invalid && form.get('sku')?.touched">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Stock Quantity</label>
+              <input type="number" class="form-control" formControlName="stockQuantity" min="0">
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" formControlName="isActive" id="isActive">
+              <label class="form-check-label" for="isActive">Active (visible in storefront)</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Categories & Brand</h5></div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Category *</label>
+            <select class="form-select" formControlName="categoryId">
+              <option [value]="null">Select category</option>
+              <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Brand *</label>
+            <select class="form-select" formControlName="brandId">
+              <option [value]="null">Select brand</option>
+              <option *ngFor="let b of brands" [value]="b.id">{{ b.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tags</label>
+            <input class="form-control" formControlName="tags" placeholder="Comma separated tags">
+            <div class="form-text">e.g., electronics, new-arrival, sale</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5>Images</h5>
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addImage()">Add Image</button>
+        </div>
+        <div class="card-body">
+          <div formArrayName="images">
+            <div class="image-row" *ngFor="let img of imagesArray.controls; let i = index" [formGroupName]="i">
+              <input class="form-control form-control-sm" formControlName="url" placeholder="Image URL">
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeImage(i)">&times;</button>
+            </div>
+          </div>
+          <div class="empty-state small" *ngIf="imagesArray.length === 0">
+            <p class="mb-0">No images added</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card full-width">
+        <div class="card-header">
+          <h5>Variants</h5>
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addVariant()">Add Variant</button>
+        </div>
+        <div class="card-body p-0">
+          <table class="table" *ngIf="variantsArray.length > 0">
+            <thead>
+              <tr><th>SKU</th><th>Color</th><th>Size</th><th>Price</th><th>Stock</th><th>Image</th><th></th></tr>
+            </thead>
+            <tbody formArrayName="variants">
+              <tr *ngFor="let v of variantsArray.controls; let i = index" [formGroupName]="i">
+                <td><input class="form-control form-control-sm" formControlName="sku" placeholder="SKU"></td>
+                <td><input class="form-control form-control-sm" formControlName="color" placeholder="Color"></td>
+                <td><input class="form-control form-control-sm" formControlName="size" placeholder="Size"></td>
+                <td><input type="number" step="0.01" class="form-control form-control-sm" formControlName="price" placeholder="0.00"></td>
+                <td><input type="number" class="form-control form-control-sm" formControlName="stockQuantity" placeholder="0"></td>
+                <td><input class="form-control form-control-sm" formControlName="imageUrl" placeholder="URL"></td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger" (click)="removeVariant(i)">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="empty-state" *ngIf="variantsArray.length === 0">
+            <p class="mb-0">No variants. Add size/color variations here.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>SEO</h5></div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Meta Title</label>
+            <input class="form-control" formControlName="metaTitle" placeholder="SEO title">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Meta Description</label>
+            <textarea class="form-control" formControlName="metaDescription" rows="3" placeholder="SEO meta description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline-secondary" routerLink="/products">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="saving">
+        <span class="spinner-border spinner-border-sm me-1" *ngIf="saving"></span>
+        {{ isEdit ? 'Update Product' : 'Create Product' }}
+      </button>
+    </div>
+  </form>
+</div>

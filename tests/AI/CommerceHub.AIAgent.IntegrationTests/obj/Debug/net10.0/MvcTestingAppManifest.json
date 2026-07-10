@@ -1,0 +1,10 @@
+{
+  "CommerceHub.AIAgent.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Services\\AI\\CommerceHub.AIAgent.Api",
+  "CommerceHub.AIAgent.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Services\\AI\\CommerceHub.AIAgent.Application",
+  "CommerceHub.AIAgent.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Services\\AI\\CommerceHub.AIAgent.Domain",
+  "CommerceHub.AIAgent.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Services\\AI\\CommerceHub.AIAgent.Infrastructure",
+  "CommerceHub.ServiceDefaults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Shared\\CommerceHub.ServiceDefaults",
+  "CommerceHub.Shared.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Shared\\CommerceHub.Shared.Contracts",
+  "CommerceHub.Shared.Kernel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Shared\\CommerceHub.Shared.Kernel",
+  "CommerceHub.Shared.Testing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\PROJECT\\Dotnet\\CommerceHub\\src\\Shared\\CommerceHub.Shared.Testing"
+}

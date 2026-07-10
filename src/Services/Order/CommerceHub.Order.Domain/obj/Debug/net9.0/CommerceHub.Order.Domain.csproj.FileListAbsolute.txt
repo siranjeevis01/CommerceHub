@@ -1,0 +1,15 @@
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.AssemblyInfoInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.AssemblyInfo.cs
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.csproj.CoreCompileInputs.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.csproj.AssemblyReference.cache
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\bin\Debug\net9.0\CommerceHub.Order.Domain.deps.json
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\bin\Debug\net9.0\CommerceHub.Order.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\bin\Debug\net9.0\CommerceHub.Order.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\bin\Debug\net9.0\CommerceHub.Shared.Contracts.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\bin\Debug\net9.0\CommerceHub.Shared.Contracts.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\Commerce.4DFB8295.Up2Date
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\refint\CommerceHub.Order.Domain.dll
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\CommerceHub.Order.Domain.pdb
+D:\PROJECT\Dotnet\CommerceHub\src\Services\Order\CommerceHub.Order.Domain\obj\Debug\net9.0\ref\CommerceHub.Order.Domain.dll

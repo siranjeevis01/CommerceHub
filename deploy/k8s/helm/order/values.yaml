@@ -1,0 +1,37 @@
+replicaCount: 3
+image:
+  repository: ghcr.io/commercehub/commercehub/order-service
+  tag: latest
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+env:
+  ASPNETCORE_ENVIRONMENT: Production
+envFromSecrets:
+  - ORDER_DB_CONNECTION
+envFromConfigMap:
+  - RABBITMQ_HOST
+  - SEQ_URL
+  - OTLP_EXPORTER_ENDPOINT
+resources:
+  requests: { memory: "256Mi", cpu: "250m" }
+  limits: { memory: "512Mi", cpu: "500m" }
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [order]
+          topologyKey: kubernetes.io/hostname

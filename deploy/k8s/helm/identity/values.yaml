@@ -1,0 +1,71 @@
+replicaCount: 3
+
+image:
+  repository: ghcr.io/commercehub/commercehub/identity-service
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: api.commercehub.com
+      paths:
+        - /identity(/|$)(.*)
+  tls:
+    - secretName: commercehub-tls
+
+env:
+  ASPNETCORE_ENVIRONMENT: Production
+  JWT_ISSUER: CommerceHub
+  JWT_AUDIENCE: CommerceHubClient
+
+envFromSecrets:
+  - JWT_KEY
+  - IDENTITY_DB_CONNECTION
+
+envFromConfigMap:
+  - RABBITMQ_HOST
+  - REDIS_CONNECTION_STRING
+  - SEQ_URL
+  - OTLP_EXPORTER_ENDPOINT
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+nodeSelector: {}
+tolerations: []
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - identity
+          topologyKey: kubernetes.io/hostname

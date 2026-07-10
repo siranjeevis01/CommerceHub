@@ -1,0 +1,16 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "dotnet CommerceHub.Gateway.dll"
+healthcheckPath = "/health"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[environment]
+ASPNETCORE_ENVIRONMENT = "Production"
+ASPNETCORE_URLS = "http://+:8080"
+
+[deploy]
+numReplicas = 1

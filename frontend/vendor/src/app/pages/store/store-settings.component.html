@@ -1,0 +1,100 @@
+<div class="page-header">
+  <h1>Store Settings</h1>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<form [formGroup]="storeForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+  <div class="form-grid">
+    <div class="form-main">
+      <div class="card mb-4">
+        <div class="card-header">Store Information</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Store Name *</label>
+              <input class="form-control" formControlName="storeName" [class.is-invalid]="storeForm.get('storeName')?.invalid && storeForm.get('storeName')?.touched">
+              <div class="invalid-feedback">Store name is required</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Store Slug *</label>
+              <div class="input-group">
+                <span class="input-group-text">/store/</span>
+                <input class="form-control" formControlName="storeSlug" [class.is-invalid]="storeForm.get('storeSlug')?.invalid && storeForm.get('storeSlug')?.touched">
+              </div>
+              <div class="invalid-feedback">Slug is required</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="4" formControlName="description" placeholder="Describe your store..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">Contact Information</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Contact Email</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="store@example.com">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input class="form-control" formControlName="phone" placeholder="+1 (555) 123-4567">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Store Address</label>
+              <textarea class="form-control" rows="2" formControlName="address" placeholder="Full store address"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">Social Media</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label"><i class="bi bi-facebook"></i> Facebook</label>
+              <input class="form-control" formControlName="facebook" placeholder="Facebook URL">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label"><i class="bi bi-instagram"></i> Instagram</label>
+              <input class="form-control" formControlName="instagram" placeholder="Instagram URL">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label"><i class="bi bi-twitter-x"></i> Twitter / X</label>
+              <input class="form-control" formControlName="twitter" placeholder="Twitter URL">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-sidebar">
+      <div class="card mb-4">
+        <div class="card-header">Store Logo</div>
+        <div class="card-body">
+          <app-image-upload-preview [imageUrl]="storeForm.get('logoUrl')?.value" [width]="200" [height]="200"
+            (imageChange)="storeForm.patchValue({ logoUrl: $event })">
+          </app-image-upload-preview>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">Store Banner</div>
+        <div class="card-body">
+          <app-image-upload-preview [imageUrl]="storeForm.get('bannerUrl')?.value" [width]="260" [height]="120"
+            (imageChange)="storeForm.patchValue({ bannerUrl: $event })">
+          </app-image-upload-preview>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="saving">
+        <i class="bi bi-check-lg"></i> {{ saving ? 'Saving...' : 'Save Settings' }}
+      </button>
+    </div>
+  </div>
+</form>

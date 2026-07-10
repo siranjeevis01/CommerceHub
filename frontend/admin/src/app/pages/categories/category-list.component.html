@@ -1,0 +1,92 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Categories</h1>
+      <p>Organize product categories. Drag to reorder.</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateForm()">
+      <i class="bi bi-plus-lg"></i> Add Category
+    </button>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <div class="card" *ngIf="showForm">
+    <div class="card-header">
+      <h5>{{ editingCategory ? 'Edit Category' : 'New Category' }}</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Name</label>
+          <input class="form-control" [(ngModel)]="editName" (input)="generateSlug()" placeholder="Category name">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Slug</label>
+          <input class="form-control" [(ngModel)]="editSlug" placeholder="category-slug">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Parent Category</label>
+          <select class="form-select" [(ngModel)]="editParentId">
+            <option [value]="null">None (top level)</option>
+            <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" [(ngModel)]="editDescription" rows="2"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" (click)="saveCategory()">{{ editingCategory ? 'Update' : 'Create' }}</button>
+        <button class="btn btn-outline-secondary" (click)="cancelForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="!loading && !error">
+    <div class="card-body p-0">
+      <table class="table">
+        <thead><tr><th>Name</th><th>Slug</th><th>Subcategories</th><th>Products</th><th></th></tr></thead>
+        <tbody>
+          <ng-container *ngFor="let cat of categories">
+            <tr class="category-row" draggable="true"
+              (dragstart)="onDragStart(cat)" (dragover)="onDragOver($event, cat)"
+              (dragleave)="onDragLeave($event)" (drop)="onDrop($event, cat)">
+              <td><i class="bi bi-grip-vertical me-2 text-secondary" style="cursor:grab"></i>{{ cat.name }}</td>
+              <td><code>{{ cat.slug }}</code></td>
+              <td>
+                <span class="child-count" *ngIf="cat.children?.length">{{ cat.children.length }}</span>
+                <span class="text-secondary" *ngIf="!cat.children?.length">-</span>
+              </td>
+              <td><span class="text-secondary">-</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditForm(cat)"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(cat)"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+            <tr *ngFor="let child of cat.children" class="category-row child-row" draggable="true"
+              (dragstart)="onDragStart(child)" (dragover)="onDragOver($event, child)"
+              (dragleave)="onDragLeave($event)" (drop)="onDrop($event, child)">
+              <td><span class="child-indent"></span><i class="bi bi-grip-vertical me-2 text-secondary" style="cursor:grab"></i>{{ child.name }}</td>
+              <td><code>{{ child.slug }}</code></td>
+              <td><span class="text-secondary">-</span></td>
+              <td><span class="text-secondary">-</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditForm(child)"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(child)"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="categories.length === 0">
+            <td colspan="5" class="text-center text-secondary py-3">No categories</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

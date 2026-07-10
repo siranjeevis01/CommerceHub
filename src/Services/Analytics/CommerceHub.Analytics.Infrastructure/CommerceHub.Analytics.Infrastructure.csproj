@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.Analytics.Infrastructure</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="MassTransit" Version="8.3.0" />
+    <PackageReference Include="EPPlus" Version="7.5.2" />
+    <PackageReference Include="QuestPDF" Version="2024.12.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommerceHub.Analytics.Application\CommerceHub.Analytics.Application.csproj" />
+    <ProjectReference Include="..\CommerceHub.Analytics.Domain\CommerceHub.Analytics.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\CommerceHub.Shared.Messaging\CommerceHub.Shared.Messaging.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,11 @@
+<div class="price-display d-flex align-items-center gap-2 flex-wrap"
+     [class.price-sm]="size === 'sm'"
+     [class.price-lg]="size === 'lg'">
+  <span class="current-price fw-bold text-dark">{{ currency }}{{ price.toFixed(2) }}</span>
+  <span class="compare-price text-decoration-line-through text-muted" *ngIf="hasDiscount">
+    {{ currency }}{{ comparePrice!.toFixed(2) }}
+  </span>
+  <span class="badge bg-danger" *ngIf="hasDiscount && showDiscount">
+    -{{ discountPercent }}%
+  </span>
+</div>

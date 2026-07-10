@@ -1,0 +1,48 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Payout Management</h1>
+      <p>Process vendor payouts and view payout history</p>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+      <span class="text-secondary" style="font-size:13px">
+        Pending: <strong>${{ totalPendingAmount.toFixed(2) }}</strong>
+      </span>
+      <button class="btn btn-primary" [disabled]="selectedPayouts.length === 0 || batchProcessing" (click)="batchProcess()">
+        <span class="spinner-border spinner-border-sm me-1" *ngIf="batchProcessing"></span>
+        Batch Process ({{ selectedPayouts.length }})
+      </button>
+    </div>
+  </div>
+
+  <div class="payout-summary">
+    <div class="summary-card" *ngFor="let s of statusSummary">
+      <div class="summary-label">{{ s.label }}</div>
+      <div class="summary-value">{{ s.count }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <app-data-table
+        [columns]="columns"
+        [data]="payouts"
+        [total]="total"
+        [page]="page"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        [error]="error"
+        [actions]="actions"
+        [filters]="filters"
+        [selectable]="true"
+        sortKey="requestedAt"
+        sortDir="desc"
+        emptyMessage="No payouts found"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (filterChange)="onFilterChange($event)"
+        (selectionChange)="onSelectionChange($event)"
+      ></app-data-table>
+    </div>
+  </div>
+</div>

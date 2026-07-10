@@ -1,0 +1,26 @@
+<div class="product-card card h-100" [class.list-view]="viewMode === 'list'" (click)="viewDetails.emit(product.id)">
+  <div class="image-wrapper">
+    <img [src]="product.imageUrl || 'assets/images/placeholder.svg'" [alt]="product.name" loading="lazy" (error)="onImageError($event)">
+    <span class="badge bg-danger badge-stock" *ngIf="product.stockQuantity === 0">Out of Stock</span>
+    <span class="badge bg-success badge-stock" *ngIf="product.comparePrice && product.comparePrice > product.price">Sale</span>
+    <button class="btn btn-sm btn-light quick-add" *ngIf="product.stockQuantity > 0" (click)="$event.stopPropagation(); addToCart.emit(product)" title="Add to Cart">
+      <i class="bi bi-cart-plus"></i>
+    </button>
+  </div>
+  <div class="card-body d-flex flex-column">
+    <small class="text-muted mb-1">{{product.categoryName}}</small>
+    <h6 class="card-title mb-2 text-truncate">{{product.name}}</h6>
+    <div class="mt-auto">
+      <app-product-rating [rating]="product.ratings" [count]="product.reviewCount" *ngIf="viewMode === 'grid'"></app-product-rating>
+      <app-price-display [price]="product.price" [comparePrice]="product.comparePrice"></app-price-display>
+      <p class="small text-muted mb-0 mt-1 text-truncate" *ngIf="viewMode === 'list'">{{product.shortDescription}}</p>
+      <app-product-rating [rating]="product.ratings" [count]="product.reviewCount" *ngIf="viewMode === 'list'"></app-product-rating>
+      <button class="btn btn-primary btn-sm w-100 mt-2" *ngIf="product.stockQuantity > 0" (click)="$event.stopPropagation(); addToCart.emit(product)">
+        <i class="bi bi-cart-plus me-1"></i>Add to Cart
+      </button>
+      <button class="btn btn-outline-secondary btn-sm w-100 mt-2" disabled *ngIf="product.stockQuantity === 0">
+        Out of Stock
+      </button>
+    </div>
+  </div>
+</div>

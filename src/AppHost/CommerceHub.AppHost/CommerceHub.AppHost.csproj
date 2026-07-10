@@ -1,0 +1,33 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.AppHost</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>CommerceHub.AppHost</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.MySql" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.Elasticsearch" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.*" />
+    <PackageReference Include="Aspire.Hosting.Seq" Version="13.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ApiGateway\CommerceHub.Gateway\CommerceHub.Gateway.csproj" />
+    <ProjectReference Include="..\..\Services\Identity\CommerceHub.Identity.Api\CommerceHub.Identity.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Product\CommerceHub.Product.Api\CommerceHub.Product.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Order\CommerceHub.Order.Api\CommerceHub.Order.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Cart\CommerceHub.Cart.Api\CommerceHub.Cart.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Payment\CommerceHub.Payment.Api\CommerceHub.Payment.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Vendor\CommerceHub.Vendor.Api\CommerceHub.Vendor.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Inventory\CommerceHub.Inventory.Api\CommerceHub.Inventory.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Notification\CommerceHub.Notification.Api\CommerceHub.Notification.Api.csproj" />
+    <ProjectReference Include="..\..\Services\CMS\CommerceHub.Cms.Api\CommerceHub.Cms.Api.csproj" />
+    <ProjectReference Include="..\..\Services\Analytics\CommerceHub.Analytics.Api\CommerceHub.Analytics.Api.csproj" />
+  </ItemGroup>
+</Project>

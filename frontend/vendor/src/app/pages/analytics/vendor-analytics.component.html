@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h1>Analytics</h1>
+</div>
+
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div *ngIf="analytics$ | async as data">
+  <div class="metrics-grid">
+    <div class="card metric-card">
+      <div class="metric-icon"><i class="bi bi-currency-dollar text-primary"></i></div>
+      <div class="metric-info">
+        <div class="metric-label">Conversion Rate</div>
+        <div class="metric-value">{{ (data.conversionRate * 100).toFixed(1) }}%</div>
+      </div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-icon"><i class="bi bi-people text-info"></i></div>
+      <div class="metric-info">
+        <div class="metric-label">Total Visitors</div>
+        <div class="metric-value">{{ data.totalVisitors.toLocaleString() }}</div>
+      </div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-icon"><i class="bi bi-cart-check text-success"></i></div>
+      <div class="metric-info">
+        <div class="metric-label">Total Sales</div>
+        <div class="metric-value">{{ data.totalSales.toLocaleString() }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analytics-grid">
+    <div class="card">
+      <div class="card-header">Revenue Trend</div>
+      <div class="card-body chart-container">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Order Volume (Weekly)</div>
+      <div class="card-body chart-container">
+        <canvas id="orderChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header">Top Performing Products</div>
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Units Sold</th>
+            <th>Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of data.topProducts">
+            <td class="fw-semibold">{{ p.name }}</td>
+            <td>{{ p.units }}</td>
+            <td class="fw-semibold">${{ p.revenue.toFixed(2) }}</td>
+          </tr>
+          <tr *ngIf="data.topProducts.length === 0">
+            <td colspan="3">
+              <app-empty-state icon="bar-chart" title="No data yet" message="Analytics data will populate as your store receives orders."></app-empty-state>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header">Traffic Overview</div>
+    <div class="card-body text-center py-5">
+      <i class="bi bi-globe2 fs-1 text-muted"></i>
+      <p class="text-muted mt-2">Traffic analytics will be available after integrating with your analytics provider.</p>
+    </div>
+  </div>
+</div>

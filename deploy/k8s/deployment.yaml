@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commercehub-api
+  namespace: commercehub
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: commercehub-api
+  template:
+    metadata:
+      labels:
+        app: commercehub-api
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+      - name: api
+        image: ghcr.io/commercehub/commercehub-api:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: commercehub-config
+        - secretRef:
+            name: commercehub-secrets
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"

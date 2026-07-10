@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-brand {
+  font-size: 1.35rem;
+  letter-spacing: -0.5px;
+
+  i {
+    color: var(--primary-light);
+  }
+}
+
+.nav-link {
+  padding: 0.5rem 0.75rem !important;
+  border-radius: var(--radius);
+  transition: background-color var(--transition);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &.active {
+    color: var(--primary-light) !important;
+  }
+}
+
+.btn-link {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.55);
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: var(--radius-lg);
+  min-width: 220px;
+  animation: dropdownFade 0.15s ease-in-out;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding-top: 1rem;
+  }
+}

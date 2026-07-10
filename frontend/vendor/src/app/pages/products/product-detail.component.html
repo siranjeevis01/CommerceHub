@@ -1,0 +1,81 @@
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div *ngIf="product$ | async as product">
+  <div class="page-header">
+    <div class="d-flex align-items-center gap-3">
+      <a routerLink="/products" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i></a>
+      <h1 class="mb-0">{{ product.name }}</h1>
+      <app-status-badge [status]="product.isActive ? 'active' : 'inactive'" size="md"></app-status-badge>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-outline-warning" (click)="toggleActive(product)">
+        {{ product.isActive ? 'Deactivate' : 'Activate' }}
+      </button>
+      <a routerLink="/products/{{ product.id }}/edit" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+    </div>
+  </div>
+
+  <div class="product-detail-grid">
+    <div class="product-images">
+      <img [src]="product.imageUrl || 'https://via.placeholder.com/400'" class="main-image" (error)="$event.target.src='https://via.placeholder.com/400'">
+      <div class="thumbnails" *ngIf="product.images?.length">
+        <img *ngFor="let img of product.images" [src]="img" (click)="product.imageUrl = img" class="thumb" [class.active]="img === product.imageUrl">
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="info-row"><span class="info-label">SKU</span><span class="info-value"><code>{{ product.sku }}</code></span></div>
+          <div class="info-row"><span class="info-label">Price</span><span class="info-value fw-bold fs-5">${{ product.price.toFixed(2) }}</span></div>
+          <div class="info-row" *ngIf="product.comparePrice"><span class="info-label">Compare Price</span><span class="info-value text-decoration-line-through">${{ product.comparePrice.toFixed(2) }}</span></div>
+          <div class="info-row"><span class="info-label">Stock</span><span class="info-value" [class.text-danger]="product.stockQuantity <= 5">{{ product.stockQuantity }} units</span></div>
+          <div class="info-row"><span class="info-label">Category</span><span class="info-value">{{ product.categoryName }}</span></div>
+          <div class="info-row"><span class="info-label">Brand</span><span class="info-value">{{ product.brandName }}</span></div>
+          <div class="info-row"><span class="info-label">Rating</span><span class="info-value">★ {{ product.ratings.toFixed(1) }} ({{ product.reviewCount }} reviews)</span></div>
+          <div class="info-row"><span class="info-label">Created</span><span class="info-value">{{ product.createdAt | date:'MMM d, y' }}</span></div>
+        </div>
+      </div>
+
+      <div class="tags" *ngIf="product.tags?.length">
+        <span class="tag" *ngFor="let tag of product.tags">{{ tag }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'details'" (click)="activeTab='details'" href="javascript:void(0)">Description</a></li>
+        <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'variants'" (click)="activeTab='variants'" href="javascript:void(0)">Variants ({{ product.variants.length }})</a></li>
+        <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'reviews'" (click)="activeTab='reviews'" href="javascript:void(0)">Reviews ({{ product.reviewCount }})</a></li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div *ngIf="activeTab === 'details'">
+        <p class="text-muted" *ngIf="product.shortDescription">{{ product.shortDescription }}</p>
+        <hr *ngIf="product.shortDescription">
+        <div [innerHTML]="product.description"></div>
+      </div>
+
+      <div *ngIf="activeTab === 'variants'">
+        <table class="table" *ngIf="product.variants.length > 0">
+          <thead><tr><th>SKU</th><th>Color</th><th>Size</th><th>Price</th><th>Stock</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let v of product.variants">
+              <td><code>{{ v.sku }}</code></td>
+              <td>{{ v.color || '-' }}</td>
+              <td>{{ v.size || '-' }}</td>
+              <td>${{ v.price.toFixed(2) }}</td>
+              <td>{{ v.stockQuantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <app-empty-state *ngIf="product.variants.length === 0" icon="layers" title="No variants"></app-empty-state>
+      </div>
+
+      <div *ngIf="activeTab === 'reviews'">
+        <app-empty-state icon="star" title="Reviews not loaded in detail view" message="Go to Reviews section for full review management."></app-empty-state>
+      </div>
+    </div>
+  </div>
+</div>

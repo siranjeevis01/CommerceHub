@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/storefront",
+    "types": [],
+    "paths": {
+      "@shared/*": ["shared/src/lib/*"],
+      "@env/*": ["storefront/src/environments/*"]
+    }
+  },
+  "files": ["src/main.ts", "src/polyfills.ts", "src/app/storefront.module.ts"],
+  "include": ["src/**/*.d.ts"],
+  "exclude": ["node_modules"]
+}

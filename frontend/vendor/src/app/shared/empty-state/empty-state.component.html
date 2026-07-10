@@ -1,0 +1,6 @@
+<div class="empty-state">
+  <div class="empty-icon"><i class="bi bi-{{ icon }}"></i></div>
+  <h3>{{ title }}</h3>
+  <p *ngIf="message">{{ message }}</p>
+  <a *ngIf="actionLabel" class="btn btn-primary" [routerLink]="actionRoute">{{ actionLabel }}</a>
+</div>

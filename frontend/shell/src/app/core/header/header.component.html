@@ -1,0 +1,89 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/">
+      <i class="bi bi-shop fs-4"></i>
+      <span>CommerceHub</span>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" (click)="toggleNav()"
+            [attr.aria-expanded]="!isNavCollapsed" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" [class.show]="!isNavCollapsed">
+      <form class="d-flex mx-auto my-2 my-lg-0" (ngSubmit)="onSearch()" style="max-width: 500px; width: 100%;">
+        <div class="input-group">
+          <input type="search" class="form-control form-control-sm bg-dark border-secondary text-light"
+                 placeholder="Search products, brands, categories..." aria-label="Search"
+                 [(ngModel)]="searchQuery" name="search">
+          <button class="btn btn-outline-light btn-sm" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <ul class="navbar-nav align-items-center gap-1">
+        <li class="nav-item">
+          <a class="nav-link position-relative" routerLink="/cart" routerLinkActive="active">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="badge bg-danger badge-cart rounded-pill" *ngIf="cartItemCount$ | async as count">
+              {{ count > 99 ? '99+' : count }}
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" (click)="toggleNotifications()" (clickOutside)="closeNotifications()">
+          <button class="nav-link btn btn-link position-relative" id="notificationDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false" type="button">
+            <i class="bi bi-bell fs-5"></i>
+            <span class="badge bg-danger badge-cart rounded-pill" *ngIf="(unreadCount$ | async) as unread">
+              {{ unread > 99 ? '99+' : unread }}
+            </span>
+          </button>
+          <app-notification-dropdown
+            *ngIf="showNotifications"
+            [notifications]="(notifications$ | async) ?? []"
+            (close)="closeNotifications()">
+          </app-notification-dropdown>
+        </li>
+
+        <ng-container *ngIf="(currentUser$ | async) as user; else authLinks">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="userDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5"></i>
+              <span class="d-none d-lg-inline">{{ user.firstName }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+              <li><h6 class="dropdown-header">{{ user.firstName }} {{ user.lastName }}</h6></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+              <li><a class="dropdown-item" routerLink="/profile/orders"><i class="bi bi-box me-2"></i>Orders</a></li>
+              <li><a class="dropdown-item" routerLink="/profile/wishlist"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+              <li><a class="dropdown-item" routerLink="/profile/addresses"><i class="bi bi-geo-alt me-2"></i>Addresses</a></li>
+              <li *ngIf="auth.isVendor">
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" routerLink="/vendor"><i class="bi bi-shop me-2"></i>Vendor Dashboard</a>
+              </li>
+              <li *ngIf="auth.isAdmin">
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" routerLink="/account"><i class="bi bi-shield-lock me-2"></i>Admin Panel</a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        </ng-container>
+
+        <ng-template #authLinks>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary btn-sm text-white px-3" routerLink="/auth/register">Register</a>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav>

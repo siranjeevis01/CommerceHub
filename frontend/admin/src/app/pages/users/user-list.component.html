@@ -1,0 +1,41 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Users</h1>
+      <p>Manage all users on the platform</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-success btn-sm" *ngIf="selectedUsers.length > 0" (click)="bulkActivate()">
+        <i class="bi bi-check-circle"></i> Activate ({{ selectedUsers.length }})
+      </button>
+      <button class="btn btn-outline-warning btn-sm" *ngIf="selectedUsers.length > 0" (click)="bulkDeactivate()">
+        <i class="bi bi-pause-circle"></i> Deactivate ({{ selectedUsers.length }})
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <app-data-table
+        [columns]="columns"
+        [data]="users"
+        [total]="total"
+        [page]="page"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        [error]="error"
+        [actions]="actions"
+        [filters]="filters"
+        [selectable]="true"
+        sortKey="createdAt"
+        sortDir="desc"
+        emptyMessage="No users found"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (filterChange)="onFilterChange($event)"
+        (selectionChange)="onSelectionChange($event)"
+        (rowClick)="router.navigate(['/users', $event.id])"
+      ></app-data-table>
+    </div>
+  </div>
+</div>

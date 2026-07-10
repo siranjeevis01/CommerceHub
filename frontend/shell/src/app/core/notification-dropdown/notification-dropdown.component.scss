@@ -1,0 +1,69 @@
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 360px;
+  max-height: 480px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  animation: slideDown 0.15s ease-in-out;
+  z-index: 1050;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-list {
+  overflow-y: auto;
+  flex: 1;
+  max-height: 380px;
+}
+
+.notification-item {
+  cursor: pointer;
+  transition: background-color var(--transition);
+  border-bottom: 1px solid #f1f5f9;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.dropdown-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dropdown-footer {
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+@media (max-width: 576px) {
+  .notification-dropdown {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: calc(100vh - 56px);
+    border-radius: 0;
+  }
+
+  .notification-list {
+    max-height: calc(100vh - 160px);
+  }
+}

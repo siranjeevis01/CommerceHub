@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: commercehub-config
+  namespace: commercehub
+data:
+  rabbitmq_host: "rabbitmq.commercehub.svc.cluster.local"
+  redis_connection_string: "redis.commercehub.svc.cluster.local:6379"
+  elasticsearch_url: "http://elasticsearch.commercehub.svc.cluster.local:9200"
+  seq_url: "http://seq.commercehub.svc.cluster.local:5341"
+  otlp_exporter_endpoint: "http://otel-collector.commercehub.svc.cluster.local:4317"

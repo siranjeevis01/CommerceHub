@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.card {
+  border-radius: var(--radius-lg);
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-control[readonly] {
+  background-color: #f8fafc;
+  cursor: not-allowed;
+}
+
+.btn-outline-secondary {
+  text-align: left;
+  transition: all var(--transition);
+
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(79, 70, 229, 0.05);
+  }
+}

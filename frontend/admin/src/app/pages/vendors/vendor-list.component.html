@@ -1,0 +1,29 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Vendors</h1>
+      <p>Manage vendor accounts and store approvals</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <app-data-table
+        [columns]="columns"
+        [data]="vendors"
+        [total]="total"
+        [page]="page"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        [error]="error"
+        [actions]="actions"
+        [filters]="filters"
+        emptyMessage="No vendors found"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (filterChange)="onFilterChange($event)"
+        (rowClick)="router.navigate(['/vendors', $event.id])"
+      ></app-data-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<app-loading-overlay [isLoading]="isLoading" [fullScreen]="false"></app-loading-overlay>
+
+<!-- Hero Carousel -->
+<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel" *ngIf="!isLoading">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#heroCarousel" *ngFor="let slide of carouselSlides; let i = index" [attr.data-bs-slide-to]="i" [class.active]="i === 0"></button>
+  </div>
+  <div class="carousel-inner rounded-3 overflow-hidden">
+    <div class="carousel-item" *ngFor="let slide of carouselSlides; let i = index" [class.active]="i === 0">
+      <div class="hero-slide d-flex align-items-center justify-content-center" [style.background]="'linear-gradient(135deg, #0d6efd 0%, #6610f2 100%)'">
+        <div class="text-center text-white py-5 px-3">
+          <h1 class="display-4 fw-bold mb-3">{{slide.title}}</h1>
+          <p class="lead mb-4">{{slide.subtitle}}</p>
+          <a [routerLink]="slide.link" class="btn btn-light btn-lg px-4 fw-semibold">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<div class="container" *ngIf="!isLoading">
+  <!-- Categories -->
+  <section class="mb-5">
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="row g-3" *ngIf="categories$ | async as categories; else categoriesLoading">
+      <div class="col-6 col-md-4 col-lg-3" *ngFor="let cat of categories">
+        <a class="category-card card h-100 text-center p-3" [routerLink]="['/categories', cat.slug]">
+          <div class="category-image mx-auto mb-2">
+            <img [src]="cat.imageUrl" [alt]="cat.name" class="img-fluid rounded-circle" width="80" height="80">
+          </div>
+          <h6 class="mb-0 fw-semibold">{{cat.name}}</h6>
+        </a>
+      </div>
+    </div>
+    <ng-template #categoriesLoading>
+      <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+    </ng-template>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="mb-5">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="product-grid" *ngIf="featuredProducts$ | async as products; else productsLoading">
+      <app-product-card *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
+    </div>
+    <ng-template #productsLoading>
+      <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+    </ng-template>
+  </section>
+
+  <!-- Special Offers Banner -->
+  <section class="mb-5">
+    <div class="offer-banner rounded-3 p-5 text-center text-white" style="background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);">
+      <h2 class="display-6 fw-bold">Special Offer!</h2>
+      <p class="lead mb-4">Get 20% off your first order. Use code: <strong>WELCOME20</strong></p>
+      <a routerLink="/products" class="btn btn-light btn-lg px-4 fw-semibold">Start Shopping</a>
+    </div>
+  </section>
+
+  <!-- New Arrivals -->
+  <section class="mb-5">
+    <h2 class="section-title">New Arrivals</h2>
+    <div class="product-grid" *ngIf="newArrivals$ | async as products; else productsLoading">
+      <app-product-card *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
+    </div>
+    <ng-template #productsLoading>
+      <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+    </ng-template>
+    <div class="text-center mt-3">
+      <a routerLink="/products" class="btn btn-outline-primary">View All Products</a>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="mb-5">
+    <div class="card p-4 text-center bg-light border-0">
+      <h3 class="fw-bold mb-2">Stay in the Loop</h3>
+      <p class="text-muted mb-3">Subscribe to get special offers, free giveaways, and exclusive deals.</p>
+      <form class="row g-2 justify-content-center" (ngSubmit)="$event.preventDefault()">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="Enter your email" required>
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

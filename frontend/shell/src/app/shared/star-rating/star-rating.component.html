@@ -1,0 +1,17 @@
+<div class="star-rating d-inline-flex align-items-center gap-1"
+     [class.star-rating-sm]="size === 'sm'"
+     [class.star-rating-lg]="size === 'lg'">
+  <span class="star" *ngFor="let star of stars"
+        [class.full]="star.type === 'full'"
+        [class.half]="star.type === 'half'"
+        [class.empty]="star.type === 'empty'"
+        [class.clickable]="!readonly"
+        (click)="setRating(star.value)">
+    <i *ngIf="star.type === 'full'" class="bi bi-star-fill"></i>
+    <i *ngIf="star.type === 'half'" class="bi bi-star-half"></i>
+    <i *ngIf="star.type === 'empty'" class="bi bi-star"></i>
+  </span>
+  <span class="rating-text ms-1 text-muted" *ngIf="!readonly">
+    ({{ rating }})
+  </span>
+</div>

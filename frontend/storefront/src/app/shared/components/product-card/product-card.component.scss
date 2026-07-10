@@ -1,0 +1,41 @@
+.product-card {
+  cursor: pointer;
+  overflow: hidden;
+
+  &.list-view {
+    flex-direction: row;
+
+    .image-wrapper {
+      width: 200px;
+      min-height: 200px;
+      flex-shrink: 0;
+    }
+  }
+
+  .image-wrapper {
+    position: relative;
+
+    .quick-add {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    &:hover .quick-add {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .badge-stock {
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+}

@@ -1,0 +1,16 @@
+<div class="image-upload" [style.width.px]="width">
+  <div class="image-preview" [style.width.px]="width" [style.height.px]="height">
+    <img [src]="displayUrl" (error)="onImageError($event)" [style.width.px]="width" [style.height.px]="height">
+    <div class="image-actions-overlay" *ngIf="editable && !editMode">
+      <button class="btn btn-sm btn-light" (click)="toggleEdit()"><i class="bi bi-pencil"></i></button>
+      <button class="btn btn-sm btn-light" *ngIf="imageUrl" (click)="removeImage()"><i class="bi bi-trash text-danger"></i></button>
+    </div>
+  </div>
+  <div class="image-edit" *ngIf="editMode && editable">
+    <div class="input-group input-group-sm">
+      <input class="form-control" [(ngModel)]="tempUrl" placeholder="Enter image URL">
+      <button class="btn btn-primary" (click)="saveUrl()"><i class="bi bi-check"></i></button>
+      <button class="btn btn-outline-secondary" (click)="cancelEdit()"><i class="bi bi-x"></i></button>
+    </div>
+  </div>
+</div>

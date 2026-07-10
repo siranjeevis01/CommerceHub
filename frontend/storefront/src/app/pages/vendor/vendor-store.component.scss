@@ -1,0 +1,25 @@
+.vendor-banner {
+  min-height: 240px;
+  background-size: cover;
+  background-position: center;
+
+  .banner-overlay {
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 576px) {
+  .vendor-banner {
+    min-height: 180px;
+
+    .banner-overlay {
+      min-height: 180px;
+      padding: 1rem !important;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+    }
+  }
+}

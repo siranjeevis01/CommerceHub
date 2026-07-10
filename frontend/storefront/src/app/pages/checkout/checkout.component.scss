@@ -1,0 +1,59 @@
+.checkout-steps {
+  align-items: center;
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: #e9ecef;
+      color: #6c757d;
+      transition: all 0.2s;
+    }
+
+    &.active .step-circle {
+      background: #0d6efd;
+      color: #fff;
+    }
+
+    &.completed .step-circle {
+      background: #198754;
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+  }
+
+  .step-line {
+    width: 48px;
+    height: 2px;
+    background: #e9ecef;
+    margin-bottom: 1.25rem;
+
+    &.active {
+      background: #198754;
+    }
+  }
+}
+
+.payment-option {
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #0d6efd;
+  }
+}

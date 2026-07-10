@@ -1,0 +1,39 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn btn-link sidebar-toggle d-lg-none" (click)="sidebarCollapsed = !sidebarCollapsed">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="breadcrumb-nav">
+          <span class="breadcrumb-item" *ngIf="auth.currentUser">Welcome back, {{ auth.currentUser.firstName }}</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="store-status" *ngIf="auth.currentUser">
+          <span class="status-dot active"></span>
+          <span class="status-text">Store Active</span>
+        </div>
+        <button class="btn btn-icon position-relative" (click)="showNotifications = !showNotifications">
+          <i class="bi bi-bell"></i>
+          <span class="notification-badge" *ngIf="(auth.currentUser)">3</span>
+        </button>
+        <div class="user-menu dropdown">
+          <button class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown">
+            <span class="user-avatar">{{ auth.currentUser?.firstName?.[0] }}{{ auth.currentUser?.lastName?.[0] }}</span>
+            <span class="user-name">{{ auth.currentUser?.firstName }} {{ auth.currentUser?.lastName }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/store"><i class="bi bi-shop"></i> Store Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

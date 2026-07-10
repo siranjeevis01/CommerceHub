@@ -1,0 +1,27 @@
+.price-display {
+  &.price-sm {
+    .current-price { font-size: 1rem; }
+    .compare-price { font-size: 0.85rem; }
+    .badge { font-size: 0.65rem; }
+  }
+
+  &:not(.price-sm):not(.price-lg) {
+    .current-price { font-size: 1.25rem; }
+    .compare-price { font-size: 1rem; }
+  }
+
+  &.price-lg {
+    .current-price { font-size: 1.5rem; }
+    .compare-price { font-size: 1.15rem; }
+    .badge { font-size: 0.8rem; }
+  }
+
+  .compare-price {
+    font-weight: 400;
+  }
+
+  .badge {
+    font-weight: 600;
+    padding: 0.25em 0.6em;
+  }
+}

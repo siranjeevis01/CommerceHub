@@ -1,0 +1,98 @@
+<div class="fade-in">
+  <nav class="breadcrumb-nav">
+    <a routerLink="/vendors">Vendors</a>
+    <span class="separator">/</span>
+    <span class="current">{{ vendor?.storeName }}</span>
+  </nav>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <ng-container *ngIf="vendor && !error">
+    <div class="page-header">
+      <div class="d-flex align-items-center gap-3">
+        <div class="store-logo">
+          <img *ngIf="vendor.logoUrl" [src]="vendor.logoUrl" alt="logo">
+          <i *ngIf="!vendor.logoUrl" class="bi bi-shop"></i>
+        </div>
+        <div>
+          <h1>{{ vendor.storeName }}</h1>
+          <p>{{ vendor.email }} | {{ vendor.phone }}</p>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-success" *ngIf="vendor.status === 'pending'" (click)="approveVendor()">
+          <i class="bi bi-check-circle"></i> Approve
+        </button>
+        <button class="btn btn-danger" *ngIf="vendor.status === 'pending'" (click)="rejectVendor()">
+          <i class="bi bi-x-circle"></i> Reject
+        </button>
+        <button class="btn btn-outline-warning" *ngIf="vendor.status === 'approved'" (click)="suspendVendor()">
+          <i class="bi bi-pause-circle"></i> Suspend
+        </button>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="card">
+        <div class="card-header"><h5>Store Information</h5></div>
+        <div class="card-body">
+          <div class="info-row"><span>Store Name</span><span>{{ vendor.storeName }}</span></div>
+          <div class="info-row"><span>Slug</span><span>{{ vendor.storeSlug }}</span></div>
+          <div class="info-row"><span>Email</span><span>{{ vendor.email }}</span></div>
+          <div class="info-row"><span>Phone</span><span>{{ vendor.phone || '-' }}</span></div>
+          <div class="info-row"><span>Status</span><span><app-status-badge [status]="vendor.status"></app-status-badge></span></div>
+          <div class="info-row"><span>Rating</span><span>{{ vendor.rating }} / 5</span></div>
+          <div class="info-row"><span>Products</span><span>{{ vendor.productCount }}</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h5>Description</h5></div>
+        <div class="card-body">
+          <p>{{ vendor.description || 'No description provided.' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'products'" (click)="activeTab = 'products'">Products ({{ products.length }})</a></li>
+          <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'">Orders</a></li>
+          <li class="nav-item"><a class="nav-link" [class.active]="activeTab === 'payouts'" (click)="activeTab = 'payouts'">Payouts ({{ payouts.length }})</a></li>
+        </ul>
+      </div>
+      <div class="card-body p-0" [ngSwitch]="activeTab">
+        <table class="table" *ngSwitchCase="'products'">
+          <thead><tr><th>Name</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let p of products">
+              <td><a [routerLink]="['/products', p.id]">{{ p.name }}</a></td>
+              <td>${{ p.price.toFixed(2) }}</td>
+              <td>{{ p.stockQuantity }}</td>
+              <td><app-status-badge [status]="p.isActive ? 'active' : 'inactive'"></app-status-badge></td>
+            </tr>
+            <tr *ngIf="products.length === 0"><td colspan="4" class="text-center text-secondary py-3">No products</td></tr>
+          </tbody>
+        </table>
+        <div class="p-3 text-center text-secondary" *ngSwitchCase="'orders'">Order history will appear here</div>
+        <table class="table" *ngSwitchCase="'payouts'">
+          <thead><tr><th>Payout #</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let p of payouts">
+              <td>{{ p.payoutNumber }}</td>
+              <td>${{ p.amount.toFixed(2) }}</td>
+              <td><app-status-badge [status]="p.status"></app-status-badge></td>
+              <td>{{ p.createdAt | date:'MMM d, y' }}</td>
+            </tr>
+            <tr *ngIf="payouts.length === 0"><td colspan="4" class="text-center text-secondary py-3">No payouts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,39 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>CMS Pages</h1>
+      <p>Manage content pages for your marketplace</p>
+    </div>
+    <button class="btn btn-primary" (click)="createPage()"><i class="bi bi-plus-lg"></i> New Page</button>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading"><div class="spinner-border" role="status"></div></div>
+  <div class="error-state" *ngIf="error">
+    <i class="bi bi-exclamation-triangle-fill"></i><p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
+  </div>
+
+  <div class="card" *ngIf="!loading && !error">
+    <div class="card-body p-0">
+      <table class="table">
+        <thead><tr><th>Title</th><th>Slug</th><th>Status</th><th>Last Modified</th><th></th></tr></thead>
+        <tbody>
+          <tr *ngFor="let page of pages">
+            <td><a class="page-title" [routerLink]="['/cms', page.id]">{{ page.title }}</a></td>
+            <td><code>/{{ page.slug }}</code></td>
+            <td><app-status-badge [status]="page.isPublished ? 'published' : 'draft'"></app-status-badge></td>
+            <td>{{ page.updatedAt | date:'MMM d, y h:mm a' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" [routerLink]="['/cms', page.id]"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm" [ngClass]="page.isPublished ? 'btn-outline-warning' : 'btn-outline-success'" (click)="togglePublish(page)">
+                <i [class]="page.isPublished ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger ms-1" (click)="deletePage(page)"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+          <tr *ngIf="pages.length === 0"><td colspan="5" class="text-center text-secondary py-3">No pages yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

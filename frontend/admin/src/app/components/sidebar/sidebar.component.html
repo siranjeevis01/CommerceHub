@@ -1,0 +1,60 @@
+<aside class="sidebar" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
+  <div class="sidebar-header">
+    <a class="brand" routerLink="/">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </span>
+      <span class="brand-text" *ngIf="!collapsed">CommerceHub</span>
+    </a>
+    <button class="collapse-btn" (click)="toggleCollapse()" [attr.title]="collapsed ? 'Expand' : 'Collapse'">
+      <i [class]="collapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-left'"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-body">
+    <ul class="nav-list">
+      <li class="nav-item" *ngFor="let item of navItems">
+        <ng-container *ngIf="!item.children">
+          <a class="nav-link" [class.active]="isExactActive(item.path!)" [routerLink]="item.path" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+            <span class="nav-icon"><i [ngClass]="item.icon"></i></span>
+            <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+            <span class="nav-badge" *ngIf="item.badge && !collapsed">{{ item.badge }}</span>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="item.children">
+          <div class="nav-link has-sub" [class.open]="isExpanded(item.label)" [class.active]="isActive(item.path || item.children[0].path!)"
+            (click)="toggleSubMenu(item.label)">
+            <span class="nav-icon"><i [ngClass]="item.icon"></i></span>
+            <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+            <span class="nav-badge" *ngIf="item.badge && !collapsed">{{ item.badge }}</span>
+            <span class="nav-arrow" *ngIf="!collapsed">
+              <i class="bi bi-chevron-down"></i>
+            </span>
+          </div>
+          <ul class="sub-menu" *ngIf="!collapsed && isExpanded(item.label)">
+            <li *ngFor="let sub of item.children">
+              <a class="sub-link" [class.active]="isExactActive(sub.path!)" [routerLink]="sub.path">
+                <span class="sub-icon"><i [ngClass]="sub.icon"></i></span>
+                {{ sub.label }}
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">A</div>
+      <div class="user-details" *ngIf="!collapsed">
+        <span class="user-name">Admin</span>
+        <span class="user-role">Super Admin</span>
+      </div>
+    </div>
+  </div>
+</aside>
