@@ -1,5 +1,3 @@
-D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Api\bin\Release\net10.0\appsettings.Development.json
-D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Api\bin\Release\net10.0\appsettings.json
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Api\bin\Release\net10.0\CommerceHub.Notification.Api.staticwebassets.endpoints.json
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Api\bin\Release\net10.0\CommerceHub.Notification.Api.exe
 D:\PROJECT\Dotnet\CommerceHub\src\Services\Notification\CommerceHub.Notification.Api\bin\Release\net10.0\CommerceHub.Notification.Api.deps.json
