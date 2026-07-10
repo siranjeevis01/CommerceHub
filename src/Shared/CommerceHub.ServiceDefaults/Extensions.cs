@@ -79,7 +79,7 @@ public static class Extensions
 
     public static IServiceCollection AddConfiguredHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
-        var mysqlConnectionString = configuration.GetConnectionString("MySqlConnection");
+        var mysqlConnectionString = configuration.GetConnectionString("DefaultConnection");
         if (!string.IsNullOrWhiteSpace(mysqlConnectionString))
         {
             services.AddHealthChecks().AddMySql(mysqlConnectionString, name: "mysql", tags: new[] { "ready", "database" });

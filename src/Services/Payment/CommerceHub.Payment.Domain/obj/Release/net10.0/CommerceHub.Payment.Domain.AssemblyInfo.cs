@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CommerceHub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0374555143907ec5f33dfca5e4cd008e461b3884")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+132ffb9b2bdd01ce83c4a5fb11097a1cfbb63bc8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CommerceHub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CommerceHub.Payment.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

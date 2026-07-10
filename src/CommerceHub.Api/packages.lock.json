@@ -1175,7 +1175,7 @@
           "EPPlus": "[7.5.2, )",
           "MassTransit": "[8.3.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, )",
+          "MySql.EntityFrameworkCore": "[10.0.7, )",
           "QuestPDF": "[2024.12.0, )"
         }
       },

@@ -172,31 +172,28 @@ builder.Services.AddOrderInfrastructure(builder.Configuration);
 
 var redisConn = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING") ?? "";
 
-// Redis-backed services (Cart, Notification)
+// SignalR always registered (Redis backplane only if Redis available)
+var signalRBuilder = builder.Services.AddSignalR().AddJsonProtocol();
+
 if (!string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddCartInfrastructure(redisConn);
-    builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConn));
+    signalRBuilder.AddStackExchangeRedis(redisConn);
     builder.Services.AddStackExchangeRedisCache(options =>
     {
         options.Configuration = redisConn;
         options.InstanceName = "CommerceHub_";
     });
-    builder.Services.AddInfrastructure(builder.Configuration);
-    builder.Services.AddSignalR()
-        .AddJsonProtocol()
-        .AddStackExchangeRedis(redisConn);
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-        options.Configuration = redisConn;
-        options.InstanceName = "CommerceHub_Notifications_";
-    });
 }
 else
 {
-    builder.Services.AddSignalR().AddJsonProtocol();
+    // Cart falls back to in-memory repository when Redis is unavailable
+    builder.Services.AddCartInfrastructure();
     builder.Services.AddDistributedMemoryCache();
 }
+
+// Notification Infrastructure always registered (no Redis dependency)
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddPaymentInfrastructure(builder.Configuration);
 builder.Services.AddVendorInfrastructure(builder.Configuration);

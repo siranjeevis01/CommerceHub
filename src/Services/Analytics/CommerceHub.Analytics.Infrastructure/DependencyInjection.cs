@@ -14,7 +14,7 @@ public static class DependencyInjection
             ?? throw new InvalidOperationException("Analytics database connection string missing");
 
         services.AddDbContext<AnalyticsDbContext>(options =>
-            options.UseNpgsql(connStr, npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(5)));
+            options.UseMySQL(connStr, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));
 
         return services;
     }

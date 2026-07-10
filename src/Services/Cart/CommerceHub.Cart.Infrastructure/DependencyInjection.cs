@@ -13,4 +13,10 @@ public static class DependencyInjection
         services.AddScoped<ICartRepository, CartRepository>();
         return services;
     }
+
+    public static IServiceCollection AddCartInfrastructure(this IServiceCollection services)
+    {
+        services.AddScoped<ICartRepository, InMemoryCartRepository>();
+        return services;
+    }
 }

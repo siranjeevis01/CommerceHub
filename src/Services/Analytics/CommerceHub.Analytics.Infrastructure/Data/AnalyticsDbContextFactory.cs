@@ -9,8 +9,8 @@ public class AnalyticsDbContextFactory : IDesignTimeDbContextFactory<AnalyticsDb
     {
         var optionsBuilder = new DbContextOptionsBuilder<AnalyticsDbContext>();
         var conn = Environment.GetEnvironmentVariable("ANALYTICS_DB_CONNECTION")
-            ?? "server=localhost;port=5432;database=commercehub_analytics;user id=postgres;password=postgres";
-        optionsBuilder.UseNpgsql(conn);
+            ?? "server=localhost;port=4000;database=commercehub_analytics;user id=root;password=";
+        optionsBuilder.UseMySQL(conn);
         return new AnalyticsDbContext(optionsBuilder.Options);
     }
 }
