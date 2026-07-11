@@ -111,7 +111,8 @@ builder.Services.AddAuthorization();
 
 // ========== CORS ==========
 var allowedOrigins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")
-    ?? "http://localhost:4200,http://localhost:8100,http://localhost:3000").Split(',', StringSplitOptions.RemoveEmptyEntries);
+    ?? "http://localhost:4200,http://localhost:8100,http://localhost:3000,https://commercehub-siranjeevis01.web.app")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries);
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
