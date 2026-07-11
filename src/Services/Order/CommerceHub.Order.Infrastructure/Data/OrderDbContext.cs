@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Order.Application.Common.Interfaces;
 using CommerceHub.Order.Domain.Entities;
@@ -20,6 +21,9 @@ public class OrderDbContext : DbContext, IOrderDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
+        modelBuilder.AddOutboxStateEntity();
 
         modelBuilder.Entity<OrderEntity>().HasIndex(o => o.OrderNumber).IsUnique();
         modelBuilder.Entity<OrderEntity>().Property(o => o.TotalAmount).HasPrecision(18, 2);

@@ -261,7 +261,8 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
 
         x.UsingRabbitMq((context, cfg) =>
         {
-            cfg.Host(rabbitHost, h =>
+            var rabbitVHost = Environment.GetEnvironmentVariable("RABBITMQ_VHOST") ?? "/";
+            cfg.Host(rabbitHost, rabbitVHost, h =>
             {
                 h.Username(Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest");
                 h.Password(Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest");
