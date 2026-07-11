@@ -252,13 +252,6 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
                 });
             });
 
-        x.AddEntityFrameworkOutbox<OrderDbContext>(o =>
-        {
-            o.QueryDelay = TimeSpan.FromSeconds(10);
-            o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
-            o.UseBusOutbox();
-        });
-
         x.UsingRabbitMq((context, cfg) =>
         {
             var rabbitVHost = Environment.GetEnvironmentVariable("RABBITMQ_VHOST") ?? "/";
