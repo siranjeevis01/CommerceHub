@@ -181,6 +181,7 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "CommerceHub multi-vendor e-commerce API"
     });
+    options.CustomSchemaIds(t => t.FullName?.Replace("CommerceHub.", "").Replace("+", "."));
 });
 
 // ========== APPLICATION LAYER DI ==========
