@@ -175,16 +175,12 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    var provider = builder.Services.BuildServiceProvider().GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider>();
-    foreach (var description in provider.ApiVersionDescriptions)
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        options.SwaggerDoc(description.GroupName, new Microsoft.OpenApi.Models.OpenApiInfo
-        {
-            Title = "CommerceHub.Api",
-            Version = description.ApiVersion.ToString(),
-            Description = "CommerceHub multi-vendor e-commerce API"
-        });
-    }
+        Title = "CommerceHub.Api",
+        Version = "v1",
+        Description = "CommerceHub multi-vendor e-commerce API"
+    });
 });
 
 // ========== APPLICATION LAYER DI ==========
@@ -360,15 +356,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    var provider = app.Services.GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider>();
-    foreach (var description in provider.ApiVersionDescriptions)
-    {
-        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
-            description.GroupName.ToUpperInvariant());
-    }
-});
+app.UseSwaggerUI();
 app.UseMetricServer();
 app.UseHttpMetrics();
 
