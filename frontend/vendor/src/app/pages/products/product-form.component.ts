@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, catchError, map, of, shareReplay } from 'rxjs';
 import { Category, Brand, Product } from '@shared/models';
@@ -79,6 +79,10 @@ export class ProductFormComponent implements OnInit {
 
   get galleryImages(): FormArray {
     return this.productForm.get('galleryImages') as FormArray;
+  }
+
+  get galleryImageControls(): FormControl[] {
+    return this.galleryImages.controls as FormControl[];
   }
 
   createVariant(): FormGroup {

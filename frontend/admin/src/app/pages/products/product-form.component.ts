@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@shared/services/api.service';
 import { Product, Category, Brand } from '@shared/models';
@@ -78,6 +78,10 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
   get galleryImagesArray(): FormArray {
     return this.form.get('galleryImages') as FormArray;
+  }
+
+  get galleryImageControls(): FormControl[] {
+    return this.galleryImagesArray.controls as FormControl[];
   }
 
   get variantsArray(): FormArray {

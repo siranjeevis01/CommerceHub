@@ -118,7 +118,7 @@
               <button type="button" class="btn btn-sm btn-outline-primary" (click)="addGalleryImage()"><i class="bi bi-plus"></i> Add Image</button>
             </div>
             <div class="gallery-grid" *ngIf="galleryImagesArray.length > 0">
-              <div class="gallery-item" *ngFor="let img of galleryImagesArray.controls; let i = index">
+              <div class="gallery-item" *ngFor="let img of galleryImageControls; let i = index">
                 <div class="gallery-preview">
                   <img *ngIf="img.value" [src]="img.value" (error)="onImageError($event)" alt="Gallery image {{ i + 1 }}" class="img-thumbnail">
                   <div class="gallery-placeholder" *ngIf="!img.value">

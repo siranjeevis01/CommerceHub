@@ -99,7 +99,7 @@
         </div>
         <div class="card-body">
           <div class="gallery-grid" *ngIf="galleryImages.length > 0">
-            <div class="gallery-item" *ngFor="let img of galleryImages.controls; let i = index">
+            <div class="gallery-item" *ngFor="let img of galleryImageControls; let i = index">
               <div class="gallery-preview">
                 <img *ngIf="img.value" [src]="img.value" (error)="onImageError($event)" alt="Gallery image {{ i + 1 }}">
                 <div class="gallery-placeholder" *ngIf="!img.value">
