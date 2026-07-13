@@ -90,6 +90,12 @@
           "System.Configuration.ConfigurationManager": "8.0.0"
         }
       },
+      "System.Net.Http.Json": {
+        "type": "Direct",
+        "requested": "[10.0.0, )",
+        "resolved": "10.0.0",
+        "contentHash": "aPu3f7W6+bSyAVoeNdhMRHEvaTRqJHDtwNY8svj7aEiveG1qzqXK4XHM6BvPsJDdfDmsH38QVfjuSxGmiglQaA=="
+      },
       "AutoMapper": {
         "type": "Transitive",
         "resolved": "16.2.0",
