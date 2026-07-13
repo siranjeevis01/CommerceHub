@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using CommerceHub.Notification.Application.Common.Interfaces;
@@ -15,6 +16,7 @@ public class EmailService : IEmailService
     private readonly string _fromEmail;
     private readonly string _fromName;
     private readonly ILogger<EmailService> _logger;
+    private readonly Dictionary<string, (string Subject, string Body)> _templates = new();
 
     public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
     {
@@ -25,6 +27,61 @@ public class EmailService : IEmailService
         _fromEmail = configuration["Smtp:FromEmail"] ?? Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL") ?? "noreply@commercehub.com";
         _fromName = configuration["Smtp:FromName"] ?? Environment.GetEnvironmentVariable("SMTP_FROM_NAME") ?? "CommerceHub";
         _logger = logger;
+        LoadTemplates();
+    }
+
+    private void LoadTemplates()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var templateNames = new Dictionary<string, string>
+        {
+            ["order.confirmed"] = "order.confirmed",
+            ["order.shipped"] = "order.shipped",
+            ["order.delivered"] = "order.delivered",
+            ["order.cancelled"] = "order.cancelled",
+            ["payment.confirmed"] = "payment.confirmed",
+            ["payment.failed"] = "payment.failed",
+            ["welcome"] = "welcome",
+            ["password.reset"] = "password.reset"
+        };
+
+        foreach (var (templateName, resourceName) in templateNames)
+        {
+            try
+            {
+                var fullName = $"CommerceHub.Notification.Infrastructure.Templates.{resourceName}.html";
+                using var stream = assembly.GetManifestResourceStream(fullName);
+                if (stream != null)
+                {
+                    using var reader = new StreamReader(stream);
+                    var body = reader.ReadToEnd();
+                    var subject = templateName switch
+                    {
+                        "order.confirmed" => "Order #{OrderNumber} Confirmed",
+                        "order.shipped" => "Order #{OrderNumber} Shipped",
+                        "order.delivered" => "Order #{OrderNumber} Delivered",
+                        "order.cancelled" => "Order #{OrderNumber} Cancelled",
+                        "payment.confirmed" => "Payment Confirmed - Order #{OrderNumber}",
+                        "payment.failed" => "Payment Failed - Order #{OrderNumber}",
+                        "welcome" => "Welcome to CommerceHub!",
+                        "password.reset" => "Reset Your Password",
+                        _ => templateName
+                    };
+                    _templates[templateName] = (subject, body);
+                    _logger.LogInformation("Loaded email template: {Template}", templateName);
+                }
+                else
+                {
+                    _logger.LogWarning("Email template resource not found: {FullName}", fullName);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load email template: {Template}", templateName);
+            }
+        }
+
+        _logger.LogInformation("Loaded {Count} email templates from embedded resources", _templates.Count);
     }
 
     public async Task<bool> SendEmailAsync(string to, string subject, string body, bool isHtml = true, CancellationToken cancellationToken = default)
@@ -61,43 +118,7 @@ public class EmailService : IEmailService
 
     public async Task<bool> SendEmailWithTemplateAsync(string to, string templateName, Dictionary<string, string> templateData, CancellationToken cancellationToken = default)
     {
-        var templates = new Dictionary<string, (string Subject, string Body)>
-        {
-            ["order.confirmed"] = (
-                "Order #{OrderNumber} Confirmed",
-                "<h2>Order Confirmed</h2><p>Your order <strong>#{OrderNumber}</strong> has been confirmed.</p><p>Total: ${TotalAmount}</p>"
-            ),
-            ["order.shipped"] = (
-                "Order #{OrderNumber} Shipped",
-                "<h2>Order Shipped</h2><p>Your order <strong>#{OrderNumber}</strong> has been shipped.</p><p>Tracking: #{TrackingNumber}</p>"
-            ),
-            ["order.delivered"] = (
-                "Order #{OrderNumber} Delivered",
-                "<h2>Order Delivered</h2><p>Your order <strong>#{OrderNumber}</strong> has been delivered.</p>"
-            ),
-            ["order.cancelled"] = (
-                "Order #{OrderNumber} Cancelled",
-                "<h2>Order Cancelled</h2><p>Your order <strong>#{OrderNumber}</strong> has been cancelled.</p><p>Reason: #{Reason}</p>"
-            ),
-            ["payment.confirmed"] = (
-                "Payment Confirmed",
-                "<h2>Payment Confirmed</h2><p>Your payment of ${Amount} has been confirmed.</p>"
-            ),
-            ["payment.failed"] = (
-                "Payment Failed",
-                "<h2>Payment Failed</h2><p>Your payment has failed: #{FailureReason}</p>"
-            ),
-            ["welcome"] = (
-                "Welcome to CommerceHub!",
-                "<h2>Welcome!</h2><p>Thank you for registering. Start shopping now!</p>"
-            ),
-            ["password.reset"] = (
-                "Reset Your Password",
-                "<h2>Password Reset</h2><p>Click <a href='#{ResetLink}'>here</a> to reset your password.</p>"
-            )
-        };
-
-        if (!templates.TryGetValue(templateName, out var template))
+        if (!_templates.TryGetValue(templateName, out var template))
         {
             _logger.LogWarning("Email template {Template} not found", templateName);
             return false;
@@ -108,8 +129,8 @@ public class EmailService : IEmailService
 
         foreach (var (key, value) in templateData)
         {
-            subject = subject.Replace($"#{{{key}}}", value);
-            body = body.Replace($"#{{{key}}}", value);
+            subject = subject.Replace($"#{{{key}}}", value ?? string.Empty);
+            body = body.Replace($"#{{{key}}}", value ?? string.Empty);
         }
 
         return await SendEmailAsync(to, subject, body, true, cancellationToken);

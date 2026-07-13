@@ -106,7 +106,55 @@ public class RecommendationService : IRecommendationService
         var cached = await _cache.GetStringAsync(cacheKey, ct);
         if (!string.IsNullOrEmpty(cached))
             return JsonSerializer.Deserialize<List<ProductRecommendationDto>>(cached) ?? new();
-        return new();
+
+        try
+        {
+            var userIds = await _context.ProductRecommendations
+                .Where(r => r.ProductId == productId && r.RecommendationType == "purchased")
+                .Select(r => r.UserId)
+                .Distinct()
+                .ToListAsync(ct);
+
+            if (userIds.Count == 0)
+                return await GetTrendingProductsAsync(count, ct);
+
+            var coPurchases = await _context.ProductRecommendations
+                .Where(r => userIds.Contains(r.UserId)
+                    && r.ProductId != productId
+                    && r.RecommendationType == "purchased")
+                .Select(r => new { r.ProductId, r.ProductName, r.UserId })
+                .ToListAsync(ct);
+
+            if (coPurchases.Count == 0)
+                return await GetTrendingProductsAsync(count, ct);
+
+            var result = coPurchases
+                .GroupBy(r => r.ProductId)
+                .Select(g => new ProductRecommendationDto
+                {
+                    ProductId = g.Key,
+                    ProductName = g.Select(x => x.ProductName).First(),
+                    Score = g.Select(x => x.UserId).Distinct().Count(),
+                    Reason = $"Bought together by {g.Select(x => x.UserId).Distinct().Count()} customers"
+                })
+                .OrderByDescending(r => r.Score)
+                .Take(count)
+                .ToList();
+
+            if (result.Count == 0)
+                return await GetTrendingProductsAsync(count, ct);
+
+            await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(result), new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            }, ct);
+
+            return result;
+        }
+        catch
+        {
+            return await GetTrendingProductsAsync(count, ct);
+        }
     }
 
     public async Task RecordInteractionAsync(int userId, int productId, string interactionType, CancellationToken ct = default)

@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 
 namespace CommerceHub.Product.Application.Commands;
 
@@ -12,6 +12,8 @@ public record CreateProductCommand : IRequest<int>
     public int CategoryId { get; init; }
     public int? BrandId { get; init; }
     public int VendorId { get; init; }
+    public string? MainImageUrl { get; init; }
+    public string? GalleryImages { get; init; }
     public List<CreateProductVariantDto>? Variants { get; init; }
 }
 

@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
+using CommerceHub.Notification.Application.Common.Interfaces;
 using CommerceHub.Notification.Infrastructure.Hubs;
 using CommerceHub.Shared.Contracts.Events;
 
@@ -8,72 +9,124 @@ namespace CommerceHub.Notification.Api.Consumers;
 public class OrderEventConsumer : IConsumer<OrderPlaced>, IConsumer<OrderConfirmed>, IConsumer<OrderShipped>, IConsumer<OrderDelivered>, IConsumer<OrderCancelled>
 {
     private readonly IHubContext<NotificationHub> _hub;
+    private readonly IEmailService _emailService;
+    private readonly IUserLookupService _userLookup;
     private readonly ILogger<OrderEventConsumer> _logger;
 
-    public OrderEventConsumer(IHubContext<NotificationHub> hub, ILogger<OrderEventConsumer> logger)
+    public OrderEventConsumer(IHubContext<NotificationHub> hub, IEmailService emailService, IUserLookupService userLookup, ILogger<OrderEventConsumer> logger)
     {
         _hub = hub;
+        _emailService = emailService;
+        _userLookup = userLookup;
         _logger = logger;
     }
 
     public async Task Consume(ConsumeContext<OrderPlaced> context)
     {
-        _logger.LogInformation("Order {OrderNumber} placed by user {UserId}", context.Message.OrderNumber, context.Message.UserId);
-        await _hub.Clients.Group($"user_{context.Message.UserId}").SendAsync("Notification", new
+        var msg = context.Message;
+        _logger.LogInformation("Order {OrderNumber} placed by user {UserId}", msg.OrderNumber, msg.UserId);
+        await _hub.Clients.Group($"user_{msg.UserId}").SendAsync("Notification", new
         {
             Type = "order.placed",
             Title = "Order Placed",
-            Message = $"Order {context.Message.OrderNumber} has been placed successfully.",
-            context.Message.OrderId,
-            context.Message.OrderNumber
+            Message = $"Order {msg.OrderNumber} has been placed successfully.",
+            msg.OrderId,
+            msg.OrderNumber
         });
+
+        var user = await _userLookup.GetUserAsync(msg.UserId, context.CancellationToken);
+        if (user != null)
+        {
+            await _emailService.SendEmailWithTemplateAsync(user.Email, "order.confirmed", new Dictionary<string, string>
+            {
+                ["OrderNumber"] = msg.OrderNumber,
+                ["TotalAmount"] = msg.TotalAmount.ToString("C"),
+                ["CustomerName"] = user.FullName
+            }, context.CancellationToken);
+        }
     }
 
     public async Task Consume(ConsumeContext<OrderConfirmed> context)
     {
-        _logger.LogInformation("Order {OrderNumber} confirmed", context.Message.OrderNumber);
-        await _hub.Clients.Group($"user_{context.Message.UserId}").SendAsync("Notification", new
+        var msg = context.Message;
+        _logger.LogInformation("Order {OrderNumber} confirmed", msg.OrderNumber);
+        await _hub.Clients.Group($"user_{msg.UserId}").SendAsync("Notification", new
         {
             Type = "order.confirmed",
             Title = "Order Confirmed",
-            Message = $"Order {context.Message.OrderNumber} is confirmed.",
-            context.Message.OrderId,
-            context.Message.OrderNumber
+            Message = $"Order {msg.OrderNumber} is confirmed.",
+            msg.OrderId,
+            msg.OrderNumber
         });
     }
 
     public async Task Consume(ConsumeContext<OrderShipped> context)
     {
-        await _hub.Clients.Group($"user_{context.Message.UserId}").SendAsync("Notification", new
+        var msg = context.Message;
+        await _hub.Clients.Group($"user_{msg.UserId}").SendAsync("Notification", new
         {
             Type = "order.shipped",
             Title = "Order Shipped",
-            Message = $"Order {context.Message.OrderNumber} has been shipped.",
-            TrackingNumber = context.Message.TrackingNumber,
-            context.Message.OrderId
+            Message = $"Order {msg.OrderNumber} has been shipped.",
+            TrackingNumber = msg.TrackingNumber,
+            msg.OrderId
         });
+
+        var user = await _userLookup.GetUserAsync(msg.UserId, context.CancellationToken);
+        if (user != null)
+        {
+            await _emailService.SendEmailWithTemplateAsync(user.Email, "order.shipped", new Dictionary<string, string>
+            {
+                ["OrderNumber"] = msg.OrderNumber,
+                ["TrackingNumber"] = msg.TrackingNumber ?? "N/A",
+                ["CustomerName"] = user.FullName
+            }, context.CancellationToken);
+        }
     }
 
     public async Task Consume(ConsumeContext<OrderDelivered> context)
     {
-        await _hub.Clients.Group($"user_{context.Message.UserId}").SendAsync("Notification", new
+        var msg = context.Message;
+        await _hub.Clients.Group($"user_{msg.UserId}").SendAsync("Notification", new
         {
             Type = "order.delivered",
             Title = "Order Delivered",
-            Message = $"Order {context.Message.OrderNumber} has been delivered.",
-            context.Message.OrderId
+            Message = $"Order {msg.OrderNumber} has been delivered.",
+            msg.OrderId
         });
+
+        var user = await _userLookup.GetUserAsync(msg.UserId, context.CancellationToken);
+        if (user != null)
+        {
+            await _emailService.SendEmailWithTemplateAsync(user.Email, "order.delivered", new Dictionary<string, string>
+            {
+                ["OrderNumber"] = msg.OrderNumber,
+                ["CustomerName"] = user.FullName
+            }, context.CancellationToken);
+        }
     }
 
     public async Task Consume(ConsumeContext<OrderCancelled> context)
     {
-        await _hub.Clients.Group($"user_{context.Message.UserId}").SendAsync("Notification", new
+        var msg = context.Message;
+        await _hub.Clients.Group($"user_{msg.UserId}").SendAsync("Notification", new
         {
             Type = "order.cancelled",
             Title = "Order Cancelled",
-            Message = $"Order {context.Message.OrderNumber} has been cancelled.",
-            Reason = context.Message.Reason,
-            context.Message.OrderId
+            Message = $"Order {msg.OrderNumber} has been cancelled.",
+            Reason = msg.Reason,
+            msg.OrderId
         });
+
+        var user = await _userLookup.GetUserAsync(msg.UserId, context.CancellationToken);
+        if (user != null)
+        {
+            await _emailService.SendEmailWithTemplateAsync(user.Email, "order.cancelled", new Dictionary<string, string>
+            {
+                ["OrderNumber"] = msg.OrderNumber,
+                ["Reason"] = msg.Reason ?? "No reason provided",
+                ["CustomerName"] = user.FullName
+            }, context.CancellationToken);
+        }
     }
 }

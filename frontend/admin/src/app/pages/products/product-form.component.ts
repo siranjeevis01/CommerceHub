@@ -70,25 +70,26 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       tags: [''],
       metaTitle: [''],
       metaDescription: [''],
-      images: this.fb.array([]),
+      mainImageUrl: [''],
+      galleryImages: this.fb.array([]),
       variants: this.fb.array([]),
     });
   }
 
-  get imagesArray(): FormArray {
-    return this.form.get('images') as FormArray;
+  get galleryImagesArray(): FormArray {
+    return this.form.get('galleryImages') as FormArray;
   }
 
   get variantsArray(): FormArray {
     return this.form.get('variants') as FormArray;
   }
 
-  addImage(url: string = ''): void {
-    this.imagesArray.push(this.fb.group({ url: [url] }));
+  addGalleryImage(url: string = ''): void {
+    this.galleryImagesArray.push(this.fb.control(url));
   }
 
-  removeImage(index: number): void {
-    this.imagesArray.removeAt(index);
+  removeGalleryImage(index: number): void {
+    this.galleryImagesArray.removeAt(index);
   }
 
   addVariant(): void {
@@ -137,11 +138,13 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       sku: product.sku,
       stockQuantity: product.stockQuantity,
       isActive: product.isActive,
-
       tags: product.tags?.join(', ') || '',
+      mainImageUrl: product.mainImageUrl || product.imageUrl || '',
     });
 
-    product.images?.forEach(img => this.addImage(img));
+    const gallery = product.galleryImages || product.images || [];
+    gallery.forEach(url => this.addGalleryImage(url));
+
     product.variants?.forEach(v => {
       this.variantsArray.push(this.fb.group({
         sku: [v.sku, Validators.required],
@@ -179,6 +182,15 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  onMainImageInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.form.patchValue({ mainImageUrl: value });
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'https://via.placeholder.com/150';
+  }
+
   onSubmit(): void {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach(key => {
@@ -193,7 +205,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     const payload = {
       ...formData,
       tags: formData.tags ? formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [],
-      images: formData.images?.map((i: any) => i.url) || [],
+      imageUrl: formData.mainImageUrl || '',
+      images: formData.galleryImages || [],
     };
 
     const request = this.isEdit

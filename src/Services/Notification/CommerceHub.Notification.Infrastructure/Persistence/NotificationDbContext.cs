@@ -9,6 +9,7 @@ public class NotificationDbContext : DbContext, INotificationDbContext
     public NotificationDbContext(DbContextOptions<NotificationDbContext> options) : base(options) { }
 
     public DbSet<NotificationMessage> Notifications { get; set; }
+    public DbSet<CachedUser> CachedUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,6 +25,14 @@ public class NotificationDbContext : DbContext, INotificationDbContext
             entity.Property(e => e.LinkUrl).HasMaxLength(500);
             entity.HasIndex(e => e.UserId);
             entity.HasIndex(e => e.CreatedAt);
+        });
+
+        modelBuilder.Entity<CachedUser>(entity =>
+        {
+            entity.HasKey(e => e.UserId);
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.FirstName).HasMaxLength(100);
+            entity.Property(e => e.LastName).HasMaxLength(100);
         });
     }
 }

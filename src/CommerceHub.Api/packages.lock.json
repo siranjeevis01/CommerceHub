@@ -231,6 +231,15 @@
           "System.Drawing.Common": "8.0.4"
         }
       },
+      "FirebaseAdmin": {
+        "type": "Transitive",
+        "resolved": "3.2.0",
+        "contentHash": "689HWz59pmUQVJY3YJd7rsevICX8KL2qQX23XyHIp2+Qek9IScgL6T/AnyHF6WMirXll2tULRe+LGOItj7kF6A==",
+        "dependencies": {
+          "Google.Api.Gax.Rest": "4.8.0",
+          "Google.Apis.Auth": "1.68.0"
+        }
+      },
       "FluentValidation": {
         "type": "Transitive",
         "resolved": "11.11.0",
@@ -251,6 +260,24 @@
         "contentHash": "viTKWaMbL3yJYgGI0DiCeavNbE9UPMWFVK2XS9nYXGbm3NDMd0/L5ER4wBzmTtW3BYh3SrlSXm9RACiKZ6stlA==",
         "dependencies": {
           "FluentValidation": "11.11.0"
+        }
+      },
+      "Google.Api.Gax": {
+        "type": "Transitive",
+        "resolved": "4.8.0",
+        "contentHash": "xlV8Jq/G5CQAA3PwYAuKGjfzGOP7AvjhREnE6vgZlzxREGYchHudZWa2PWSqFJL+MBtz9YgitLpRogANN3CVvg==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "6.0.0",
+          "Newtonsoft.Json": "13.0.3"
+        }
+      },
+      "Google.Api.Gax.Rest": {
+        "type": "Transitive",
+        "resolved": "4.8.0",
+        "contentHash": "zaA5LZ2VvGj/wwIzRB68swr7khi2kWNgqWvsB0fYtScIAl3kGkGtqiBcx63H1YLeKr5xau1866bFjTeReH6FSQ==",
+        "dependencies": {
+          "Google.Api.Gax": "4.8.0",
+          "Google.Apis.Auth": "[1.67.0, 2.0.0)"
         }
       },
       "Google.Apis": {
@@ -376,6 +403,11 @@
         "type": "Transitive",
         "resolved": "10.0.7",
         "contentHash": "P+EStKGKTMQQxB31HUKDiIRYVOP73YIxvOl1ICR3BmGfWAFwSZAyuMvkfP+PGFj37kkoicE0vjhggJN4vYgzoA=="
+      },
+      "Microsoft.Bcl.AsyncInterfaces": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "UcSjPsst+DfAdJGVDsu346FX0ci0ah+lw3WRtn18NUwEqRt70HaOQ7lI72vy3+1LxtqI3T5GWwV39rQSrCzAeg=="
       },
       "Microsoft.Build.Framework": {
         "type": "Transitive",
@@ -1423,6 +1455,8 @@
         "dependencies": {
           "CommerceHub.Notification.Application": "[1.0.0, )",
           "CommerceHub.Notification.Domain": "[1.0.0, )",
+          "FirebaseAdmin": "[3.2.0, )",
+          "Google.Apis.Auth": "[1.68.0, )",
           "Microsoft.AspNetCore.SignalR.StackExchangeRedis": "[10.0.7, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )",

@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CommerceHub.Product.Application.Commands;
 using CommerceHub.Product.Application.DTOs;
 using ProductEntity = CommerceHub.Product.Domain.Entities.Product;
@@ -37,8 +37,6 @@ public class MappingProfile : Profile
             .ForMember(d => d.Slug, o => o.Ignore())
             .ForMember(d => d.ShortDescription, o => o.MapFrom(s => s.Description))
             .ForMember(d => d.LongDescription, o => o.Ignore())
-            .ForMember(d => d.MainImageUrl, o => o.Ignore())
-            .ForMember(d => d.GalleryImages, o => o.Ignore())
             .ForMember(d => d.StockQuantity, o => o.Ignore())
             .ForMember(d => d.StockStatus, o => o.Ignore())
             .ForMember(d => d.IsFeatured, o => o.Ignore())
@@ -61,8 +59,6 @@ public class MappingProfile : Profile
             .ForMember(d => d.Slug, o => o.Ignore())
             .ForMember(d => d.ShortDescription, o => o.MapFrom(s => s.Description))
             .ForMember(d => d.LongDescription, o => o.Ignore())
-            .ForMember(d => d.MainImageUrl, o => o.Ignore())
-            .ForMember(d => d.GalleryImages, o => o.Ignore())
             .ForMember(d => d.StockQuantity, o => o.Ignore())
             .ForMember(d => d.StockStatus, o => o.Ignore())
             .ForMember(d => d.IsFeatured, o => o.Ignore())

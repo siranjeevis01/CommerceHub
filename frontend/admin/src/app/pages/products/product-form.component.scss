@@ -16,6 +16,72 @@
   input { flex: 1; }
 }
 
+.main-image-preview {
+  position: relative;
+  display: inline-block;
+
+  img {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .remove-main-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+  }
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .gallery-preview {
+    width: 100%;
+    height: 120px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-placeholder {
+      color: #adb5bd;
+      font-size: 24px;
+    }
+  }
+
+  input {
+    font-size: 0.75rem;
+  }
+}
+
 .form-actions {
   display: flex;
   gap: 12px;

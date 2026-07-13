@@ -45,6 +45,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<PaymentEventConsumer>();
     x.AddConsumer<InventoryEventConsumer>();
     x.AddConsumer<VendorEventConsumer>();
+    x.AddConsumer<UserRegisteredConsumer>();
     x.AddConsumer<SendEmailNotificationConsumer>();
     x.AddConsumer<SendPushNotificationConsumer>();
     x.AddConsumer<SendSmsNotificationConsumer>();

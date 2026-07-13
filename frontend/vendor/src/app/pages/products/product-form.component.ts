@@ -65,8 +65,8 @@ export class ProductFormComponent implements OnInit {
       comparePrice: [null, Validators.min(0)],
       sku: ['', [Validators.required, Validators.maxLength(50)]],
       stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      imageUrl: [''],
-      images: this.fb.array([]),
+      mainImageUrl: [''],
+      galleryImages: this.fb.array([]),
       isActive: [true],
       variants: this.fb.array([]),
       tags: [''],
@@ -77,8 +77,8 @@ export class ProductFormComponent implements OnInit {
     return this.productForm.get('variants') as FormArray;
   }
 
-  get images(): FormArray {
-    return this.productForm.get('images') as FormArray;
+  get galleryImages(): FormArray {
+    return this.productForm.get('galleryImages') as FormArray;
   }
 
   createVariant(): FormGroup {
@@ -100,12 +100,16 @@ export class ProductFormComponent implements OnInit {
     this.variants.removeAt(index);
   }
 
-  addImage(): void {
-    this.images.push(this.fb.control(''));
+  addGalleryImage(url: string = ''): void {
+    this.galleryImages.push(this.fb.control(url));
   }
 
-  removeImage(index: number): void {
-    this.images.removeAt(index);
+  removeGalleryImage(index: number): void {
+    this.galleryImages.removeAt(index);
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'https://via.placeholder.com/150';
   }
 
   private loadProduct(id: number): void {
@@ -123,12 +127,13 @@ export class ProductFormComponent implements OnInit {
           comparePrice: p.comparePrice,
           sku: p.sku,
           stockQuantity: p.stockQuantity,
-          imageUrl: p.imageUrl,
+          mainImageUrl: p.mainImageUrl || p.imageUrl || '',
           isActive: p.isActive,
           tags: p.tags?.join(', '),
         });
-        this.images.clear();
-        p.images?.forEach(img => this.images.push(this.fb.control(img)));
+        this.galleryImages.clear();
+        const gallery = p.galleryImages || p.images || [];
+        gallery.forEach((url: string) => this.galleryImages.push(this.fb.control(url)));
         this.variants.clear();
         p.variants?.forEach(v => {
           this.variants.push(this.fb.group({
@@ -165,6 +170,8 @@ export class ProductFormComponent implements OnInit {
     const data: any = { ...formValue };
     data.isActive = !draft && formValue.isActive;
     data.tags = formValue.tags ? formValue.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
+    data.imageUrl = formValue.mainImageUrl || '';
+    data.images = formValue.galleryImages || [];
 
     const request = this.isEdit
       ? this.vendorService.updateProduct(this.productId!, data)

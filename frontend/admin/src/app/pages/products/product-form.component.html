@@ -98,20 +98,40 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h5>Images</h5>
-          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addImage()">Add Image</button>
-        </div>
+      <div class="card full-width">
+        <div class="card-header"><h5>Images</h5></div>
         <div class="card-body">
-          <div formArrayName="images">
-            <div class="image-row" *ngFor="let img of imagesArray.controls; let i = index" [formGroupName]="i">
-              <input class="form-control form-control-sm" formControlName="url" placeholder="Image URL">
-              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeImage(i)">&times;</button>
+          <div class="mb-4">
+            <label class="form-label">Main Image URL</label>
+            <div class="image-url-input">
+              <input class="form-control" formControlName="mainImageUrl" placeholder="https://example.com/image.jpg" (input)="onMainImageInput($event)">
+            </div>
+            <div class="main-image-preview mt-2" *ngIf="form.get('mainImageUrl')?.value">
+              <img [src]="form.get('mainImageUrl')?.value" (error)="onImageError($event)" alt="Main image preview" class="img-thumbnail">
+              <button type="button" class="btn btn-sm btn-outline-danger remove-main-image" (click)="form.patchValue({ mainImageUrl: '' })">&times;</button>
             </div>
           </div>
-          <div class="empty-state small" *ngIf="imagesArray.length === 0">
-            <p class="mb-0">No images added</p>
+
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label mb-0">Gallery Images</label>
+              <button type="button" class="btn btn-sm btn-outline-primary" (click)="addGalleryImage()"><i class="bi bi-plus"></i> Add Image</button>
+            </div>
+            <div class="gallery-grid" *ngIf="galleryImagesArray.length > 0">
+              <div class="gallery-item" *ngFor="let img of galleryImagesArray.controls; let i = index">
+                <div class="gallery-preview">
+                  <img *ngIf="img.value" [src]="img.value" (error)="onImageError($event)" alt="Gallery image {{ i + 1 }}" class="img-thumbnail">
+                  <div class="gallery-placeholder" *ngIf="!img.value">
+                    <i class="bi bi-image"></i>
+                  </div>
+                </div>
+                <input class="form-control form-control-sm" [formControl]="img" placeholder="Image URL">
+                <button type="button" class="btn btn-sm btn-outline-danger mt-1" (click)="removeGalleryImage(i)"><i class="bi bi-trash"></i> Remove</button>
+              </div>
+            </div>
+            <div class="empty-state small" *ngIf="galleryImagesArray.length === 0">
+              <p class="text-muted mb-0">No gallery images added</p>
+            </div>
           </div>
         </div>
       </div>

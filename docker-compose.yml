@@ -126,10 +126,15 @@ services:
       - RABBITMQ_VHOST=${RABBITMQ_VHOST:-/}
       - RABBITMQ_HOST=rabbitmq
       - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
-      - JWT_KEY=${JWT_KEY}
+      - JWT_KEY=${JWT_KEY:-supersecretkeythatmustbe32byteslong}
       - JWT_ISSUER=CommerceHub
       - JWT_AUDIENCE=CommerceHubClient
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@commercehub.com}
+      - FIREBASE_SERVICE_ACCOUNT_JSON=${FIREBASE_SERVICE_ACCOUNT_JSON:-}
       - SEQ_URL=http://seq:80
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     ports:

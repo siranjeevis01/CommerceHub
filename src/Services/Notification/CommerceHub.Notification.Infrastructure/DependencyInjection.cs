@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<ISmsService, SmsService>();
         services.AddHttpClient<IWhatsAppService, WhatsAppService>();
         services.AddScoped<IPushNotificationService, PushNotificationService>();
+        services.AddScoped<IUserLookupService, UserLookupService>();
         services.AddSingleton<INotificationHub, NotificationService>();
         return services;
     }

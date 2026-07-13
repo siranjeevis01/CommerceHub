@@ -94,17 +94,24 @@
 
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <span>Additional Images</span>
-          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addImage()"><i class="bi bi-plus"></i> Add Image</button>
+          <span>Gallery Images</span>
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addGalleryImage()"><i class="bi bi-plus"></i> Add Image</button>
         </div>
         <div class="card-body">
-          <div class="row g-3" formArrayName="images">
-            <div class="col-md-4" *ngFor="let img of images.controls; let i = index">
-              <div class="d-flex gap-2">
-                <input class="form-control form-control-sm" [formControlName]="i" placeholder="Image URL">
-                <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeImage(i)"><i class="bi bi-x"></i></button>
+          <div class="gallery-grid" *ngIf="galleryImages.length > 0">
+            <div class="gallery-item" *ngFor="let img of galleryImages.controls; let i = index">
+              <div class="gallery-preview">
+                <img *ngIf="img.value" [src]="img.value" (error)="onImageError($event)" alt="Gallery image {{ i + 1 }}">
+                <div class="gallery-placeholder" *ngIf="!img.value">
+                  <i class="bi bi-image"></i>
+                </div>
               </div>
+              <input class="form-control form-control-sm" [formControl]="img" placeholder="Image URL">
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeGalleryImage(i)"><i class="bi bi-trash"></i> Remove</button>
             </div>
+          </div>
+          <div class="text-center text-muted py-3" *ngIf="galleryImages.length === 0">
+            No gallery images. Click "Add Image" to enter an image URL.
           </div>
         </div>
       </div>
@@ -136,9 +143,17 @@
       <div class="card mb-4">
         <div class="card-header">Main Image</div>
         <div class="card-body">
-          <app-image-upload-preview [imageUrl]="productForm.get('imageUrl')?.value || ''"
-            (imageChange)="productForm.patchValue({ imageUrl: $event })">
-          </app-image-upload-preview>
+          <input class="form-control form-control-sm mb-2" formControlName="mainImageUrl" placeholder="https://example.com/image.jpg">
+          <div class="main-image-preview" *ngIf="productForm.get('mainImageUrl')?.value">
+            <img [src]="productForm.get('mainImageUrl')?.value" (error)="onImageError($event)" alt="Main image preview" class="img-thumbnail">
+            <button type="button" class="btn btn-sm btn-outline-danger mt-2" (click)="productForm.patchValue({ mainImageUrl: '' })">Remove</button>
+          </div>
+          <div class="main-image-preview" *ngIf="!productForm.get('mainImageUrl')?.value">
+            <div class="image-placeholder">
+              <i class="bi bi-image"></i>
+              <span class="text-muted small">No image set</span>
+            </div>
+          </div>
         </div>
       </div>
 

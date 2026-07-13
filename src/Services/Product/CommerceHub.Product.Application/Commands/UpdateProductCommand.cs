@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 
 namespace CommerceHub.Product.Application.Commands;
 
@@ -13,4 +13,6 @@ public record UpdateProductCommand : IRequest
     public int CategoryId { get; init; }
     public int? BrandId { get; init; }
     public int VendorId { get; init; }
+    public string? MainImageUrl { get; init; }
+    public string? GalleryImages { get; init; }
 }

@@ -1,135 +1,146 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { AIAgentService, ChatResponse, Message } from '../../../../../../shared/src/lib/services/ai-agent.service';
-import { AuthService } from '../../../../../../shared/src/lib/services/auth.service';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  AfterViewChecked,
+  OnDestroy,
+} from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import {
+  AIAgentService,
+  ChatResponse,
+  Message,
+} from '@shared/services/ai-agent.service';
 
 interface ChatMessage {
-  id: string;
-  role: 'user' | 'ai';
+  role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  recommendations?: any[];
-  searchResults?: any[];
+  recommendations?: ChatResponse['recommendations'];
+  searchResults?: ChatResponse['searchResults'];
 }
 
 @Component({
+  standalone: false,
   selector: 'app-ai-chat',
   templateUrl: './ai-chat.component.html',
-  styleUrls: ['./ai-chat.component.scss']
+  styleUrls: ['./ai-chat.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AiChatComponent implements OnInit, OnDestroy {
-  @ViewChild('chatMessages') chatMessagesRef!: ElementRef;
-  @ViewChild('messageInput') messageInputRef!: ElementRef;
+export class AiChatComponent implements AfterViewChecked, OnDestroy {
+  @ViewChild('messageList') messageListRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('chatInput') chatInputRef!: ElementRef<HTMLInputElement>;
 
   isOpen = false;
-  isMinimized = false;
-  isTyping = false;
+  isLoading = false;
+  userInput = '';
+  conversationId: number | null = null;
   messages: ChatMessage[] = [];
-  currentMessage = '';
-  conversationId?: number;
-  unreadCount = 0;
+  errorMessage = '';
 
-  private welcomeMessage: ChatMessage = {
-    id: 'welcome',
-    role: 'ai',
-    content: 'Hello! I\'m your AI Shopping Assistant. I can help you find products, get recommendations, track orders, and more! What would you like help with?',
-    timestamp: new Date()
-  };
+  private destroy$ = new Subject<void>();
+  private shouldScroll = false;
 
   constructor(
-    private aiAgent: AIAgentService,
-    private auth: AuthService
+    private aiAgentService: AIAgentService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {
-    this.messages.push(this.welcomeMessage);
+  ngAfterViewChecked(): void {
+    if (this.shouldScroll) {
+      this.scrollToBottom();
+      this.shouldScroll = false;
+    }
   }
 
   ngOnDestroy(): void {
-    // Cleanup
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleChat(): void {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      this.isMinimized = false;
-      this.unreadCount = 0;
-      setTimeout(() => this.scrollToBottom(), 100);
+      this.shouldScroll = true;
+      setTimeout(() => this.chatInputRef?.nativeElement.focus(), 100);
     }
   }
 
-  minimizeChat(): void {
-    this.isMinimized = !this.isMinimized;
-  }
-
-  async sendMessage(): Promise<void> {
-    const text = this.currentMessage.trim();
-    if (!text || this.isTyping) return;
-
-    this.currentMessage = '';
+  sendMessage(): void {
+    const text = this.userInput.trim();
+    if (!text || this.isLoading) return;
 
     this.messages.push({
-      id: `user-${Date.now()}`,
       role: 'user',
       content: text,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
+    this.userInput = '';
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.shouldScroll = true;
+    this.cdr.markForCheck();
 
-    this.isTyping = true;
-    this.scrollToBottom();
+    const request = {
+      message: text,
+      conversationId: this.conversationId ?? undefined,
+    };
 
-    try {
-      const response = await this.aiAgent.chat({
-        message: text,
-        conversationId: this.conversationId
-      }).toPromise();
-
-      if (response.success && response.data) {
-        this.conversationId = response.data.conversationId;
-
-        this.messages.push({
-          id: `ai-${Date.now()}`,
-          role: 'ai',
-          content: response.data.reply,
-          timestamp: new Date(),
-          recommendations: response.data.recommendations,
-          searchResults: response.data.searchResults
-        });
-
-        if (!this.isOpen) {
-          this.unreadCount++;
-        }
-      }
-    } catch (error) {
-      this.messages.push({
-        id: `ai-${Date.now()}`,
-        role: 'ai',
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date()
+    this.aiAgentService
+      .chat(request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const data = res.data;
+          if (data) {
+            this.conversationId = data.conversationId;
+            this.messages.push({
+              role: 'assistant',
+              content: data.reply,
+              timestamp: new Date(),
+              recommendations: data.recommendations,
+              searchResults: data.searchResults,
+            });
+          }
+          this.isLoading = false;
+          this.shouldScroll = true;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.errorMessage =
+            err?.error?.message || 'Sorry, something went wrong. Please try again.';
+          this.isLoading = false;
+          this.shouldScroll = true;
+          this.cdr.markForCheck();
+        },
       });
-    }
-
-    this.isTyping = false;
-    this.scrollToBottom();
   }
 
-  quickSearch(query: string): void {
-    this.currentMessage = query;
-    this.sendMessage();
-  }
-
-  handleKeydown(event: KeyboardEvent): void {
+  onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.sendMessage();
     }
   }
 
+  clearChat(): void {
+    this.messages = [];
+    this.conversationId = null;
+    this.errorMessage = '';
+    this.cdr.markForCheck();
+  }
+
+  trackByIndex(_index: number, item: ChatMessage): number {
+    return item.timestamp.getTime();
+  }
+
   private scrollToBottom(): void {
-    setTimeout(() => {
-      if (this.chatMessagesRef) {
-        const el = this.chatMessagesRef.nativeElement;
-        el.scrollTop = el.scrollHeight;
-      }
-    }, 50);
+    const el = this.messageListRef?.nativeElement;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }
 }

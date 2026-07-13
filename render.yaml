@@ -13,13 +13,15 @@ services:
       - key: JWT_AUDIENCE
         value: CommerceHubClient
       - key: ALLOWED_ORIGINS
-        value: "*"
+        value: "https://commercehub-siranjeevis01.web.app,https://commercehub-admin.web.app"
       - key: RABBITMQ_HOST
         sync: false
       - key: RABBITMQ_USER
-        value: guest
+        sync: false
       - key: RABBITMQ_PASS
-        value: guest
+        sync: false
+      - key: RABBITMQ_VHOST
+        value: "/"
       - key: REDIS_CONNECTION_STRING
         sync: false
       - key: IDENTITY_DB_CONNECTION
@@ -40,17 +42,13 @@ services:
         sync: false
       - key: ANALYTICS_DB_CONNECTION
         sync: false
+      - key: NOTIFICATION_DB_CONNECTION
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: RABBITMQ_VHOST
-        value: "/"
-      - key: RABBITMQ_VHOST
-        sync: false
-      - key: NOTIFICATION_DB_CONNECTION
         sync: false
       - key: RAZORPAY_KEY_ID
         sync: false
@@ -64,5 +62,17 @@ services:
         sync: false
       - key: UPI_MERCHANT_NAME
         value: CommerceHub
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM_EMAIL
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
     healthCheckPath: /health
     autoDeploy: true

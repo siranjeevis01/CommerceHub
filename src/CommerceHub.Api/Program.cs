@@ -246,6 +246,7 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
         x.AddConsumer<CommerceHub.Notification.Api.Consumers.PaymentEventConsumer>();
         x.AddConsumer<CommerceHub.Notification.Api.Consumers.InventoryEventConsumer>();
         x.AddConsumer<CommerceHub.Notification.Api.Consumers.VendorEventConsumer>();
+        x.AddConsumer<CommerceHub.Notification.Api.Consumers.UserRegisteredConsumer>();
         x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendEmailNotificationConsumer>();
         x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendPushNotificationConsumer>();
         x.AddConsumer<CommerceHub.Notification.Application.Consumers.SendSmsNotificationConsumer>();

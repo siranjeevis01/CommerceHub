@@ -41,7 +41,9 @@ export interface Product {
   sku: string;
   stockQuantity: number;
   imageUrl: string;
+  mainImageUrl?: string;
   images: string[];
+  galleryImages?: string[];
   categoryId: number;
   categoryName: string;
   brandId: number;
