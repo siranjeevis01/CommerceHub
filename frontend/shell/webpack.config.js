@@ -1,7 +1,7 @@
 const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || process.argv.some(a => a.includes('configuration') && a.includes('production'));
 
 module.exports = {
   output: {
@@ -20,10 +20,11 @@ module.exports = {
         storefront: `storefront@${isProd ? '/storefront/remoteEntry.js' : 'http://localhost:4203/remoteEntry.js'}`,
       },
       shared: {
-        '@angular/core': { singleton: true, strictVersion: true },
-        '@angular/common': { singleton: true, strictVersion: true },
-        '@angular/router': { singleton: true, strictVersion: true },
-        'rxjs': { singleton: true, strictVersion: true },
+        '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+        '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+        '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+        '@angular/forms': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+        'rxjs': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
       },
     }),
   ],

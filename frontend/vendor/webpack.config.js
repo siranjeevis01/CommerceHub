@@ -9,13 +9,16 @@ module.exports = {
   plugins: [
     new ModuleFederationPlugin({
       name: 'vendor',
+      filename: 'remoteEntry.js',
       exposes: {
         './Module': path.resolve(__dirname, 'src/app/vendor.module.ts'),
       },
       shared: {
-        '@angular/core': { singleton: true },
-        '@angular/common': { singleton: true },
-        '@angular/router': { singleton: true },
+        '@angular/core': { singleton: true, requiredVersion: 'auto' },
+        '@angular/common': { singleton: true, requiredVersion: 'auto' },
+        '@angular/router': { singleton: true, requiredVersion: 'auto' },
+        '@angular/forms': { singleton: true, requiredVersion: 'auto' },
+        'rxjs': { singleton: true, requiredVersion: 'auto' },
       },
     }),
   ],
