@@ -59,6 +59,7 @@
                 <select class="form-select" formControlName="country">
                   <option value="US">United States</option>
                   <option value="CA">Canada</option>
+                  <option value="IN">India</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -87,20 +88,44 @@
                   <small class="d-block text-muted">Visa, Mastercard, Amex</small>
                 </div>
               </div>
-              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'paypal'" (click)="selectPayment('paypal')">
-                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'paypal'">
-                <i class="bi bi-paypal fs-4 me-2"></i>
-                <div>
-                  <strong>PayPal</strong>
-                  <small class="d-block text-muted">Pay with your PayPal account</small>
-                </div>
-              </div>
-              <div class="payment-option d-flex align-items-center p-3 border rounded cursor-pointer" [class.border-primary]="selectedPayment === 'stripe'" (click)="selectPayment('stripe')">
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'stripe'" (click)="selectPayment('stripe')">
                 <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'stripe'">
                 <i class="bi bi-stripe fs-4 me-2"></i>
                 <div>
                   <strong>Stripe</strong>
                   <small class="d-block text-muted">Secure payment processing</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'razorpay'" (click)="selectPayment('razorpay')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'razorpay'">
+                <i class="bi bi-shield-check fs-4 me-2"></i>
+                <div>
+                  <strong>Razorpay</strong>
+                  <small class="d-block text-muted">UPI, Cards, Netbanking</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'upi'" (click)="selectPayment('upi')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'upi'">
+                <i class="bi bi-qr-code fs-4 me-2"></i>
+                <div>
+                  <strong>UPI QR Code</strong>
+                  <small class="d-block text-muted">Scan QR to pay with any UPI app</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded mb-2 cursor-pointer" [class.border-primary]="selectedPayment === 'whatsapp'" (click)="selectPayment('whatsapp')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'whatsapp'">
+                <i class="bi bi-whatsapp fs-4 me-2 text-success"></i>
+                <div>
+                  <strong>Order via WhatsApp</strong>
+                  <small class="d-block text-muted">Get payment link on WhatsApp</small>
+                </div>
+              </div>
+              <div class="payment-option d-flex align-items-center p-3 border rounded cursor-pointer" [class.border-primary]="selectedPayment === 'paypal'" (click)="selectPayment('paypal')">
+                <input type="radio" name="payment" class="me-3" [checked]="selectedPayment === 'paypal'">
+                <i class="bi bi-paypal fs-4 me-2"></i>
+                <div>
+                  <strong>PayPal</strong>
+                  <small class="d-block text-muted">Pay with your PayPal account</small>
                 </div>
               </div>
             </div>
@@ -125,6 +150,23 @@
                 </div>
               </div>
             </div>
+
+            <div *ngIf="selectedPayment === 'upi' || selectedPayment === 'whatsapp'" class="mt-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label small">Phone Number (for WhatsApp notification)</label>
+                  <input type="tel" class="form-control" formControlName="phoneNumber" placeholder="+91 98765 43210">
+                </div>
+              </div>
+              <div class="alert alert-info mt-3 mb-0" *ngIf="selectedPayment === 'upi'">
+                <i class="bi bi-info-circle me-1"></i>
+                A UPI QR code will be generated after placing the order. Scan it with any UPI app (GPay, PhonePe, Paytm, etc.) to complete payment.
+              </div>
+              <div class="alert alert-success mt-3 mb-0" *ngIf="selectedPayment === 'whatsapp'">
+                <i class="bi bi-whatsapp me-1"></i>
+                Order details and payment link will be sent to your WhatsApp number after placing the order.
+              </div>
+            </div>
           </form>
           <div class="d-flex gap-2 mt-4">
             <button class="btn btn-outline-secondary" (click)="prevStep()">Back</button>
@@ -147,8 +189,11 @@
           <p class="small mb-3">
             <ng-container [ngSwitch]="selectedPayment">
               <span *ngSwitchCase="'credit_card'"><i class="bi bi-credit-card me-1"></i> Credit Card ending in ****{{paymentForm.value.cardNumber?.slice(-4)}}</span>
-              <span *ngSwitchCase="'paypal'"><i class="bi bi-paypal me-1"></i> PayPal</span>
               <span *ngSwitchCase="'stripe'"><i class="bi bi-stripe me-1"></i> Stripe</span>
+              <span *ngSwitchCase="'razorpay'"><i class="bi bi-shield-check me-1"></i> Razorpay</span>
+              <span *ngSwitchCase="'upi'"><i class="bi bi-qr-code me-1"></i> UPI QR Code</span>
+              <span *ngSwitchCase="'whatsapp'"><i class="bi bi-whatsapp me-1 text-success"></i> WhatsApp Payment</span>
+              <span *ngSwitchCase="'paypal'"><i class="bi bi-paypal me-1"></i> PayPal</span>
             </ng-container>
           </p>
 
@@ -173,11 +218,26 @@
           <hr>
           <div class="d-flex justify-content-between fw-bold mb-3"><span>Total</span><span class="text-primary">{{getTotal(cart$ | async) | currency}}</span></div>
 
+          <!-- UPI QR Code Display -->
+          <div *ngIf="upiQrData" class="upi-qr-section text-center p-4 bg-light rounded mb-3">
+            <h6 class="fw-bold text-success mb-2"><i class="bi bi-qr-code me-1"></i> Scan UPI QR Code to Pay</h6>
+            <p class="small text-muted mb-3">Open any UPI app and scan this code</p>
+            <img [src]="upiQrData" alt="UPI QR Code" class="upi-qr-image mb-3">
+            <div class="d-flex justify-content-center gap-2">
+              <span class="badge bg-success"><i class="bi bi-google-play me-1"></i> GPay</span>
+              <span class="badge bg-success"><i class="bi bi-phone me-1"></i> PhonePe</span>
+              <span class="badge bg-success"><i class="bi bi-wallet2 me-1"></i> Paytm</span>
+            </div>
+          </div>
+
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary" (click)="prevStep()">Back</button>
-            <button class="btn btn-success flex-fill" (click)="placeOrder()" [disabled]="isSubmitting">
+            <button class="btn btn-outline-secondary" (click)="prevStep()" *ngIf="!upiQrData">Back</button>
+            <button class="btn btn-success flex-fill" (click)="placeOrder()" [disabled]="isSubmitting" *ngIf="!upiQrData">
               <span *ngIf="isSubmitting"><span class="spinner-border spinner-border-sm me-1"></span> Processing...</span>
               <span *ngIf="!isSubmitting"><i class="bi bi-check2-circle me-1"></i> Place Order</span>
+            </button>
+            <button class="btn btn-outline-primary flex-fill" *ngIf="upiQrData" routerLink="/orders">
+              <i class="bi bi-list-ul me-1"></i> View Orders
             </button>
           </div>
         </div>

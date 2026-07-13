@@ -21,8 +21,11 @@ public static class DependencyInjection
 
         services.AddScoped<IPaymentDbContext>(sp => sp.GetRequiredService<PaymentDbContext>());
 
+        services.AddHttpClient<WhatsAppPaymentService>();
         services.AddScoped<StripePaymentGateway>();
         services.AddScoped<RazorpayPaymentGateway>();
+        services.AddScoped<UpiQrPaymentGateway>();
+        services.AddScoped<WhatsAppPaymentService>();
         services.AddScoped<IPaymentGatewayFactory, PaymentGatewayFactory>();
 
         return services;

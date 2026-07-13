@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '@shared/services/api.service';
 import { CartService } from '@shared/services/cart.service';
 import { Cart, Order } from '@shared/models';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { take, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,6 +20,9 @@ export class CheckoutComponent {
   currentStep = 1;
   isSubmitting = false;
   selectedPayment = 'credit_card';
+  upiQrData: string | null = null;
+  upiUri: string | null = null;
+  phoneNumber = '';
 
   shippingForm: FormGroup;
   paymentForm: FormGroup;
@@ -48,6 +51,7 @@ export class CheckoutComponent {
       cardNumber: [''],
       cardExpiry: [''],
       cardCvv: [''],
+      phoneNumber: [''],
     });
   }
 
@@ -61,6 +65,10 @@ export class CheckoutComponent {
     else if (this.currentStep === 2) {
       if (this.selectedPayment === 'credit_card' && (!this.paymentForm.value.cardNumber || !this.paymentForm.value.cardExpiry || !this.paymentForm.value.cardCvv)) {
         this.toastr.error('Please complete payment details');
+        return;
+      }
+      if ((this.selectedPayment === 'upi' || this.selectedPayment === 'whatsapp') && !this.paymentForm.value.phoneNumber) {
+        this.toastr.error('Please enter a phone number');
         return;
       }
       this.currentStep = 3;
@@ -83,11 +91,31 @@ export class CheckoutComponent {
         shippingCost: this.getShipping(),
         total: this.getTotal(cart),
       };
-      this.api.post<Order>('/api/v1/orders', order).subscribe({
-        next: () => {
+      this.api.post<Order>('/api/v1/orders', order).pipe(
+        switchMap((result: any) => {
+          if (this.selectedPayment === 'upi' || this.selectedPayment === 'whatsapp') {
+            return this.api.post<any>('/api/v1/payments/upi/qr', {
+              orderId: result?.id || 0,
+              userId: 0,
+              amount: this.getTotal(cart),
+              currency: 'INR',
+            });
+          }
+          return of(result);
+        })
+      ).subscribe({
+        next: (result: any) => {
           this.isSubmitting = false;
+          if (result?.clientSecret) {
+            this.upiQrData = 'data:image/png;base64,' + result.clientSecret;
+          }
+          if (this.selectedPayment === 'whatsapp' && this.paymentForm.value.phoneNumber) {
+            this.sendWhatsAppQr();
+          }
           this.toastr.success('Order placed successfully!');
-          this.router.navigate(['/orders']);
+          if (!this.upiQrData) {
+            this.router.navigate(['/orders']);
+          }
         },
         error: () => {
           this.isSubmitting = false;
@@ -97,9 +125,21 @@ export class CheckoutComponent {
     });
   }
 
+  sendWhatsAppQr(): void {
+    if (!this.upiUri || !this.paymentForm.value.phoneNumber) return;
+    this.api.post('/api/v1/payments/whatsapp/send-qr', {
+      phoneNumber: this.paymentForm.value.phoneNumber,
+      upiUri: this.upiUri,
+      amount: 0,
+      currency: 'INR',
+      orderId: '',
+    }).subscribe();
+  }
+
   selectPayment(method: string): void {
     this.selectedPayment = method;
     this.paymentForm.patchValue({ method });
+    this.upiQrData = null;
   }
 
   getSubtotal(cart: Cart | null): number {

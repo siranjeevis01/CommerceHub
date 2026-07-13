@@ -57,3 +57,42 @@
     border-color: #0d6efd;
   }
 }
+
+.upi-qr-section {
+  border: 2px dashed #198754;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+}
+
+.upi-qr-image {
+  width: 200px;
+  height: 200px;
+  border: 3px solid #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .checkout-steps .step-line {
+    width: 24px;
+  }
+
+  .checkout-steps .step .step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .checkout-steps .step .step-label {
+    font-size: 0.65rem;
+  }
+
+  .upi-qr-image {
+    width: 160px;
+    height: 160px;
+  }
+}

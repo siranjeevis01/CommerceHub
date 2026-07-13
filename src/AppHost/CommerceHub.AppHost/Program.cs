@@ -99,6 +99,15 @@ var analyticsService = builder.AddProject("analytics-service", Path.Combine(proj
     .WithEnvironment("SEQ_URL", seq.Resource.ConnectionStringExpression)
     .WithExternalHttpEndpoints();
 
+var aiDb = mysql.AddDatabase("commercehub-ai");
+var aiService = builder.AddProject("ai-service", Path.Combine(projectDir, "AI", "CommerceHub.AIAgent.Api", "CommerceHub.AIAgent.Api.csproj"))
+    .WithReference(aiDb)
+    .WithReference(redis)
+    .WithReference(rabbitmq)
+    .WithEnvironment("SEQ_URL", seq.Resource.ConnectionStringExpression)
+    .WithEnvironment("GEMINI_API_KEY", builder.Configuration["GeminiApiKey"] ?? "")
+    .WithExternalHttpEndpoints();
+
 var gateway = builder.AddProject("gateway", Path.Combine("..", "..", "ApiGateway", "CommerceHub.Gateway", "CommerceHub.Gateway.csproj"))
     .WithReference(identityService)
     .WithReference(productService)
@@ -110,6 +119,7 @@ var gateway = builder.AddProject("gateway", Path.Combine("..", "..", "ApiGateway
     .WithReference(notificationService)
     .WithReference(cmsService)
     .WithReference(analyticsService)
+    .WithReference(aiService)
     .WithEnvironment("JWT_KEY", jwtKey)
     .WithEnvironment("JWT_ISSUER", "CommerceHub")
     .WithEnvironment("JWT_AUDIENCE", "CommerceHubClient")

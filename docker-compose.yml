@@ -28,7 +28,7 @@ services:
     networks:
       - commercehub-network
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "redispass", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redispass}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -116,7 +116,14 @@ services:
       - INVENTORY_DB_CONNECTION=server=mysql;database=commercehub_inventory;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
       - CMS_DB_CONNECTION=server=mysql;database=commercehub_cms;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
       - AI_DB_CONNECTION=server=mysql;database=commercehub_ai;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
+      - NOTIFICATION_DB_CONNECTION=server=mysql;database=commercehub_notification;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
       - ANALYTICS_DB_CONNECTION=Host=postgres;Database=commercehub_analytics;Username=commercehub;Password=${POSTGRES_PASSWORD:-postgrespass}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - WHATSAPP_ACCESS_TOKEN=${WHATSAPP_ACCESS_TOKEN:-}
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
+      - UPI_ID=${UPI_ID:-}
+      - UPI_MERCHANT_NAME=${UPI_MERCHANT_NAME:-CommerceHub}
+      - RABBITMQ_VHOST=${RABBITMQ_VHOST:-/}
       - RABBITMQ_HOST=rabbitmq
       - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
       - JWT_KEY=${JWT_KEY}

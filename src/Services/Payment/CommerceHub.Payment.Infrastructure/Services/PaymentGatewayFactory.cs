@@ -18,6 +18,7 @@ public class PaymentGatewayFactory : IPaymentGatewayFactory
         {
             "stripe" => _serviceProvider.GetRequiredService<StripePaymentGateway>(),
             "razorpay" => _serviceProvider.GetRequiredService<RazorpayPaymentGateway>(),
+            "upi" or "upi_qr" or "whatsapp" => _serviceProvider.GetRequiredService<UpiQrPaymentGateway>(),
             _ => _serviceProvider.GetRequiredService<StripePaymentGateway>()
         };
     }
