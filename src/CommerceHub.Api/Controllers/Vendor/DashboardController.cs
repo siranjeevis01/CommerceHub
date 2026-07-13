@@ -67,9 +67,7 @@ public class DashboardController : ControllerBase
             .ToListAsync();
         var averageRating = reviews.Count > 0 ? reviews.Average(r => r.Rating) : 0;
 
-        var recentViews = await _productDb.Products
-            .Where(p => p.VendorId == vendorId && !p.IsDeleted)
-            .SumAsync(p => p.StockQuantity);
+        var recentViews = 0; // View tracking not available in this context
 
         return Ok(new
         {

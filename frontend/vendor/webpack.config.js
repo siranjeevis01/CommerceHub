@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   output: {
-    publicPath: 'http://localhost:4202/',
+    publicPath: 'auto',
     uniqueName: 'vendor',
   },
   plugins: [

@@ -58,4 +58,11 @@ public class AuthController : ControllerBase
         await _mediator.Send(command);
         return Ok(new { Success = true, Message = "Email verified successfully." });
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok(new { Success = true, Message = "Logged out successfully." });
+    }
 }

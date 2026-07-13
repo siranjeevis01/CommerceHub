@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Cms.Application.Commands.Pages;
 using CommerceHub.Cms.Application.Queries.Pages;
@@ -50,6 +51,7 @@ public class PageController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePageCommand command)
     {
@@ -57,6 +59,7 @@ public class PageController : ControllerBase
         return Ok(new { Success = true, Data = id });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdatePageCommand command)
     {
@@ -66,6 +69,7 @@ public class PageController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -73,6 +77,7 @@ public class PageController : ControllerBase
         return Ok(new { Success = true, Message = "Page deleted" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}/publish")]
     public async Task<IActionResult> Publish(int id)
     {

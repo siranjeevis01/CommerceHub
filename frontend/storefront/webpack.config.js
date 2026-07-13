@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   output: {
-    publicPath: 'http://localhost:4203/',
+    publicPath: 'auto',
     uniqueName: 'storefront',
   },
   plugins: [

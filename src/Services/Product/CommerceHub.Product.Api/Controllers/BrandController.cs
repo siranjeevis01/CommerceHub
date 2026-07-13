@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Product.Application.Commands;
 using CommerceHub.Product.Application.Queries;
@@ -31,6 +32,7 @@ public class BrandController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateBrandCommand command)
     {
@@ -38,6 +40,7 @@ public class BrandController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateBrandCommand command)
     {
@@ -45,6 +48,7 @@ public class BrandController : ControllerBase
         return Ok(new { Success = true, Message = "Brand updated" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

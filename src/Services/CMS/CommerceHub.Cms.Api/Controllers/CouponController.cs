@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Cms.Application.Commands.Coupons;
 using CommerceHub.Cms.Application.Queries.Coupons;
@@ -16,6 +17,7 @@ public class CouponController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] bool? isActive = null, [FromQuery] string? couponType = null)
     {
@@ -31,6 +33,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -41,6 +44,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("by-code/{code}")]
     public async Task<IActionResult> GetByCode(string code)
     {
@@ -51,6 +55,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCouponCommand command)
     {
@@ -58,6 +63,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Data = id });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateCouponCommand command)
     {
@@ -67,6 +73,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -74,6 +81,7 @@ public class CouponController : ControllerBase
         return Ok(new { Success = true, Message = "Coupon deleted" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("validate")]
     public async Task<IActionResult> Validate([FromBody] ValidateCouponCommand command)
     {

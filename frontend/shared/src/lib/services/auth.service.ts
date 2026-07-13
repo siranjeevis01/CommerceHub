@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<ApiResponse<LoginResponse>> {
-    return this.api.post<LoginResponse>('/api/v1/auth/login', credentials).pipe(
+    return this.api.post<LoginResponse>('/api/v1/identity/auth/login', credentials).pipe(
       tap(response => {
         if (response.success) {
           this.setSession(response.data);
@@ -43,11 +43,11 @@ export class AuthService {
   }
 
   register(data: RegisterRequest): Observable<ApiResponse<User>> {
-    return this.api.post<User>('/api/v1/auth/register', data);
+    return this.api.post<User>('/api/v1/identity/auth/register', data);
   }
 
   logout(): void {
-    this.api.post('/api/v1/auth/logout', { refreshToken: this.getRefreshToken() }).subscribe({
+    this.api.post('/api/v1/identity/auth/logout', { refreshToken: this.getRefreshToken() }).subscribe({
       next: () => this.clearSession(),
       error: () => this.clearSession()
     });
@@ -55,7 +55,7 @@ export class AuthService {
 
   refreshToken(): Observable<ApiResponse<LoginResponse>> {
     const refreshToken = this.getRefreshToken();
-    return this.api.post<LoginResponse>('/api/v1/auth/refresh', { refreshToken }).pipe(
+    return this.api.post<LoginResponse>('/api/v1/identity/auth/refresh-token', { refreshToken }).pipe(
       tap(response => {
         if (response.success) {
           this.setSession(response.data);

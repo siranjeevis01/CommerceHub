@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Cms.Domain.Entities;
@@ -12,9 +13,11 @@ public class PlatformSettingController : ControllerBase
     private readonly CmsDbContext _db;
     public PlatformSettingController(CmsDbContext db) => _db = db;
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(new { Success = true, Data = await _db.PlatformSettings.ToListAsync() });
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] PlatformSetting setting)
     {
@@ -23,6 +26,7 @@ public class PlatformSettingController : ControllerBase
         return Ok(new { Success = true, Data = setting });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] PlatformSetting updated)
     {

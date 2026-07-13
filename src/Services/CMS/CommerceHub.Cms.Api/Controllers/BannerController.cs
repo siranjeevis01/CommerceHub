@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Cms.Application.Commands.Banners;
 using CommerceHub.Cms.Application.Queries.Banners;
@@ -48,6 +49,7 @@ public class BannerController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateBannerCommand command)
     {
@@ -55,6 +57,7 @@ public class BannerController : ControllerBase
         return Ok(new { Success = true, Data = id });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateBannerCommand command)
     {
@@ -64,6 +67,7 @@ public class BannerController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Inventory.Application.Queries;
 using CommerceHub.Inventory.Application.Commands;
@@ -34,6 +35,7 @@ public class WarehouseController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateWarehouseCommand command)
     {
@@ -41,6 +43,7 @@ public class WarehouseController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateWarehouseCommand command)
     {

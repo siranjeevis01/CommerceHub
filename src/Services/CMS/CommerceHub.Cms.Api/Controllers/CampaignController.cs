@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Cms.Domain.Entities;
@@ -12,9 +13,11 @@ public class CampaignController : ControllerBase
     private readonly CmsDbContext _db;
     public CampaignController(CmsDbContext db) => _db = db;
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(new { Success = true, Data = await _db.Campaigns.ToListAsync() });
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Campaign campaign)
     {
@@ -23,6 +26,7 @@ public class CampaignController : ControllerBase
         return Ok(new { Success = true, Data = campaign });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Campaign updated)
     {
@@ -37,6 +41,7 @@ public class CampaignController : ControllerBase
         return Ok(new { Success = true, Data = campaign });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -1,6 +1,7 @@
 using CommerceHub.Shared.Contracts.Events;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Product.Application.Commands;
 using CommerceHub.Product.Application.Queries;
@@ -65,6 +66,7 @@ public class ProductController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Vendor,Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
     {
@@ -72,6 +74,7 @@ public class ProductController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Vendor,Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateProductCommand command)
     {
@@ -79,6 +82,7 @@ public class ProductController : ControllerBase
         return Ok(new { Success = true, Message = "Product updated" });
     }
 
+    [Authorize(Roles = "Vendor,Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

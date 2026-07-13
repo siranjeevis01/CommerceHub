@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Analytics.Application.Queries;
 using CommerceHub.Analytics.Application.Commands;
@@ -16,6 +17,7 @@ public class AnalyticsController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("dashboard")]
     public async Task<IActionResult> GetDashboard()
     {
@@ -24,6 +26,7 @@ public class AnalyticsController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("sales")]
     public async Task<IActionResult> GetSalesReport([FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
@@ -36,6 +39,7 @@ public class AnalyticsController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("top-products")]
     public async Task<IActionResult> GetTopProducts([FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int count = 10)
     {
@@ -49,6 +53,7 @@ public class AnalyticsController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("users/{userId}")]
     public async Task<IActionResult> GetUserAnalytics(int userId, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
@@ -62,6 +67,7 @@ public class AnalyticsController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("vendors/{vendorId}/performance")]
     public async Task<IActionResult> GetVendorPerformance(int vendorId, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {

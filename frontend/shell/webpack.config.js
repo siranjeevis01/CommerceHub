@@ -1,9 +1,11 @@
 const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 module.exports = {
   output: {
-    publicPath: 'http://localhost:4200/',
+    publicPath: 'auto',
     uniqueName: 'shell',
   },
   optimization: {
@@ -13,9 +15,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'shell',
       remotes: {
-        admin: 'admin@http://localhost:4201/remoteEntry.js',
-        vendor: 'vendor@http://localhost:4202/remoteEntry.js',
-        storefront: 'storefront@http://localhost:4203/remoteEntry.js',
+        admin: `admin@${isProd ? '/admin/remoteEntry.js' : 'http://localhost:4201/remoteEntry.js'}`,
+        vendor: `vendor@${isProd ? '/vendor/remoteEntry.js' : 'http://localhost:4202/remoteEntry.js'}`,
+        storefront: `storefront@${isProd ? '/storefront/remoteEntry.js' : 'http://localhost:4203/remoteEntry.js'}`,
       },
       shared: {
         '@angular/core': { singleton: true, strictVersion: true },

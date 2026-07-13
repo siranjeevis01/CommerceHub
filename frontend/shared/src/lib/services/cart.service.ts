@@ -26,34 +26,28 @@ export class CartService {
   }
 
   addItem(productId: number, name: string, imageUrl: string, unitPrice: number, quantity: number, variantId?: number): Observable<Cart> {
-    return this.api.post<Cart>(`${this.getCartEndpoint()}/add`, { userId: this.auth.currentUser?.id, sessionId: this.sessionId, productId, variantId, name, imageUrl, unitPrice, quantity }).pipe(
+    return this.api.post<Cart>(`${this.getCartEndpoint()}/items`, { productId, variantId, productName: name, imageUrl, unitPrice, quantity }).pipe(
       map(r => r.data),
       tap(cart => this.cartSubject.next(cart))
     );
   }
 
   updateItem(productId: number, quantity: number, variantId?: number): Observable<Cart> {
-    return this.api.put<Cart>(`${this.getCartEndpoint()}/update`, { userId: this.auth.currentUser?.id, sessionId: this.sessionId, productId, variantId, quantity }).pipe(
+    return this.api.put<Cart>(`${this.getCartEndpoint()}/items`, { productId, variantId, quantity }).pipe(
       map(r => r.data),
       tap(cart => this.cartSubject.next(cart))
     );
   }
 
   removeItem(productId: number, variantId?: number): Observable<Cart> {
-    const body = {
-      userId: this.auth.currentUser?.id,
-      sessionId: this.sessionId,
-      productId,
-      variantId,
-    };
-    return this.api.delete<Cart>(`${this.getCartEndpoint()}/remove`, body).pipe(
+    return this.api.delete<Cart>(`${this.getCartEndpoint()}/items/${productId}`).pipe(
       map(r => r.data),
       tap(cart => this.cartSubject.next(cart))
     );
   }
 
   clearCart(): Observable<void> {
-    return this.api.delete<void>(`${this.getCartEndpoint()}/clear`).pipe(
+    return this.api.delete<void>(this.getCartEndpoint()).pipe(
       map(r => r.data),
       tap(() => this.loadCart())
     );
@@ -61,7 +55,8 @@ export class CartService {
 
   mergeCart(): Observable<Cart> {
     if (!this.auth.isLoggedIn) return this.getCart();
-    return this.api.post<Cart>('/api/v1/cart/merge', { userId: this.auth.currentUser!.id, sessionId: this.sessionId }).pipe(
+    const mergeKey = `user_${this.auth.currentUser!.id}`;
+    return this.api.post<Cart>(`/api/v1/cart/${mergeKey}/items`, { mergeSessionId: this.sessionId }).pipe(
       map(r => r.data),
       tap(cart => this.cartSubject.next(cart))
     );
@@ -78,8 +73,8 @@ export class CartService {
   }
 
   private getCartEndpoint(): string {
-    if (this.auth.isLoggedIn) return `/api/v1/cart?userId=${this.auth.currentUser!.id}`;
-    return `/api/v1/cart?sessionId=${this.sessionId}`;
+    if (this.auth.isLoggedIn) return `/api/v1/cart/user_${this.auth.currentUser!.id}`;
+    return `/api/v1/cart/session_${this.sessionId}`;
   }
 
   private getOrCreateSessionId(): string {

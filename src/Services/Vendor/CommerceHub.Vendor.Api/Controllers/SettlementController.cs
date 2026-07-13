@@ -1,5 +1,6 @@
 using CommerceHub.Shared.Contracts.Events;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Vendor.Domain.Entities;
@@ -19,9 +20,11 @@ public class SettlementController : ControllerBase
         _publishEndpoint = publishEndpoint;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(new { Success = true, Data = await _db.Settlements.ToListAsync() });
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("run")]
     public async Task<IActionResult> RunSettlement([FromBody] RunSettlementRequest request)
     {
@@ -61,6 +64,7 @@ public class SettlementController : ControllerBase
         return Ok(new { Success = true, Message = $"Settlements processed for {vendors.Count} vendors" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("vendor/{vendorId}")]
     public async Task<IActionResult> GetVendorSummary(int vendorId)
     {

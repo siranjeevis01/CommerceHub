@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Cms.Domain.Entities;
@@ -19,6 +20,7 @@ public class MenuController : ControllerBase
         return Ok(new { Success = true, Data = menus });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Menu menu)
     {
@@ -27,6 +29,7 @@ public class MenuController : ControllerBase
         return Ok(new { Success = true, Data = menu });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Menu updated)
     {
@@ -42,6 +45,7 @@ public class MenuController : ControllerBase
         return Ok(new { Success = true, Data = menu });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

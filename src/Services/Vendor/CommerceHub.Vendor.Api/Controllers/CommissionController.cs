@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Vendor.Domain.Entities;
@@ -12,9 +13,11 @@ public class CommissionController : ControllerBase
     private readonly VendorDbContext _db;
     public CommissionController(VendorDbContext db) => _db = db;
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(new { Success = true, Data = await _db.Commissions.ToListAsync() });
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CommissionConfig config)
     {
@@ -23,6 +26,7 @@ public class CommissionController : ControllerBase
         return Ok(new { Success = true, Data = config });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] CommissionConfig updated)
     {

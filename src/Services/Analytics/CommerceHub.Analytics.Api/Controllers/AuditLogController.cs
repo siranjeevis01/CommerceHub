@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommerceHub.Analytics.Infrastructure.Data;
@@ -11,6 +12,7 @@ public class AuditLogController : ControllerBase
     private readonly AnalyticsDbContext _db;
     public AuditLogController(AnalyticsDbContext db) => _db = db;
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 50, [FromQuery] string? entity = null, [FromQuery] int? userId = null)
     {

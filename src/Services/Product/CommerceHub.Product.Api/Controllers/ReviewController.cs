@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Product.Application.Commands;
 using CommerceHub.Product.Application.Queries;
@@ -23,6 +24,7 @@ public class ReviewController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateReviewCommand command)
     {
@@ -30,6 +32,7 @@ public class ReviewController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

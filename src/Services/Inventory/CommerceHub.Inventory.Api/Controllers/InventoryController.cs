@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Inventory.Application.Queries;
 using CommerceHub.Inventory.Application.Commands;
@@ -34,6 +35,7 @@ public class InventoryController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin,Vendor")]
     [HttpGet("low-stock")]
     public async Task<IActionResult> GetLowStockProducts([FromQuery] int? threshold)
     {
@@ -42,6 +44,7 @@ public class InventoryController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin,Vendor")]
     [HttpGet("movements")]
     public async Task<IActionResult> GetStockMovements(
         [FromQuery] int page = 1,

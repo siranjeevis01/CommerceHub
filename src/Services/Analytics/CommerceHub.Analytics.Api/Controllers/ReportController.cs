@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Analytics.Application.Commands;
 
@@ -15,6 +16,7 @@ public class ReportController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("generate")]
     public async Task<IActionResult> Generate([FromBody] GenerateReportCommand command)
     {

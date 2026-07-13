@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Product.Application.Commands;
 using CommerceHub.Product.Application.Queries;
@@ -16,6 +17,7 @@ public class WishlistController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize]
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetWishlist(int userId)
     {
@@ -23,6 +25,7 @@ public class WishlistController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddWishlistItemCommand command)
     {
@@ -30,6 +33,7 @@ public class WishlistController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Remove(int id)
     {

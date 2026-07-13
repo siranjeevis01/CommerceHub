@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Vendor.Application.Commands;
 using CommerceHub.Vendor.Application.Queries;
@@ -16,6 +17,7 @@ public class VendorPayoutController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("vendor/{vendorId}")]
     public async Task<IActionResult> GetByVendor(int vendorId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
@@ -29,6 +31,7 @@ public class VendorPayoutController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreatePayout([FromBody] CreatePayoutCommand command)
     {
@@ -36,6 +39,7 @@ public class VendorPayoutController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{id}/process")]
     public async Task<IActionResult> ProcessPayout(int id, [FromBody] ProcessPayoutCommand command)
     {

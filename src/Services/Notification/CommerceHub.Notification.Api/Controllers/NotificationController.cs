@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Notification.Application.Commands;
 using CommerceHub.Notification.Application.Queries;
@@ -16,6 +17,7 @@ public class NotificationController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize]
     [HttpGet("users/{userId}")]
     public async Task<IActionResult> GetUserNotifications(int userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
@@ -24,6 +26,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpGet("users/{userId}/unread-count")]
     public async Task<IActionResult> GetUnreadCount(int userId)
     {
@@ -42,6 +45,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("send/email")]
     public async Task<IActionResult> SendEmail([FromBody] SendEmailCommand command)
     {
@@ -49,6 +53,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = result, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("send/sms")]
     public async Task<IActionResult> SendSms([FromBody] SendSmsCommand command)
     {
@@ -56,6 +61,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = result, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("send/push")]
     public async Task<IActionResult> SendPush([FromBody] SendPushNotificationCommand command)
     {
@@ -63,6 +69,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = true, Message = "Push notification sent" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("send/whatsapp")]
     public async Task<IActionResult> SendWhatsApp([FromBody] SendWhatsAppCommand command)
     {
@@ -70,6 +77,7 @@ public class NotificationController : ControllerBase
         return Ok(new { Success = result, Data = result });
     }
 
+    [Authorize]
     [HttpPut("{id}/read")]
     public async Task<IActionResult> MarkAsRead(int id)
     {

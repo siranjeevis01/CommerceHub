@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Vendor.Application.Commands;
 using CommerceHub.Vendor.Application.Queries;
@@ -16,6 +17,7 @@ public class VendorController : ControllerBase
         _mediator = mediator;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] string? status = null)
     {
@@ -30,6 +32,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -38,6 +41,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetByUserId(int userId)
     {
@@ -46,6 +50,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateVendorCommand command)
     {
@@ -53,6 +58,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateVendorCommand command)
     {
@@ -61,6 +67,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{id}/approve")]
     public async Task<IActionResult> Approve(int id)
     {
@@ -69,6 +76,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{id}/reject")]
     public async Task<IActionResult> Reject(int id, [FromBody] RejectVendorCommand command)
     {
@@ -77,6 +85,7 @@ public class VendorController : ControllerBase
         return Ok(new { Success = true, Data = result });
     }
 
+    [Authorize]
     [HttpGet("{id}/analytics")]
     public async Task<IActionResult> GetAnalytics(int id)
     {
