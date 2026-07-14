@@ -323,9 +323,7 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
 }
 
 // ========== HEALTH CHECKS ==========
-builder.Services.AddHealthChecks()
-    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy());
-
+// "self" health check is already registered by ServiceDefaults — don't duplicate it
 if (!string.IsNullOrWhiteSpace(redisConn))
 {
     builder.Services.AddHealthChecks()
