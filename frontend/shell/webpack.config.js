@@ -1,7 +1,7 @@
 const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 
-const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || process.argv.some(a => a.includes('configuration') && a.includes('production'));
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || (!process.argv.some(a => a.includes('serve')));
 
 module.exports = {
   output: {

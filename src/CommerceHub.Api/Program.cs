@@ -65,6 +65,7 @@ if (bool.TryParse(logFileEnabled, out var logFile) && logFile)
         retainedFileCountLimit: 7);
 
 Log.Logger = logConfig.CreateLogger();
+builder.Host.UseSerilog();
 
 // ========== ENVIRONMENT VARIABLE EXPANSION ==========
 var configKeys = builder.Configuration.AsEnumerable().Select(kv => kv.Key).ToList();
