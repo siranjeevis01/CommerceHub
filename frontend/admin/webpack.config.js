@@ -7,6 +7,7 @@ module.exports = {
   output: {
     publicPath: isProd ? '/admin/' : 'auto',
     uniqueName: 'admin',
+    library: { name: 'admin', type: 'var' },
   },
   plugins: [
     new ModuleFederationPlugin({
