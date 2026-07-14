@@ -7,6 +7,7 @@ import { Observable, Subject, of } from 'rxjs';
 import { map, switchMap, takeUntil, catchError, shareReplay } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '@env/environment';
 
 @Component({
   standalone: false,
@@ -107,6 +108,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   buyNow(): void {
     this.addToCart();
     this.router.navigate(['/checkout']);
+  }
+
+  shareOnWhatsApp(): void {
+    this.product$.pipe(takeUntil(this.destroy$)).subscribe(product => {
+      if (!product) return;
+      const price = this.currentPrice || product.price;
+      const productUrl = window.location.href;
+      const message = `Check out ${product.name} at ₹${price.toFixed(2)}! \n\n${productUrl}\n\nPay via UPI: ${environment.upiId}\n\nvia CommerceHub`;
+      const encodedMessage = encodeURIComponent(message);
+      const shareUrl = `https://wa.me/?text=${encodedMessage}`;
+      window.open(shareUrl, '_blank');
+    });
   }
 
   onImageError(event: Event): void {

@@ -1,6 +1,9 @@
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.RateLimiting;
 using Asp.Versioning;
 using CommerceHub.AIAgent.Api.Hubs;
@@ -25,6 +28,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using Serilog;
+using Serilog.Events;
 using StackExchange.Redis;
 
 // Infrastructure DI (unique names, safe to import)
@@ -138,6 +142,42 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+// ========== RESPONSE COMPRESSION ==========
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes;
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
+// ========== OUTPUT CACHING (public GET endpoints) ==========
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(5)));
+
+    // Product listings and details — cache 2 minutes
+    options.AddPolicy("Products", builder =>
+        builder.Expire(TimeSpan.FromMinutes(2))
+            .SetVaryByQuery("page", "pageSize", "categoryId", "search"));
+
+    // CMS content — cache 10 minutes
+    options.AddPolicy("Cms", builder =>
+        builder.Expire(TimeSpan.FromMinutes(10)));
+
+    // Health checks — cache 30 seconds
+    options.AddPolicy("Health", builder =>
+        builder.Expire(TimeSpan.FromSeconds(30)));
+});
+
 // ========== DYNAMIC CONTROLLER DISCOVERY ==========
 var apiAssemblies = new[]
 {
@@ -233,6 +273,9 @@ builder.Services.AddCmsInfrastructure(builder.Configuration);
 builder.Services.AddAnalyticsInfrastructure(builder.Configuration);
 builder.Services.AddAIAgentInfrastructure(builder.Configuration);
 
+// ========== SEED DATA SERVICE ==========
+builder.Services.AddScoped<CommerceHub.Api.Services.SeedDataService>();
+
 // ========== MASS TRANSIT (optional) ==========
 var rabbitHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 if (!string.IsNullOrWhiteSpace(rabbitHost))
@@ -279,7 +322,19 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
 }
 
 // ========== HEALTH CHECKS ==========
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy());
+
+if (!string.IsNullOrWhiteSpace(redisConn))
+{
+    builder.Services.AddHealthChecks()
+        .AddRedis(redisConn, name: "redis", tags: new[] { "ready", "cache" });
+}
+if (!string.IsNullOrWhiteSpace(rabbitHost))
+{
+    builder.Services.AddHealthChecks()
+        .AddRabbitMQ($"amqp://{rabbitHost}", name: "rabbitmq", tags: new[] { "ready", "messaging" });
+}
 
 // ========== BUILD ==========
 var app = builder.Build();
@@ -353,11 +408,22 @@ app.Use(async (context, next) =>
 });
 
 // ========== MIDDLEWARE ==========
+app.UseResponseCompression();
 app.UseForwardedHeaders();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
+app.UseOutputCache();
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000ms}";
+    options.GetLevel = (httpContext, elapsed, ex) =>
+        ex != null ? LogEventLevel.Error
+        : httpContext.Response.StatusCode >= 500 ? LogEventLevel.Error
+        : httpContext.Response.StatusCode >= 400 ? LogEventLevel.Warning
+        : LogEventLevel.Information;
+});
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseMetricServer();
@@ -375,7 +441,7 @@ app.Use(async (context, next) =>
 });
 
 // ========== ENDPOINTS ==========
-app.MapControllers();
+app.MapControllers().CacheOutput("Products");
 app.MapHub<NotificationHub>("/hubs/notification");
 app.MapHub<AIHub>("/hubs/ai");
 app.MapServiceDefaultsHealthChecks();
@@ -386,7 +452,7 @@ app.MapGet("/", () => Results.Ok(new
     Redis = !string.IsNullOrWhiteSpace(redisConn) ? "enabled" : "disabled (in-memory)",
     RabbitMQ = !string.IsNullOrWhiteSpace(rabbitHost) ? "enabled" : "disabled",
     Timestamp = DateTime.UtcNow
-})).AllowAnonymous();
+})).AllowAnonymous().CacheOutput("Health");
 
 Log.Information("CommerceHub API started — Redis: {Redis}, RabbitMQ: {RabbitMQ}",
     !string.IsNullOrWhiteSpace(redisConn) ? "enabled" : "disabled (in-memory)",

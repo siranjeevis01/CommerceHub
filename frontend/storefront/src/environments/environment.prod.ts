@@ -3,4 +3,5 @@ export const environment = {
   apiUrl: '/api',
   appName: 'CommerceHub Store',
   appVersion: '1.0.0',
+  upiId: 'merchant@upi',
 };
