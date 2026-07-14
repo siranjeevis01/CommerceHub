@@ -9,7 +9,7 @@
     "build:admin": "ng build admin",
     "build:vendor": "ng build vendor",
     "build:storefront": "ng build storefront",
-    "build:all": "ng build shell && ng build admin && ng build vendor && ng build storefront",
+    "build:all": "ng build admin && ng build vendor && ng build storefront && ng build shell && node -e \"const fs=require('fs');['admin','vendor','storefront'].forEach(d=>{fs.cpSync('dist/'+d,'dist/shell/'+d,{recursive:true,force:true});console.log('Copied',d)})\"",
     "serve:shell": "ng serve shell",
     "serve:admin": "ng serve admin",
     "serve:vendor": "ng serve vendor",
