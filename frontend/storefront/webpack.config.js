@@ -7,12 +7,15 @@ module.exports = {
   output: {
     publicPath: isProd ? '/storefront/' : 'auto',
     uniqueName: 'storefront',
-    library: { name: 'storefront', type: 'var' },
+  },
+  optimization: {
+    runtimeChunk: false,
   },
   plugins: [
     new ModuleFederationPlugin({
       name: 'storefront',
       filename: 'remoteEntry.js',
+      library: { type: 'var', name: 'storefront' },
       exposes: {
         './Module': path.resolve(__dirname, 'src/app/storefront.module.ts'),
       },

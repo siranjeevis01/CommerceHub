@@ -7,12 +7,15 @@ module.exports = {
   output: {
     publicPath: isProd ? '/vendor/' : 'auto',
     uniqueName: 'vendor',
-    library: { name: 'vendor', type: 'var' },
+  },
+  optimization: {
+    runtimeChunk: false,
   },
   plugins: [
     new ModuleFederationPlugin({
       name: 'vendor',
       filename: 'remoteEntry.js',
+      library: { type: 'var', name: 'vendor' },
       exposes: {
         './Module': path.resolve(__dirname, 'src/app/vendor.module.ts'),
       },

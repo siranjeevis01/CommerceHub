@@ -7,12 +7,15 @@ module.exports = {
   output: {
     publicPath: isProd ? '/admin/' : 'auto',
     uniqueName: 'admin',
-    library: { name: 'admin', type: 'var' },
+  },
+  optimization: {
+    runtimeChunk: false,
   },
   plugins: [
     new ModuleFederationPlugin({
       name: 'admin',
       filename: 'remoteEntry.js',
+      library: { type: 'var', name: 'admin' },
       exposes: {
         './Module': path.resolve(__dirname, 'src/app/admin.module.ts'),
       },
