@@ -7,6 +7,7 @@ import { Cart, Order } from '@shared/models';
 import { Observable, of } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '@env/environment';
 
 @Component({
   standalone: false,
@@ -109,8 +110,8 @@ export class CheckoutComponent {
           if (result?.clientSecret) {
             this.upiQrData = 'data:image/png;base64,' + result.clientSecret;
           }
-          if (this.selectedPayment === 'whatsapp' && this.paymentForm.value.phoneNumber) {
-            this.sendWhatsAppQr();
+          if (this.selectedPayment === 'whatsapp') {
+            this.openWhatsAppPayment(cart, result?.id);
           }
           this.toastr.success('Order placed successfully!');
           if (!this.upiQrData) {
@@ -125,15 +126,19 @@ export class CheckoutComponent {
     });
   }
 
-  sendWhatsAppQr(): void {
-    if (!this.upiUri || !this.paymentForm.value.phoneNumber) return;
-    this.api.post('/api/v1/payments/whatsapp/send-qr', {
-      phoneNumber: this.paymentForm.value.phoneNumber,
-      upiUri: this.upiUri,
-      amount: 0,
-      currency: 'INR',
-      orderId: '',
-    }).subscribe();
+  openWhatsAppPayment(cart: Cart | null, orderId?: number): void {
+    const total = cart ? this.getTotal(cart) : 0;
+    const items = cart?.items?.map(i => `${i.name} x${i.quantity}`)?.join(', ') || 'Order';
+    const orderIdStr = orderId ? `#${orderId}` : '';
+    const upiId = environment.upiId;
+    const message = `*New Order ${orderIdStr}*\n\nItems: ${items}\nTotal: ₹${total.toFixed(2)}\n\nUPI ID: ${upiId}\nPay via GPay/PhonePe/Paytm to this UPI ID.\n\nThank you for shopping with CommerceHub!`;
+    const encodedMessage = encodeURIComponent(message);
+    const phone = this.paymentForm.value.phoneNumber?.replace(/[^0-9]/g, '') || '';
+    const phoneParam = phone.length >= 10 ? phone : '';
+    const shareUrl = phoneParam
+      ? `https://wa.me/${phoneParam}?text=${encodedMessage}`
+      : `https://wa.me/?text=${encodedMessage}`;
+    window.open(shareUrl, '_blank');
   }
 
   selectPayment(method: string): void {

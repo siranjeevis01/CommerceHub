@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Encodings.Web;
 using Microsoft.Extensions.Configuration;
 
 namespace CommerceHub.Payment.Infrastructure.Services;
@@ -18,10 +19,31 @@ public class WhatsAppPaymentService
             ?? Environment.GetEnvironmentVariable("WHATSAPP_PHONE_NUMBER_ID") ?? "";
     }
 
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(_accessToken) && !string.IsNullOrWhiteSpace(_phoneNumberId);
+
+    public string GenerateFreeShareLink(string? phoneNumber, string message)
+    {
+        var encoded = UrlEncoder.Default.Encode(message);
+        var phone = phoneNumber?.Replace("+", "").Replace(" ", "").Replace("-", "") ?? "";
+        return phone.Length >= 10
+            ? $"https://wa.me/{phone}?text={encoded}"
+            : $"https://wa.me/?text={encoded}";
+    }
+
+    public string GenerateOrderPaymentLink(string? phoneNumber, string orderId, decimal total, string upiId, string merchantName = "CommerceHub")
+    {
+        var message = $"*Order #{orderId}*\n\n" +
+                      $"Total: ₹{total:F2}\n\n" +
+                      $"Pay via UPI: {upiId}\n" +
+                      $"Open any UPI app (GPay/PhonePe/Paytm) and pay to this UPI ID.\n\n" +
+                      $"Thank you for shopping with {merchantName}!";
+
+        return GenerateFreeShareLink(phoneNumber, message);
+    }
+
     public async Task<bool> SendUpiQrCodeAsync(string recipientPhone, string upiUri, decimal amount, string currency, string orderId, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(_accessToken) || string.IsNullOrWhiteSpace(_phoneNumberId))
-            return false;
+        if (!IsConfigured) return false;
 
         var message = $"*Payment Request - Order #{orderId}*\n\n" +
                       $"Amount: {currency} {amount:F2}\n\n" +
@@ -45,10 +67,9 @@ public class WhatsAppPaymentService
 
     public async Task<bool> SendOrderConfirmationAsync(string recipientPhone, string orderId, decimal amount, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(_accessToken) || string.IsNullOrWhiteSpace(_phoneNumberId))
-            return false;
+        if (!IsConfigured) return false;
 
-        var message = $"✅ *Order Confirmed!*\n\n" +
+        var message = $"*Order Confirmed!*\n\n" +
                       $"Order #{orderId}\n" +
                       $"Amount: ₹{amount:F2}\n\n" +
                       $"Thank you for shopping with CommerceHub!";
@@ -70,10 +91,9 @@ public class WhatsAppPaymentService
 
     public async Task<bool> SendShippingUpdateAsync(string recipientPhone, string orderId, string status, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(_accessToken) || string.IsNullOrWhiteSpace(_phoneNumberId))
-            return false;
+        if (!IsConfigured) return false;
 
-        var message = $"📦 *Shipping Update*\n\n" +
+        var message = $"*Shipping Update*\n\n" +
                       $"Order #{orderId}\n" +
                       $"Status: {status}\n\n" +
                       $"Track your order in the CommerceHub app.";

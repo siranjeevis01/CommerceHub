@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CommerceHub.Payment.Application.Commands;
@@ -112,12 +111,24 @@ public class PaymentController : ControllerBase
     [HttpPost("whatsapp/share-product")]
     public IActionResult ShareProduct([FromBody] ShareProductRequest request)
     {
-        var message = $"Check out {request.ProductName} at ₹{request.ProductPrice:F2}! \n\n{request.ProductUrl}\n\nPay via UPI: {request.UpiId}\n\nvia CommerceHub";
+        var link = _whatsAppPaymentService.GenerateOrderPaymentLink(
+            request.PhoneNumber,
+            request.ProductUrl,
+            request.ProductPrice,
+            request.UpiId);
+        return Ok(new { Success = true, Data = new { ShareUrl = link } });
+    }
 
-        var encodedMessage = UrlEncoder.Default.Encode(message);
-        var shareUrl = $"https://wa.me/{request.PhoneNumber}?text={encodedMessage}";
-
-        return Ok(new { Success = true, Data = new { ShareUrl = shareUrl } });
+    [HttpPost("whatsapp/share-order")]
+    public IActionResult ShareOrder([FromBody] ShareOrderRequest request)
+    {
+        var link = _whatsAppPaymentService.GenerateOrderPaymentLink(
+            request.PhoneNumber,
+            request.OrderId,
+            request.Amount,
+            request.UpiId,
+            request.MerchantName);
+        return Ok(new { Success = true, Data = new { ShareUrl = link } });
     }
 }
 
@@ -159,4 +170,13 @@ public record ShareProductRequest
     public string ProductUrl { get; init; } = string.Empty;
     public string PhoneNumber { get; init; } = string.Empty;
     public string UpiId { get; init; } = string.Empty;
+}
+
+public record ShareOrderRequest
+{
+    public string OrderId { get; init; } = string.Empty;
+    public decimal Amount { get; init; }
+    public string PhoneNumber { get; init; } = string.Empty;
+    public string UpiId { get; init; } = string.Empty;
+    public string MerchantName { get; init; } = "CommerceHub";
 }
