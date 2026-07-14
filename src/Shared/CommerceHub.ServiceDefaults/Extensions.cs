@@ -110,6 +110,7 @@ public static class Extensions
     {
         app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
         {
+            Predicate = _ => false,
             AllowCachingResponses = false
         });
         app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions

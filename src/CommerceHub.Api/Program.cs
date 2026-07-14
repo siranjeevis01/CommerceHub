@@ -329,11 +329,15 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
 
     if (!string.IsNullOrWhiteSpace(redisConn) && registeredNames.Add("redis"))
     {
-        hcBuilder.AddRedis(redisConn, name: "redis", tags: new[] { "ready", "cache" });
+        hcBuilder.AddRedis(redisConn, name: "redis", tags: new[] { "ready", "cache" }, timeout: TimeSpan.FromSeconds(5));
     }
     if (!string.IsNullOrWhiteSpace(rabbitHost) && registeredNames.Add("rabbitmq"))
     {
-        hcBuilder.AddRabbitMQ($"amqp://{rabbitHost}", name: "rabbitmq", tags: new[] { "ready", "messaging" });
+        var rabbitUser = Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest";
+        var rabbitPass = Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest";
+        var rabbitVHost = Environment.GetEnvironmentVariable("RABBITMQ_VHOST") ?? "/";
+        var rabbitUrl = $"amqp://{Uri.EscapeDataString(rabbitUser)}:{Uri.EscapeDataString(rabbitPass)}@{rabbitHost}/{Uri.EscapeDataString(rabbitVHost)}";
+        hcBuilder.AddRabbitMQ(rabbitUrl, name: "rabbitmq", tags: new[] { "ready", "messaging" }, timeout: TimeSpan.FromSeconds(5));
     }
 
     var dbConnections = new (string Name, string EnvKey)[]
@@ -354,7 +358,7 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
         var connStr = Environment.GetEnvironmentVariable(envKey);
         if (!string.IsNullOrWhiteSpace(connStr) && registeredNames.Add(name))
         {
-            hcBuilder.AddMySql(connStr, name: $"mysql-{name}", tags: new[] { "ready", "database" });
+            hcBuilder.AddMySql(connStr, name: $"mysql-{name}", tags: new[] { "ready", "database" }, timeout: TimeSpan.FromSeconds(10));
         }
     }
 }
