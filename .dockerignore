@@ -11,3 +11,16 @@
 **/.vs/
 **/TestResults/
 **/publish/
+
+.env*
+*.md
+LICENSE
+deploy/
+tests/
+frontend/
+docs/
+scripts/
+.github/
+.vscode/
+.idea/
+*.log

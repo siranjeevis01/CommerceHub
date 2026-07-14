@@ -1,9 +1,18 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CartService } from '@shared/services/cart.service';
+import { ApiService } from '@shared/services/api.service';
 import { Cart, CartItem } from '@shared/models';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+
+interface CouponValidationResponse {
+  valid: boolean;
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  discountAmount: number;
+}
 
 @Component({
   standalone: false,
@@ -15,11 +24,14 @@ import { ToastrService } from 'ngx-toastr';
 export class CartComponent {
   cart$: Observable<Cart> = this.cartService.cart$;
   couponCode = '';
+  appliedDiscount = 0;
+  appliedCouponCode = '';
   estimatedShipping = 5.99;
   taxRate = 0.08;
 
   constructor(
     private cartService: CartService,
+    private api: ApiService,
     private toastr: ToastrService,
   ) {}
 
@@ -45,9 +57,22 @@ export class CartComponent {
   }
 
   applyCoupon(): void {
-    if (this.couponCode.trim()) {
-      this.toastr.info('Coupon applied (demo)');
-    }
+    const code = this.couponCode.trim();
+    if (!code) return;
+
+    this.api.post<CouponValidationResponse>('/api/v1/coupons/validate', { code }).subscribe({
+      next: (response) => {
+        if (response.data?.valid) {
+          this.appliedDiscount = response.data.discountAmount;
+          this.appliedCouponCode = response.data.code;
+          this.couponCode = '';
+          this.toastr.success(`Coupon "${response.data.code}" applied — $${response.data.discountAmount.toFixed(2)} off`);
+        } else {
+          this.toastr.error('Invalid coupon code');
+        }
+      },
+      error: () => this.toastr.error('Failed to validate coupon'),
+    });
   }
 
   getSubtotal(cart: Cart): number {
@@ -64,6 +89,6 @@ export class CartComponent {
   }
 
   getTotal(cart: Cart): number {
-    return this.getSubtotal(cart) + this.getShipping(cart) + this.getTax(cart);
+    return Math.max(0, this.getSubtotal(cart) + this.getShipping(cart) + this.getTax(cart) - this.appliedDiscount);
   }
 }

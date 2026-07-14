@@ -16,7 +16,6 @@ public static class Extensions
     public static WebApplicationBuilder ConfigureServiceDefaults(this WebApplicationBuilder builder, string serviceName)
     {
         builder.ConfigureOpenTelemetry(serviceName);
-        builder.ConfigureSerilog();
         builder.Services.AddServiceDefaultsHealthChecks();
         builder.Services.AddConfiguredHealthChecks(builder.Configuration);
         return builder;
@@ -71,35 +70,35 @@ public static class Extensions
 
     public static IServiceCollection AddServiceDefaultsHealthChecks(this IServiceCollection services)
     {
-        services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy());
-
+        services.AddHealthChecks();
         return services;
     }
 
     public static IServiceCollection AddConfiguredHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
+        var registeredNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
         var mysqlConnectionString = configuration.GetConnectionString("DefaultConnection");
-        if (!string.IsNullOrWhiteSpace(mysqlConnectionString))
+        if (!string.IsNullOrWhiteSpace(mysqlConnectionString) && registeredNames.Add("mysql"))
         {
             services.AddHealthChecks().AddMySql(mysqlConnectionString, name: "mysql", tags: new[] { "ready", "database" });
         }
 
         var redisConnectionString = configuration.GetConnectionString("Redis");
-        if (!string.IsNullOrWhiteSpace(redisConnectionString))
+        if (!string.IsNullOrWhiteSpace(redisConnectionString) && registeredNames.Add("redis"))
         {
             services.AddHealthChecks().AddRedis(redisConnectionString, name: "redis", tags: new[] { "ready", "cache" });
         }
 
         var elasticsearchUri = Environment.GetEnvironmentVariable("ELASTICSEARCH_URI") ?? configuration["Elasticsearch:Uri"];
-        if (!string.IsNullOrWhiteSpace(elasticsearchUri))
+        if (!string.IsNullOrWhiteSpace(elasticsearchUri) && registeredNames.Add("elasticsearch"))
         {
             services.AddHealthChecks().AddElasticsearch(elasticsearchUri, name: "elasticsearch", tags: new[] { "ready", "search" });
         }
 
         var rabbitMqConnectionString = configuration.GetSection("RabbitMQ")?.GetValue<string>("ConnectionString")
             ?? Environment.GetEnvironmentVariable("RabbitMQ__ConnectionString");
-        if (!string.IsNullOrWhiteSpace(rabbitMqConnectionString))
+        if (!string.IsNullOrWhiteSpace(rabbitMqConnectionString) && registeredNames.Add("rabbitmq"))
         {
             services.AddHealthChecks().AddRabbitMQ(rabbitMqConnectionString, name: "rabbitmq", tags: new[] { "ready", "messaging" });
         }

@@ -65,7 +65,6 @@ if (bool.TryParse(logFileEnabled, out var logFile) && logFile)
         retainedFileCountLimit: 7);
 
 Log.Logger = logConfig.CreateLogger();
-builder.Host.UseSerilog();
 
 // ========== ENVIRONMENT VARIABLE EXPANSION ==========
 var configKeys = builder.Configuration.AsEnumerable().Select(kv => kv.Key).ToList();
@@ -323,16 +322,40 @@ if (!string.IsNullOrWhiteSpace(rabbitHost))
 }
 
 // ========== HEALTH CHECKS ==========
-// "self" health check is already registered by ServiceDefaults — don't duplicate it
-if (!string.IsNullOrWhiteSpace(redisConn))
 {
-    builder.Services.AddHealthChecks()
-        .AddRedis(redisConn, name: "redis", tags: new[] { "ready", "cache" });
-}
-if (!string.IsNullOrWhiteSpace(rabbitHost))
-{
-    builder.Services.AddHealthChecks()
-        .AddRabbitMQ($"amqp://{rabbitHost}", name: "rabbitmq", tags: new[] { "ready", "messaging" });
+    var hcBuilder = builder.Services.AddHealthChecks();
+    var registeredNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    if (!string.IsNullOrWhiteSpace(redisConn) && registeredNames.Add("redis"))
+    {
+        hcBuilder.AddRedis(redisConn, name: "redis", tags: new[] { "ready", "cache" });
+    }
+    if (!string.IsNullOrWhiteSpace(rabbitHost) && registeredNames.Add("rabbitmq"))
+    {
+        hcBuilder.AddRabbitMQ($"amqp://{rabbitHost}", name: "rabbitmq", tags: new[] { "ready", "messaging" });
+    }
+
+    var dbConnections = new (string Name, string EnvKey)[]
+    {
+        ("identity", "IDENTITY_DB_CONNECTION"),
+        ("product", "PRODUCT_DB_CONNECTION"),
+        ("order", "ORDER_DB_CONNECTION"),
+        ("payment", "PAYMENT_DB_CONNECTION"),
+        ("vendor", "VENDOR_DB_CONNECTION"),
+        ("inventory", "INVENTORY_DB_CONNECTION"),
+        ("notification", "NOTIFICATION_DB_CONNECTION"),
+        ("cms", "CMS_DB_CONNECTION"),
+        ("analytics", "ANALYTICS_DB_CONNECTION"),
+        ("ai", "AI_DB_CONNECTION"),
+    };
+    foreach (var (name, envKey) in dbConnections)
+    {
+        var connStr = Environment.GetEnvironmentVariable(envKey);
+        if (!string.IsNullOrWhiteSpace(connStr) && registeredNames.Add(name))
+        {
+            hcBuilder.AddMySql(connStr, name: $"mysql-{name}", tags: new[] { "ready", "database" });
+        }
+    }
 }
 
 // ========== BUILD ==========

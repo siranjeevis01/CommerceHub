@@ -68,14 +68,11 @@ if (!string.IsNullOrEmpty(jwtKey))
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        var origins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS") ?? "http://localhost:4200").Split(',');
-        policy.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-    });
-});
+var allowedOrigins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")
+    ?? "http://localhost:4200,http://localhost:8100,http://localhost:3000")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries);
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 builder.Services.AddApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);

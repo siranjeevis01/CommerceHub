@@ -7,6 +7,7 @@ ARG BUILD_CONFIGURATION=Release
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_NOLOGO=1
 ENV MSBuildEnableWorkloadCompiler=false
+ENV DOTNET_ROLL_FORWARD=LatestMajor
 WORKDIR /src
 
 # Shared libraries
@@ -79,5 +80,9 @@ RUN dotnet publish "CommerceHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 
 FROM base AS final
 WORKDIR /app
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+ENV DOTNET_gcServer=0
+ENV DOTNET_GCHeapHardLimit=384000000
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "CommerceHub.Api.dll"]

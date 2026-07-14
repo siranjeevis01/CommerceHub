@@ -27,6 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   newArrivals$!: Observable<Product[]>;
   categories$!: Observable<Category[]>;
   isLoading = true;
+  newsletterEmail = '';
+  newsletterSubmitted = false;
 
   carouselSlides: CarouselSlide[] = [
     { image: 'https://placehold.co/1200x400/4f46e5/ffffff?text=Summer+Sale', title: 'Summer Sale', subtitle: 'Up to 50% off on selected items', link: '/products' },
@@ -59,6 +61,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       next: () => this.toastr.success(`${product.name} added to cart`),
       error: () => this.toastr.error('Failed to add item to cart'),
     });
+  }
+
+  subscribeNewsletter(): void {
+    if (!this.newsletterEmail || !this.newsletterEmail.trim()) {
+      return;
+    }
+    console.log('Newsletter subscription:', this.newsletterEmail);
+    this.newsletterSubmitted = true;
   }
 
   ngOnDestroy(): void {

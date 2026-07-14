@@ -45,6 +45,7 @@ Thumbs.db
 node_modules/
 frontend/node_modules/
 frontend/.angular/
+frontend/dist/
 
 # Temp files
 *.tmp

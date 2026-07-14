@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@shared/guards/auth.guard';
 import { RoleGuard } from '@shared/guards/role.guard';
 import { HomeComponent } from './features/home/home.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -32,7 +33,7 @@ const routes: Routes = [
     loadChildren: () => import('storefront/Module').then(m => m.StorefrontModule)
   },
   { path: 'cart', redirectTo: '/storefront/cart', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home' }
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

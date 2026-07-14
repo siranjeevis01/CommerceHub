@@ -73,6 +73,7 @@
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/CommerceHub.Shared.Kernel/CommerceHub.Shared.Kernel.csproj" />
     <Project Path="src/Shared/CommerceHub.Shared.Messaging/CommerceHub.Shared.Messaging.csproj" />
+    <Project Path="src/Shared/CommerceHub.Shared.Contracts/CommerceHub.Shared.Contracts.csproj" />
     <Project Path="src/Shared/CommerceHub.Shared.Testing/CommerceHub.Shared.Testing.csproj" />
     <Project Path="src/Shared/CommerceHub.ServiceDefaults/CommerceHub.ServiceDefaults.csproj" />
   </Folder>

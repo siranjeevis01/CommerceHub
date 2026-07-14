@@ -11,6 +11,7 @@ import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { NotificationDropdownComponent } from './core/notification-dropdown/notification-dropdown.component';
 import { HomeComponent } from './features/home/home.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 import { SharedModule } from './shared/shared.module';
 import { JwtInterceptor, ErrorInterceptor } from '@shared/interceptors';
 
@@ -20,7 +21,8 @@ import { JwtInterceptor, ErrorInterceptor } from '@shared/interceptors';
     HeaderComponent,
     FooterComponent,
     NotificationDropdownComponent,
-    HomeComponent
+    HomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
