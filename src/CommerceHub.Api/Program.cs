@@ -181,6 +181,7 @@ builder.Services.AddOutputCache(options =>
 // ========== DYNAMIC CONTROLLER DISCOVERY ==========
 var apiAssemblies = new[]
 {
+    typeof(Program).Assembly,
     typeof(CommerceHub.Identity.Api.Controllers.AuthController).Assembly,
     typeof(CommerceHub.Product.Api.Controllers.ProductController).Assembly,
     typeof(CommerceHub.Order.Api.Controllers.OrderController).Assembly,
