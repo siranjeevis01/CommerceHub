@@ -4,6 +4,9 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV DOTNET_NOLOGO=1
+ENV MSBuildEnableWorkloadCompiler=false
 WORKDIR /src
 
 # Shared libraries
@@ -72,7 +75,7 @@ RUN dotnet restore "src/CommerceHub.Api/CommerceHub.Api.csproj"
 
 COPY . .
 WORKDIR "/src/src/CommerceHub.Api"
-RUN dotnet publish "CommerceHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "CommerceHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:PublishTrimmed=false /p:DebugType=None /p:DebugSymbols=false --no-restore
 
 FROM base AS final
 WORKDIR /app
