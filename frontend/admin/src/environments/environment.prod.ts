@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://commercehub-api-5xg3.onrender.com',
   appName: 'CommerceHub Admin',
 };
