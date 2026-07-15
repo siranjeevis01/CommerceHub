@@ -1,31 +1,22 @@
-const { ModuleFederationPlugin } = require('webpack').container;
-const path = require('path');
+const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
 const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || (!process.argv.some(a => a.includes('serve')));
 
-module.exports = {
-  output: {
-    publicPath: 'auto',
-    uniqueName: 'shell',
+module.exports = withModuleFederationPlugin({
+  remotes: isProd ? {
+    admin: 'admin@/admin/remoteEntry.js',
+    vendor: 'vendor@/vendor/remoteEntry.js',
+    storefront: 'storefront@/storefront/remoteEntry.js',
+  } : {
+    admin: 'admin@http://localhost:4201/remoteEntry.js',
+    vendor: 'vendor@http://localhost:4202/remoteEntry.js',
+    storefront: 'storefront@http://localhost:4203/remoteEntry.js',
   },
-  optimization: {
-    runtimeChunk: false,
-  },
-  plugins: [
-    new ModuleFederationPlugin({
-      name: 'shell',
-      remotes: {
-        admin: `admin@${isProd ? '/admin/remoteEntry.js' : 'http://localhost:4201/remoteEntry.js'}`,
-        vendor: `vendor@${isProd ? '/vendor/remoteEntry.js' : 'http://localhost:4202/remoteEntry.js'}`,
-        storefront: `storefront@${isProd ? '/storefront/remoteEntry.js' : 'http://localhost:4203/remoteEntry.js'}`,
-      },
-      shared: {
-        '@angular/core': { singleton: true },
-        '@angular/common': { singleton: true },
-        '@angular/router': { singleton: true },
-        '@angular/forms': { singleton: true },
-        'rxjs': { singleton: true },
-      },
+  shared: {
+    ...shareAll({
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto',
     }),
-  ],
-};
+  },
+});
