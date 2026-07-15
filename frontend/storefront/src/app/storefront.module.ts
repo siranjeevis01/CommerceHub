@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { ToastrModule } from 'ngx-toastr';
 
 import { StorefrontRoutingModule } from './storefront-routing.module';
 
@@ -58,16 +56,8 @@ import { AiChatComponent } from './shared/components/ai-chat/ai-chat.component';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    HttpClientModule,
     StorefrontRoutingModule,
-    ToastrModule.forRoot({
-      timeOut: 3000,
-      positionClass: 'toast-top-right',
-      preventDuplicates: true,
-      closeButton: true,
-      progressBar: true,
-    }),
   ],
-  exports: [StorefrontRoutingModule, AppComponent],
+  exports: [StorefrontRoutingModule],
 })
 export class StorefrontModule {}

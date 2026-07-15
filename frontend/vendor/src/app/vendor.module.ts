@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { ToastrModule } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { VendorRoutingModule } from './vendor-routing.module';
@@ -59,15 +57,9 @@ import { LoadingOverlayComponent } from './shared/loading-overlay/loading-overla
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    HttpClientModule,
     VendorRoutingModule,
     NgxPaginationModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-top-right',
-      preventDuplicates: true,
-      timeOut: 3000,
-    }),
   ],
-  exports: [VendorRoutingModule, AppComponent],
+  exports: [VendorRoutingModule],
 })
 export class VendorModule {}
