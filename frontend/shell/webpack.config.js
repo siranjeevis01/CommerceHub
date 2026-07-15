@@ -1,4 +1,4 @@
-const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+const { share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
 const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || (!process.argv.some(a => a.includes('serve')));
 
@@ -12,11 +12,17 @@ module.exports = withModuleFederationPlugin({
     vendor: 'http://localhost:4202/remoteEntry.js',
     storefront: 'http://localhost:4203/remoteEntry.js',
   },
-  shared: {
-    ...shareAll({
-      singleton: true,
-      strictVersion: true,
-      requiredVersion: 'auto',
-    }),
-  },
+  shared: share({
+    '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/forms': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/platform-browser-dynamic': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/animations': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/animations/browser': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    'rxjs': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    'rxjs/operators': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+  }),
 });
