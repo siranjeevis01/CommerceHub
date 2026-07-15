@@ -74,7 +74,7 @@ COPY ["backend/src/Modules/Ai/Infrastructure/CommerceHub.Modules.Ai.Infrastructu
 
 RUN dotnet restore "backend/src/Api/CommerceHub.Api.csproj"
 
-COPY backend/ .
+COPY backend backend/
 WORKDIR "/src/backend/src/Api"
 RUN dotnet publish "CommerceHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
