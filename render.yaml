@@ -2,7 +2,7 @@ services:
   - type: web
     name: commercehub-api
     runtime: docker
-    dockerfilePath: src/CommerceHub.Api/Dockerfile
+    dockerfilePath: Dockerfile
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
@@ -49,6 +49,8 @@ services:
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
         sync: false
       - key: RAZORPAY_KEY_ID
         sync: false

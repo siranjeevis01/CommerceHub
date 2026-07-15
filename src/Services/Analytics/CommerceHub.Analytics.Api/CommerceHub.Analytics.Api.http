@@ -1,6 +1,0 @@
-@CommerceHub.Analytics.Api_HostAddress = http://localhost:5064
-
-GET {{CommerceHub.Analytics.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

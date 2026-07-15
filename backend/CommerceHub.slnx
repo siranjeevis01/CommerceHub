@@ -1,0 +1,246 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Api/">
+    <Project Path="src/Api/CommerceHub.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/CommerceHub.BuildingBlocks.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/Contracts/">
+    <Project Path="src/BuildingBlocks/Contracts/CommerceHub.Shared.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/Messaging/">
+    <Project Path="src/BuildingBlocks/Messaging/CommerceHub.Shared.Messaging.csproj" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/Testing/">
+    <Project Path="src/BuildingBlocks/Testing/CommerceHub.Shared.Testing.csproj" />
+  </Folder>
+  <Folder Name="/src/SharedKernel/">
+    <Project Path="src/SharedKernel/CommerceHub.SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/CommerceHub.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/ServiceDefaults/">
+    <Project Path="src/ServiceDefaults/CommerceHub.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Identity/" />
+  <Folder Name="/src/Modules/Identity/Domain/">
+    <Project Path="src/Modules/Identity/Domain/CommerceHub.Modules.Identity.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/Application/">
+    <Project Path="src/Modules/Identity/Application/CommerceHub.Modules.Identity.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/Infrastructure/">
+    <Project Path="src/Modules/Identity/Infrastructure/CommerceHub.Modules.Identity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Identity/Presentation/">
+    <Project Path="src/Modules/Identity/Presentation/CommerceHub.Modules.Identity.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Product/" />
+  <Folder Name="/src/Modules/Product/Domain/">
+    <Project Path="src/Modules/Product/Domain/CommerceHub.Modules.Product.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Product/Application/">
+    <Project Path="src/Modules/Product/Application/CommerceHub.Modules.Product.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Product/Infrastructure/">
+    <Project Path="src/Modules/Product/Infrastructure/CommerceHub.Modules.Product.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Product/Presentation/">
+    <Project Path="src/Modules/Product/Presentation/CommerceHub.Modules.Product.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Order/" />
+  <Folder Name="/src/Modules/Order/Domain/">
+    <Project Path="src/Modules/Order/Domain/CommerceHub.Modules.Order.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Order/Application/">
+    <Project Path="src/Modules/Order/Application/CommerceHub.Modules.Order.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Order/Infrastructure/">
+    <Project Path="src/Modules/Order/Infrastructure/CommerceHub.Modules.Order.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Order/Presentation/">
+    <Project Path="src/Modules/Order/Presentation/CommerceHub.Modules.Order.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cart/" />
+  <Folder Name="/src/Modules/Cart/Domain/">
+    <Project Path="src/Modules/Cart/Domain/CommerceHub.Modules.Cart.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cart/Application/">
+    <Project Path="src/Modules/Cart/Application/CommerceHub.Modules.Cart.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cart/Infrastructure/">
+    <Project Path="src/Modules/Cart/Infrastructure/CommerceHub.Modules.Cart.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cart/Presentation/">
+    <Project Path="src/Modules/Cart/Presentation/CommerceHub.Modules.Cart.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Payment/" />
+  <Folder Name="/src/Modules/Payment/Domain/">
+    <Project Path="src/Modules/Payment/Domain/CommerceHub.Modules.Payment.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Payment/Application/">
+    <Project Path="src/Modules/Payment/Application/CommerceHub.Modules.Payment.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Payment/Infrastructure/">
+    <Project Path="src/Modules/Payment/Infrastructure/CommerceHub.Modules.Payment.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Payment/Presentation/">
+    <Project Path="src/Modules/Payment/Presentation/CommerceHub.Modules.Payment.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Inventory/" />
+  <Folder Name="/src/Modules/Inventory/Domain/">
+    <Project Path="src/Modules/Inventory/Domain/CommerceHub.Modules.Inventory.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Inventory/Application/">
+    <Project Path="src/Modules/Inventory/Application/CommerceHub.Modules.Inventory.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Inventory/Infrastructure/">
+    <Project Path="src/Modules/Inventory/Infrastructure/CommerceHub.Modules.Inventory.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Inventory/Presentation/">
+    <Project Path="src/Modules/Inventory/Presentation/CommerceHub.Modules.Inventory.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Vendor/" />
+  <Folder Name="/src/Modules/Vendor/Domain/">
+    <Project Path="src/Modules/Vendor/Domain/CommerceHub.Modules.Vendor.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Vendor/Application/">
+    <Project Path="src/Modules/Vendor/Application/CommerceHub.Modules.Vendor.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Vendor/Infrastructure/">
+    <Project Path="src/Modules/Vendor/Infrastructure/CommerceHub.Modules.Vendor.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Vendor/Presentation/">
+    <Project Path="src/Modules/Vendor/Presentation/CommerceHub.Modules.Vendor.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/" />
+  <Folder Name="/src/Modules/Notification/Domain/">
+    <Project Path="src/Modules/Notification/Domain/CommerceHub.Modules.Notification.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/Application/">
+    <Project Path="src/Modules/Notification/Application/CommerceHub.Modules.Notification.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/Infrastructure/">
+    <Project Path="src/Modules/Notification/Infrastructure/CommerceHub.Modules.Notification.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notification/Presentation/">
+    <Project Path="src/Modules/Notification/Presentation/CommerceHub.Modules.Notification.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cms/" />
+  <Folder Name="/src/Modules/Cms/Domain/">
+    <Project Path="src/Modules/Cms/Domain/CommerceHub.Modules.Cms.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cms/Application/">
+    <Project Path="src/Modules/Cms/Application/CommerceHub.Modules.Cms.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cms/Infrastructure/">
+    <Project Path="src/Modules/Cms/Infrastructure/CommerceHub.Modules.Cms.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Cms/Presentation/">
+    <Project Path="src/Modules/Cms/Presentation/CommerceHub.Modules.Cms.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Analytics/" />
+  <Folder Name="/src/Modules/Analytics/Domain/">
+    <Project Path="src/Modules/Analytics/Domain/CommerceHub.Modules.Analytics.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Analytics/Application/">
+    <Project Path="src/Modules/Analytics/Application/CommerceHub.Modules.Analytics.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Analytics/Infrastructure/">
+    <Project Path="src/Modules/Analytics/Infrastructure/CommerceHub.Modules.Analytics.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Analytics/Presentation/">
+    <Project Path="src/Modules/Analytics/Presentation/CommerceHub.Modules.Analytics.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Ai/" />
+  <Folder Name="/src/Modules/Ai/Domain/">
+    <Project Path="src/Modules/Ai/Domain/CommerceHub.Modules.Ai.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Ai/Application/">
+    <Project Path="src/Modules/Ai/Application/CommerceHub.Modules.Ai.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Ai/Infrastructure/">
+    <Project Path="src/Modules/Ai/Infrastructure/CommerceHub.Modules.Ai.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Ai/Presentation/">
+    <Project Path="src/Modules/Ai/Presentation/CommerceHub.Modules.Ai.Presentation.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/TestBase/">
+    <Project Path="tests/TestBase/CommerceHub.TestBase.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/" />
+  <Folder Name="/tests/UnitTests/Identity/">
+    <Project Path="tests/UnitTests/Identity/CommerceHub.Identity.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Order/">
+    <Project Path="tests/UnitTests/Order/CommerceHub.Order.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Product/">
+    <Project Path="tests/UnitTests/Product/CommerceHub.Product.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Cart/">
+    <Project Path="tests/UnitTests/Cart/CommerceHub.Cart.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Payment/">
+    <Project Path="tests/UnitTests/Payment/CommerceHub.Payment.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Inventory/">
+    <Project Path="tests/UnitTests/Inventory/CommerceHub.Inventory.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Vendor/">
+    <Project Path="tests/UnitTests/Vendor/CommerceHub.Vendor.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Notification/">
+    <Project Path="tests/UnitTests/Notification/CommerceHub.Notification.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Cms/">
+    <Project Path="tests/UnitTests/Cms/CommerceHub.Cms.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Analytics/">
+    <Project Path="tests/UnitTests/Analytics/CommerceHub.Analytics.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Ai/">
+    <Project Path="tests/UnitTests/Ai/CommerceHub.AIAgent.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/Gateway/">
+    <Project Path="tests/UnitTests/Gateway/CommerceHub.Gateway.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/" />
+  <Folder Name="/tests/IntegrationTests/Identity/">
+    <Project Path="tests/IntegrationTests/Identity/CommerceHub.Identity.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Order/">
+    <Project Path="tests/IntegrationTests/Order/CommerceHub.Order.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Product/">
+    <Project Path="tests/IntegrationTests/Product/CommerceHub.Product.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Cart/">
+    <Project Path="tests/IntegrationTests/Cart/CommerceHub.Cart.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Inventory/">
+    <Project Path="tests/IntegrationTests/Inventory/CommerceHub.Inventory.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Vendor/">
+    <Project Path="tests/IntegrationTests/Vendor/CommerceHub.Vendor.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Cms/">
+    <Project Path="tests/IntegrationTests/Cms/CommerceHub.Cms.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Analytics/">
+    <Project Path="tests/IntegrationTests/Analytics/CommerceHub.Analytics.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/IntegrationTests/Ai/">
+    <Project Path="tests/IntegrationTests/Ai/CommerceHub.AIAgent.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/ContractTests/">
+    <Project Path="tests/ContractTests/CommerceHub.ContractTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/EndToEndTests/">
+    <Project Path="tests/EndToEndTests/CommerceHub.EndToEndTests.csproj" />
+  </Folder>
+</Solution>

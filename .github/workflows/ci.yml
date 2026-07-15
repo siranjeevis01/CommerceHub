@@ -3,17 +3,95 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - "backend/**"
+      - "frontend/**"
   pull_request:
     branches: [main]
+    paths:
+      - "backend/**"
+      - "frontend/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DOTNET_VERSION: "10.0.x"
+  NODE_VERSION: "20"
 
 jobs:
-  build:
+  backend-build:
+    name: Backend Build & Test
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "10.0.x"
-      - run: dotnet restore
-      - run: dotnet build --no-restore -c Release
-      - run: dotnet test --no-build -c Release --verbosity normal
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('backend/**/*.csproj', 'backend/**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore backend/CommerceHub.slnx
+
+      - name: Build
+        run: dotnet build backend/CommerceHub.slnx --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test backend/CommerceHub.slnx --configuration Release --no-build --verbosity normal
+
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache Angular builds
+        uses: actions/cache@v4
+        with:
+          path: frontend/.angular/cache
+          key: ${{ runner.os }}-angular-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-angular-
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build all MFEs
+        working-directory: frontend
+        run: npm run build:all
+        env:
+          NODE_ENV: production
+
+      - name: Verify build outputs
+        working-directory: frontend
+        run: |
+          for mfe in shell admin vendor storefront; do
+            if [ -d "dist/$mfe" ]; then
+              echo "OK: dist/$mfe exists"
+            else
+              echo "ERROR: dist/$mfe missing"
+              exit 1
+            fi
+          done

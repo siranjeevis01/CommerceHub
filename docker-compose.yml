@@ -104,10 +104,11 @@ services:
   commercehub-api:
     build:
       context: .
-      dockerfile: src/CommerceHub.Api/Dockerfile
+      dockerfile: Dockerfile
     container_name: commercehub-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
       - IDENTITY_DB_CONNECTION=server=mysql;database=commercehub_identity;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
       - PRODUCT_DB_CONNECTION=server=mysql;database=commercehub_products;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
       - ORDER_DB_CONNECTION=server=mysql;database=commercehub_orders;user=root;password=${DB_ROOT_PASSWORD:-rootpassword}
@@ -125,6 +126,8 @@ services:
       - UPI_MERCHANT_NAME=${UPI_MERCHANT_NAME:-CommerceHub}
       - RABBITMQ_VHOST=${RABBITMQ_VHOST:-/}
       - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_PASS=${RABBITMQ_PASS:-guest}
       - REDIS_CONNECTION_STRING=redis:6379,password=${REDIS_PASSWORD:-redispass}
       - JWT_KEY=${JWT_KEY:-supersecretkeythatmustbe32byteslong}
       - JWT_ISSUER=CommerceHub
@@ -144,10 +147,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
       rabbitmq:
-        condition: service_healthy
+        condition: service_started
     networks:
       - commercehub-network
     restart: always

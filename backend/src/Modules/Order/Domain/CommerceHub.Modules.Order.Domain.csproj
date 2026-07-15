@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CommerceHub.Modules.Order.Domain</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.3.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Contracts\CommerceHub.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\CommerceHub.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>
+

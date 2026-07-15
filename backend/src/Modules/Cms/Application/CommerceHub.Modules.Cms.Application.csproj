@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.Modules.Cms.Application</RootNamespace>
+    <AssemblyName>CommerceHub.Modules.Cms.Application</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\CommerceHub.Modules.Cms.Domain.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\CommerceHub.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Contracts\CommerceHub.Shared.Contracts.csproj" />
+  </ItemGroup>
+</Project>

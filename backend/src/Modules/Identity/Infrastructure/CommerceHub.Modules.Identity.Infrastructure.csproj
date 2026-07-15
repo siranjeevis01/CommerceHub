@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CommerceHub.Modules.Identity.Infrastructure</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="MassTransit" Version="8.3.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.4.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\CommerceHub.Modules.Identity.Domain.csproj" />
+    <ProjectReference Include="..\Application\CommerceHub.Modules.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernel\CommerceHub.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>

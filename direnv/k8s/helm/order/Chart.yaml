@@ -1,6 +1,0 @@
-apiVersion: v2
-name: commercehub-order
-description: CommerceHub Order Service
-type: application
-version: 1.0.0
-appVersion: 1.0.0

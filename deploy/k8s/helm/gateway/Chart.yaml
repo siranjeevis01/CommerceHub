@@ -1,6 +1,0 @@
-apiVersion: v2
-name: gateway
-description: CommerceHub API Gateway (YARP)
-type: application
-version: 1.0.0
-appVersion: "1.0.0"

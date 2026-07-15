@@ -12,11 +12,7 @@ module.exports = withModuleFederationPlugin({
     '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     '@angular/forms': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@angular/platform-browser-dynamic': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     '@angular/animations': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@angular/animations/browser': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     'rxjs': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    'rxjs/operators': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
   }),
 });

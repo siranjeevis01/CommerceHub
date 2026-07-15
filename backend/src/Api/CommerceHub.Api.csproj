@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\CommerceHub.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\Contracts\CommerceHub.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\Messaging\CommerceHub.Shared.Messaging.csproj" />
+    <ProjectReference Include="..\SharedKernel\CommerceHub.SharedKernel.csproj" />
+    <ProjectReference Include="..\Infrastructure\CommerceHub.Infrastructure.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Modules\Identity\Infrastructure\CommerceHub.Modules.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Product\Infrastructure\CommerceHub.Modules.Product.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Order\Infrastructure\CommerceHub.Modules.Order.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Cart\Infrastructure\CommerceHub.Modules.Cart.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Payment\Infrastructure\CommerceHub.Modules.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Vendor\Infrastructure\CommerceHub.Modules.Vendor.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Inventory\Infrastructure\CommerceHub.Modules.Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Notification\Infrastructure\CommerceHub.Modules.Notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Cms\Infrastructure\CommerceHub.Modules.Cms.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Analytics\Infrastructure\CommerceHub.Modules.Analytics.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Ai\Infrastructure\CommerceHub.Modules.Ai.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CommerceHub.Modules.Cart.Presentation</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="MassTransit" Version="8.3.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.3" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Application\CommerceHub.Modules.Cart.Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Cart.Infrastructure.csproj" />
+    <ProjectReference Include="..\Domain\CommerceHub.Modules.Cart.Domain.csproj" />
+    <ProjectReference Include="..\..\..\ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Messaging\CommerceHub.Shared.Messaging.csproj" />
+  </ItemGroup>
+</Project>
+
