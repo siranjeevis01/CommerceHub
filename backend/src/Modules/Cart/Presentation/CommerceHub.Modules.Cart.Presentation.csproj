@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -16,6 +16,9 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Application\CommerceHub.Modules.Cart.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Cart.Infrastructure.csproj" />
     <ProjectReference Include="..\Domain\CommerceHub.Modules.Cart.Domain.csproj" />
@@ -23,4 +26,3 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Messaging\CommerceHub.Shared.Messaging.csproj" />
   </ItemGroup>
 </Project>
-

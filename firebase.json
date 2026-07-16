@@ -1,16 +1,21 @@
 {
   "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs20"
+    "rules": "firestore.rules"
   },
   "hosting": {
-    "public": "frontend/dist/storefront",
+    "public": "frontend/dist/shell",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
+      { "source": "/admin/remoteEntry.js", "destination": "/admin/remoteEntry.js" },
+      { "source": "/vendor/remoteEntry.js", "destination": "/vendor/remoteEntry.js" },
+      { "source": "/storefront/remoteEntry.js", "destination": "/storefront/remoteEntry.js" },
+      { "source": "/admin/**", "destination": "/index.html" },
+      { "source": "/vendor/**", "destination": "/index.html" },
+      { "source": "/storefront/**", "destination": "/index.html" },
+      { "source": "/auth/**", "destination": "/index.html" },
+      { "source": "/profile/**", "destination": "/index.html" },
+      { "source": "/cart", "destination": "/index.html" },
+      { "source": "/home", "destination": "/index.html" },
       { "source": "**", "destination": "/index.html" }
     ],
     "headers": [
@@ -25,21 +30,13 @@
         "headers": [
           { "key": "X-Content-Type-Options", "value": "nosniff" },
           { "key": "X-Frame-Options", "value": "DENY" },
-          { "key": "X-XSS-Protection", "value": "1; mode=block" }
+          { "key": "X-XSS-Protection", "value": "1; mode=block" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
         ]
       }
     ]
   },
   "storage": {
     "rules": "storage.rules"
-  },
-  "emulators": {
-    "auth": { "port": 9099 },
-    "functions": { "port": 5001 },
-    "firestore": { "port": 8080 },
-    "hosting": { "port": 5000 },
-    "pubsub": { "port": 8085 },
-    "storage": { "port": 9199 },
-    "ui": { "enabled": true, "port": 4000 }
   }
 }

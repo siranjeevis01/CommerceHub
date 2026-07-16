@@ -2221,6 +2221,7 @@
           "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
           "MediatR": "[12.4.1, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.7, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.7, )",
           "Serilog.AspNetCore": "[9.0.0, )",
           "Swashbuckle.AspNetCore": "[7.2.0, )",
           "prometheus-net.AspNetCore": "[8.2.1, )"

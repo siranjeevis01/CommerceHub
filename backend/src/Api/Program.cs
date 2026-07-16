@@ -19,6 +19,18 @@ using CommerceHub.Modules.Cms.Infrastructure;
 using CommerceHub.Modules.Analytics.Infrastructure;
 using CommerceHub.Modules.Ai.Infrastructure;
 using CommerceHub.Shared.Messaging.Extensions;
+using CommerceHub.Infrastructure.Persistence;
+using CommerceHub.Modules.Identity.Infrastructure.Data;
+using CommerceHub.Modules.Product.Infrastructure.Data;
+using CommerceHub.Modules.Payment.Infrastructure.Data;
+using CommerceHub.Modules.Vendor.Infrastructure.Data;
+using CommerceHub.Modules.Inventory.Infrastructure.Data;
+using CommerceHub.Modules.Notification.Infrastructure.Persistence;
+using CommerceHub.Modules.Cms.Infrastructure.Data;
+using CommerceHub.Modules.Analytics.Infrastructure.Data;
+using CommerceHub.Modules.Ai.Infrastructure.Data;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.RateLimiting;
@@ -47,7 +59,34 @@ builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(Rab
 builder.Services.Configure<SeqOptions>(builder.Configuration.GetSection(SeqOptions.SectionName));
 builder.Services.Configure<OtlpOptions>(builder.Configuration.GetSection(OtlpOptions.SectionName));
 builder.Services.Configure<LoggingOptions>(builder.Configuration.GetSection(LoggingOptions.SectionName));
-builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
+builder.Services.Configure<SmtpOptions>(options =>
+{
+    var section = builder.Configuration.GetSection(SmtpOptions.SectionName);
+    var server = section["Server"];
+    if (string.IsNullOrEmpty(server) || server.StartsWith("${"))
+        server = Environment.GetEnvironmentVariable("SMTP_HOST");
+    if (!string.IsNullOrEmpty(server)) options.Server = server;
+
+    var portStr = section["Port"];
+    if (string.IsNullOrEmpty(portStr) || portStr.StartsWith("${"))
+        portStr = Environment.GetEnvironmentVariable("SMTP_PORT");
+    if (int.TryParse(portStr, out var port)) options.Port = port;
+
+    var email = section["SenderEmail"];
+    if (string.IsNullOrEmpty(email) || email.StartsWith("${"))
+        email = Environment.GetEnvironmentVariable("SMTP_USER") ?? Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL");
+    if (!string.IsNullOrEmpty(email)) options.SenderEmail = email;
+
+    var pass = section["SenderPassword"];
+    if (string.IsNullOrEmpty(pass) || pass.StartsWith("${"))
+        pass = Environment.GetEnvironmentVariable("SMTP_PASS");
+    if (!string.IsNullOrEmpty(pass)) options.SenderPassword = pass;
+
+    var sslStr = section["EnableSsl"];
+    if (string.IsNullOrEmpty(sslStr) || sslStr.StartsWith("${"))
+        sslStr = Environment.GetEnvironmentVariable("Smtp__EnableSsl");
+    if (bool.TryParse(sslStr, out var ssl)) options.EnableSsl = ssl;
+});
 builder.Services.Configure<StripeOptions>(builder.Configuration.GetSection(StripeOptions.SectionName));
 builder.Services.Configure<RazorpayOptions>(builder.Configuration.GetSection(RazorpayOptions.SectionName));
 builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection(TwilioOptions.SectionName));
@@ -253,6 +292,18 @@ builder.Services.AddAnalyticsInfrastructure(builder.Configuration);
 CommerceHub.Modules.Ai.Application.DependencyInjection.AddApplication(builder.Services);
 builder.Services.AddAIAgentInfrastructure(builder.Configuration);
 
+// ========== DB INITIALIZERS ==========
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<IdentityDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<ProductDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<OrderDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<PaymentDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<VendorDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<InventoryDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<NotificationDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<CmsDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<AnalyticsDbContext>>();
+builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<AIAgentDbContext>>();
+
 // ========== MASSTRANSIT / RABBITMQ ==========
 var rabbitMqHost = builder.Configuration.GetSection("RabbitMQ")["Host"]
     ?? Environment.GetEnvironmentVariable("RABBITMQ_HOST");
@@ -262,10 +313,19 @@ if (!string.IsNullOrWhiteSpace(rabbitMqHost))
         ?? Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest";
     var rabbitMqPass = builder.Configuration.GetSection("RabbitMQ")["Password"]
         ?? Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest";
-    var rabbitMqVhost = builder.Configuration.GetSection("RabbitMQ")["VirtualHost"] ?? "/";
+    var rabbitMqVhost = builder.Configuration.GetSection("RabbitMQ")["VirtualHost"]
+        ?? Environment.GetEnvironmentVariable("RABBITMQ_VHOST") ?? "/";
     var rabbitConnectionString = $"amqp://{rabbitMqUser}:{rabbitMqPass}@{rabbitMqHost}{rabbitMqVhost}";
 
-    builder.Services.AddServiceBus<OrderDbContext>("order", rabbitConnectionString);
+    builder.Services.AddServiceBus<OrderDbContext>("order", rabbitConnectionString, consumers =>
+    {
+        consumers.AddSagaStateMachine<CommerceHub.Modules.Order.Domain.Sagas.OrderStateMachine, CommerceHub.Modules.Order.Domain.Sagas.OrderState>()
+            .InMemoryRepository();
+        consumers.AddConsumersFromAssemblyContaining<CommerceHub.Modules.Notification.Presentation.Consumers.OrderEventConsumer>();
+        consumers.AddConsumersFromAssemblyContaining<CommerceHub.Modules.Notification.Application.Consumers.SendEmailNotificationConsumer>();
+        consumers.AddConsumersFromAssemblyContaining<CommerceHub.Modules.Payment.Presentation.Consumers.ProcessPaymentConsumer>();
+        consumers.AddConsumersFromAssemblyContaining<CommerceHub.Modules.Analytics.Application.Consumers.AnalyticsEventConsumer>();
+    });
     Log.Information("MassTransit configured with RabbitMQ at {Host}", rabbitMqHost);
 }
 else
@@ -277,6 +337,72 @@ else
 builder.ConfigureHangfire("CommerceHub");
 
 var app = builder.Build();
+
+// ========== DATABASE INITIALIZATION ==========
+{
+    using var scope = app.Services.CreateScope();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    var dbInitializers = scope.ServiceProvider.GetServices<IDbInitializer>();
+    foreach (var dbInitializer in dbInitializers)
+    {
+        try
+        {
+            await dbInitializer.InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "{Initializer} failed - will retry on next request", dbInitializer.GetType().Name);
+        }
+    }
+
+    if (builder.Configuration.GetValue<bool>("Seed:Enabled", true))
+    {
+        try
+        {
+            var identityCtx = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+            if (!await identityCtx.Users.AnyAsync())
+            {
+                var seedOpts = builder.Configuration.GetSection(SeedOptions.SectionName).Get<SeedOptions>() ?? new SeedOptions();
+                var roles = new[] { "Admin", "Vendor", "Customer", "Support" };
+                var roleEntities = roles.Select(r => new CommerceHub.Modules.Identity.Domain.Entities.Role
+                {
+                    Name = r,
+                    Description = $"{r} role",
+                    CreatedAt = DateTime.UtcNow
+                }).ToList();
+                identityCtx.Roles.AddRange(roleEntities);
+                await identityCtx.SaveChangesAsync();
+
+                var adminUser = new CommerceHub.Modules.Identity.Domain.Entities.User
+                {
+                    Email = seedOpts.AdminEmail,
+                    Username = "admin",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedOpts.AdminPassword),
+                    FirstName = "Admin",
+                    LastName = "User",
+                    UserType = "Admin",
+                    EmailConfirmed = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+                identityCtx.Users.Add(adminUser);
+                await identityCtx.SaveChangesAsync();
+
+                identityCtx.UserRoles.Add(new CommerceHub.Modules.Identity.Domain.Entities.UserRole
+                {
+                    UserId = adminUser.Id,
+                    RoleId = roleEntities.First(r => r.Name == "Admin").Id
+                });
+                await identityCtx.SaveChangesAsync();
+                logger.LogInformation("Identity seeded: admin user created ({Email})", seedOpts.AdminEmail);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Identity seeding failed");
+        }
+    }
+}
 
 // ========== MIDDLEWARE PIPELINE ==========
 app.UseGlobalExceptionHandler();

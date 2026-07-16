@@ -72,6 +72,19 @@ COPY ["backend/src/Modules/Ai/Domain/CommerceHub.Modules.Ai.Domain.csproj", "bac
 COPY ["backend/src/Modules/Ai/Application/CommerceHub.Modules.Ai.Application.csproj", "backend/src/Modules/Ai/Application/"]
 COPY ["backend/src/Modules/Ai/Infrastructure/CommerceHub.Modules.Ai.Infrastructure.csproj", "backend/src/Modules/Ai/Infrastructure/"]
 
+# Presentation projects (now class libraries)
+COPY ["backend/src/Modules/Identity/Presentation/CommerceHub.Modules.Identity.Presentation.csproj", "backend/src/Modules/Identity/Presentation/"]
+COPY ["backend/src/Modules/Product/Presentation/CommerceHub.Modules.Product.Presentation.csproj", "backend/src/Modules/Product/Presentation/"]
+COPY ["backend/src/Modules/Order/Presentation/CommerceHub.Modules.Order.Presentation.csproj", "backend/src/Modules/Order/Presentation/"]
+COPY ["backend/src/Modules/Cart/Presentation/CommerceHub.Modules.Cart.Presentation.csproj", "backend/src/Modules/Cart/Presentation/"]
+COPY ["backend/src/Modules/Payment/Presentation/CommerceHub.Modules.Payment.Presentation.csproj", "backend/src/Modules/Payment/Presentation/"]
+COPY ["backend/src/Modules/Vendor/Presentation/CommerceHub.Modules.Vendor.Presentation.csproj", "backend/src/Modules/Vendor/Presentation/"]
+COPY ["backend/src/Modules/Inventory/Presentation/CommerceHub.Modules.Inventory.Presentation.csproj", "backend/src/Modules/Inventory/Presentation/"]
+COPY ["backend/src/Modules/Notification/Presentation/CommerceHub.Modules.Notification.Presentation.csproj", "backend/src/Modules/Notification/Presentation/"]
+COPY ["backend/src/Modules/Cms/Presentation/CommerceHub.Modules.Cms.Presentation.csproj", "backend/src/Modules/Cms/Presentation/"]
+COPY ["backend/src/Modules/Analytics/Presentation/CommerceHub.Modules.Analytics.Presentation.csproj", "backend/src/Modules/Analytics/Presentation/"]
+COPY ["backend/src/Modules/Ai/Presentation/CommerceHub.Modules.Ai.Presentation.csproj", "backend/src/Modules/Ai/Presentation/"]
+
 RUN dotnet restore "backend/src/Api/CommerceHub.Api.csproj"
 
 COPY backend backend/

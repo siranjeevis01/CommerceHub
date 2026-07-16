@@ -14,8 +14,12 @@
     <ProjectReference Include="..\Modules\Vendor\Infrastructure\CommerceHub.Modules.Vendor.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Inventory\Infrastructure\CommerceHub.Modules.Inventory.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Notification\Infrastructure\CommerceHub.Modules.Notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Notification\Presentation\CommerceHub.Modules.Notification.Presentation.csproj" />
+    <ProjectReference Include="..\Modules\Payment\Infrastructure\CommerceHub.Modules.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Payment\Presentation\CommerceHub.Modules.Payment.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Cms\Infrastructure\CommerceHub.Modules.Cms.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Analytics\Infrastructure\CommerceHub.Modules.Analytics.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Analytics\Presentation\CommerceHub.Modules.Analytics.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Ai\Infrastructure\CommerceHub.Modules.Ai.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>

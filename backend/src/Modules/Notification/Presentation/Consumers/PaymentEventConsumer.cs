@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using CommerceHub.Modules.Notification.Application.Common.Interfaces;
 using CommerceHub.Modules.Notification.Infrastructure.Hubs;
 using CommerceHub.Shared.Contracts.Events;

@@ -2,6 +2,7 @@
 using CommerceHub.Shared.Contracts.Events;
 using MassTransit;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CommerceHub.Modules.Payment.Presentation.Consumers;
 

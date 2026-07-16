@@ -1,71 +1,105 @@
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using CommerceHub.Modules.Product.Application.Common.Interfaces;
+using CommerceHub.Modules.Product.Infrastructure.Data;
 using ProductEntity = CommerceHub.Modules.Product.Domain.Entities.Product;
 
 namespace CommerceHub.Modules.Product.Infrastructure.Services;
 
 public class ProductSearchService : IProductSearchService
 {
-    private readonly ElasticsearchClient _client;
+    private readonly ProductDbContext _dbContext;
+    private readonly Meilisearch.MeilisearchClient? _client;
+    private readonly ILogger<ProductSearchService> _logger;
 
-    public ProductSearchService(ElasticsearchClient client)
+    public ProductSearchService(ProductDbContext dbContext, ILogger<ProductSearchService> logger, Meilisearch.MeilisearchClient? client = null)
     {
+        _dbContext = dbContext;
+        _logger = logger;
         _client = client;
     }
 
     public async Task IndexProductAsync(ProductEntity product, CancellationToken cancellationToken = default)
     {
-        var doc = new ProductIndexDocument
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Slug = product.Slug,
-            SKU = product.SKU,
-            Price = product.Price,
-            CategoryId = product.CategoryId,
-            VendorId = product.VendorId,
-            BrandId = product.BrandId,
-            Description = product.ShortDescription
-        };
+        if (_client is null) return;
 
-        await _client.IndexAsync(doc, idx => idx
-            .Index("products")
-            .Id(product.Id), cancellationToken);
+        try
+        {
+            var doc = new ProductIndexDocument
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Slug = product.Slug,
+                SKU = product.SKU,
+                Price = product.Price,
+                CategoryId = product.CategoryId,
+                VendorId = product.VendorId,
+                BrandId = product.BrandId,
+                Description = product.ShortDescription
+            };
+
+            var index = _client.Index("products");
+            await index.AddDocumentsAsync(new[] { doc });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Meilisearch indexing failed for product {ProductId} - search index may be stale", product.Id);
+        }
     }
 
     public async Task RemoveProductIndexAsync(int productId, CancellationToken cancellationToken = default)
     {
-        await _client.DeleteAsync<ProductIndexDocument>(productId, d => d
-            .Index("products"), cancellationToken);
+        if (_client is null) return;
+
+        try
+        {
+            var index = _client.Index("products");
+            await index.DeleteOneDocumentAsync(productId.ToString());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Meilisearch index removal failed for product {ProductId} - search index may be stale", productId);
+        }
     }
 
     public async Task<IReadOnlyList<int>> SearchAsync(string query, int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var from = (page - 1) * pageSize;
+        if (_client is null)
+            return await SearchWithMySqlAsync(query, page, pageSize, cancellationToken);
 
-        var response = await _client.SearchAsync<ProductIndexDocument>(s => s
-            .Index("products")
-            .From(from)
-            .Size(pageSize)
-            .Query(q => q
-                .Bool(b => b
-                    .Should(
-                        new Action<QueryDescriptor<ProductIndexDocument>>[]
-                        {
-                            ms => ms.Match(m => m.Field(p => p.Name).Query(query).Boost(2)),
-                            ms => ms.Match(m => m.Field(p => p.SKU).Query(query)),
-                            ms => ms.Match(m => m.Field(p => p.Description).Query(query))
-                        }
-                    )
-                    .MinimumShouldMatch(1)
-                )
-            ), cancellationToken);
+        try
+        {
+            var index = _client.Index("products");
+            var results = await index.SearchAsync<ProductIndexDocument>(query, new Meilisearch.SearchQuery
+            {
+                Limit = pageSize,
+                Offset = (page - 1) * pageSize
+            });
 
-        if (!response.IsValidResponse)
-            return Array.Empty<int>();
+            return results.Hits.Select(h => h.Id).ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Meilisearch query failed, falling back to MySQL search");
+            return await SearchWithMySqlAsync(query, page, pageSize, cancellationToken);
+        }
+    }
 
-        return response.Hits.Select(h => int.Parse(h.Id!)).ToList();
+    private async Task<IReadOnlyList<int>> SearchWithMySqlAsync(string query, int page, int pageSize, CancellationToken cancellationToken)
+    {
+        var lowerQuery = query.ToLower();
+        return await _dbContext.Products
+            .Where(p => !p.IsDeleted && (
+                p.Name.ToLower().Contains(lowerQuery) ||
+                p.SKU.ToLower().Contains(lowerQuery) ||
+                (p.ShortDescription != null && p.ShortDescription.ToLower().Contains(lowerQuery)) ||
+                (p.Slug != null && p.Slug.ToLower().Contains(lowerQuery))
+            ))
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => p.Id)
+            .ToListAsync(cancellationToken);
     }
 }
 

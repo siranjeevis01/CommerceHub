@@ -2163,6 +2163,7 @@
           "MediatR": "[12.4.1, )",
           "Microsoft.AspNetCore.SignalR.StackExchangeRedis": "[10.0.7, )",
           "Microsoft.Extensions.Caching.StackExchangeRedis": "[10.0.7, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.7, )",
           "Serilog.AspNetCore": "[9.0.0, )",
           "StackExchange.Redis": "[2.9.17, )",
           "Swashbuckle.AspNetCore": "[7.2.0, )",

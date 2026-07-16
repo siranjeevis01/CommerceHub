@@ -1,6 +1,7 @@
 using MassTransit;
 using CommerceHub.Modules.Notification.Application.Common.Interfaces;
 using CommerceHub.Shared.Contracts.Events;
+using Microsoft.Extensions.Logging;
 
 namespace CommerceHub.Modules.Notification.Presentation.Consumers;
 

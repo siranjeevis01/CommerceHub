@@ -96,19 +96,6 @@
           "Docker.DotNet.Enhanced": "3.126.1"
         }
       },
-      "Elastic.Clients.Elasticsearch": {
-        "type": "Transitive",
-        "resolved": "8.17.1",
-        "contentHash": "H1TI5dMB/si8GzoEy17sgjzr8frO+nURIjfgoHFg3AOGugbvPwm4FzCNLk+R++vdPOmsQ3wS0NZPH3VufP4HcQ==",
-        "dependencies": {
-          "Elastic.Transport": "0.5.7"
-        }
-      },
-      "Elastic.Transport": {
-        "type": "Transitive",
-        "resolved": "0.5.7",
-        "contentHash": "0VQhS6RauOqydF1bUs7nqpk9u8X2Sa2O7djiioD5b/jWf/cX6S7GcmlWzqvm2j1a+np1Q79B2SwEFOI2zMkcbw=="
-      },
       "Fare": {
         "type": "Transitive",
         "resolved": "2.2.1",
@@ -775,6 +762,14 @@
         "resolved": "2.0.1",
         "contentHash": "FYv95bNT4UwcNA+G/J1oX5OpRiSUxteXaUt2BJbRSdRNiIUNbggJF69wy6mnk2wYToaanpdXZdCwVylt96MpwQ=="
       },
+      "MeiliSearch": {
+        "type": "Transitive",
+        "resolved": "0.18.0",
+        "contentHash": "gejqLq8TqeZsZuc50ofZD3MRsS/+a14vjrS9LRKqDfNKWYJWQaB+PXVOaRV/pzpXsl9FQO/vc5qqaqCMedlvCA==",
+        "dependencies": {
+          "System.IdentityModel.Tokens.Jwt": "8.7.0"
+        }
+      },
       "MetadataReferenceService.Abstractions": {
         "type": "Transitive",
         "resolved": "0.0.1",
@@ -1269,11 +1264,11 @@
       },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
-        "resolved": "6.34.0",
-        "contentHash": "c0misfmFT3QxKY+a16PGlj+DtiUzoPaf26m2avyPZaLRc9vlIdLtmovfRY5MqN+y/SEoBSRXrgVaeZGPgFQQ6w==",
+        "resolved": "8.7.0",
+        "contentHash": "8dKL3A9pVqYCJIXHd4H2epQqLxSvKeNxGonR0e5g89yMchyvsM/NLuB06otx29BicUd6+LUJZgNZmvYjjPsPGg==",
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "6.34.0",
-          "Microsoft.IdentityModel.Tokens": "6.34.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "8.7.0",
+          "Microsoft.IdentityModel.Tokens": "8.7.0"
         }
       },
       "System.Linq.Dynamic.Core": {
@@ -1489,8 +1484,8 @@
           "CommerceHub.Modules.Product.Application": "[2.0.0, )",
           "CommerceHub.Modules.Product.Domain": "[2.0.0, )",
           "CommerceHub.SharedKernel": "[2.0.0, )",
-          "Elastic.Clients.Elasticsearch": "[8.17.1, )",
           "MassTransit": "[8.3.3, )",
+          "MeiliSearch": "[0.18.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
           "Microsoft.Extensions.Caching.StackExchangeRedis": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )",

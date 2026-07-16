@@ -2,15 +2,6 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
-      "Elastic.Clients.Elasticsearch": {
-        "type": "Direct",
-        "requested": "[8.17.1, )",
-        "resolved": "8.17.1",
-        "contentHash": "H1TI5dMB/si8GzoEy17sgjzr8frO+nURIjfgoHFg3AOGugbvPwm4FzCNLk+R++vdPOmsQ3wS0NZPH3VufP4HcQ==",
-        "dependencies": {
-          "Elastic.Transport": "0.5.7"
-        }
-      },
       "MassTransit": {
         "type": "Direct",
         "requested": "[8.3.3, )",
@@ -23,6 +14,15 @@
           "Microsoft.Extensions.Hosting.Abstractions": "9.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0",
           "Microsoft.Extensions.Options": "9.0.0"
+        }
+      },
+      "MeiliSearch": {
+        "type": "Direct",
+        "requested": "[0.18.0, )",
+        "resolved": "0.18.0",
+        "contentHash": "gejqLq8TqeZsZuc50ofZD3MRsS/+a14vjrS9LRKqDfNKWYJWQaB+PXVOaRV/pzpXsl9FQO/vc5qqaqCMedlvCA==",
+        "dependencies": {
+          "System.IdentityModel.Tokens.Jwt": "8.7.0"
         }
       },
       "Microsoft.EntityFrameworkCore": {
@@ -104,11 +104,6 @@
         "type": "Transitive",
         "resolved": "2.6.2",
         "contentHash": "7oWOcvnntmMKNzDLsdxAYqApt+AjpRpP2CShjMfIa3umZ42UQMvH0tl1qAliYPNYO6vTdcGMqnRrCPmsfzTI1w=="
-      },
-      "Elastic.Transport": {
-        "type": "Transitive",
-        "resolved": "0.5.7",
-        "contentHash": "0VQhS6RauOqydF1bUs7nqpk9u8X2Sa2O7djiioD5b/jWf/cX6S7GcmlWzqvm2j1a+np1Q79B2SwEFOI2zMkcbw=="
       },
       "FluentValidation": {
         "type": "Transitive",
@@ -518,6 +513,15 @@
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "fdYxcRjQqTTacKId/2IECojlDSFvp7LP5N78+0z/xH7v/Tuw5ZAxu23Y6PTCRinqyu2ePx+Gn1098NC6jM6d+A=="
+      },
+      "System.IdentityModel.Tokens.Jwt": {
+        "type": "Transitive",
+        "resolved": "8.7.0",
+        "contentHash": "8dKL3A9pVqYCJIXHd4H2epQqLxSvKeNxGonR0e5g89yMchyvsM/NLuB06otx29BicUd6+LUJZgNZmvYjjPsPGg==",
+        "dependencies": {
+          "Microsoft.IdentityModel.JsonWebTokens": "8.7.0",
+          "Microsoft.IdentityModel.Tokens": "8.7.0"
+        }
       },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",

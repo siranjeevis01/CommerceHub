@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using CommerceHub.Modules.Product.Application.Common.Interfaces;
 using CommerceHub.Modules.Product.Infrastructure.Data;
 using CommerceHub.Modules.Product.Infrastructure.Services;
-using Elastic.Clients.Elasticsearch;
 
 namespace CommerceHub.Modules.Product.Infrastructure;
 
@@ -22,12 +22,26 @@ public static class DependencyInjection
 
         services.AddScoped<IProductDbContext>(provider => provider.GetRequiredService<ProductDbContext>());
 
-        var esUrl = configuration["Elasticsearch:Url"]
-            ?? Environment.GetEnvironmentVariable("ELASTICSEARCH_URL")
-            ?? "http://localhost:9200";
-        var esSettings = new ElasticsearchClientSettings(new Uri(esUrl)).DefaultIndex("products");
-        services.AddSingleton(new ElasticsearchClient(esSettings));
-        services.AddScoped<IProductSearchService, ProductSearchService>();
+        var searchUrl = configuration["Meilisearch:Url"]
+            ?? Environment.GetEnvironmentVariable("MEILISEARCH_URL");
+        var searchApiKey = configuration["Meilisearch:ApiKey"]
+            ?? Environment.GetEnvironmentVariable("MEILISEARCH_API_KEY");
+
+        if (!string.IsNullOrWhiteSpace(searchUrl) && !searchUrl.Contains("${"))
+        {
+            var msClient = string.IsNullOrWhiteSpace(searchApiKey) || searchApiKey.Contains("${")
+                ? new Meilisearch.MeilisearchClient(searchUrl)
+                : new Meilisearch.MeilisearchClient(searchUrl, searchApiKey);
+            services.AddSingleton(msClient);
+        }
+
+        services.AddScoped<IProductSearchService>(sp =>
+        {
+            var db = sp.GetRequiredService<ProductDbContext>();
+            var logger = sp.GetRequiredService<ILogger<ProductSearchService>>();
+            var client = sp.GetService<Meilisearch.MeilisearchClient>();
+            return new ProductSearchService(db, logger, client);
+        });
 
         var redisConnectionString = configuration.GetConnectionString("Redis")
             ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION");
