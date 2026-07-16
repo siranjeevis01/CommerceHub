@@ -315,6 +315,8 @@ if (!string.IsNullOrWhiteSpace(rabbitMqHost))
         ?? Environment.GetEnvironmentVariable("RABBITMQ_PASS") ?? "guest";
     var rabbitMqVhost = builder.Configuration.GetSection("RabbitMQ")["VirtualHost"]
         ?? Environment.GetEnvironmentVariable("RABBITMQ_VHOST") ?? "/";
+    if (!rabbitMqVhost.StartsWith("/"))
+        rabbitMqVhost = "/" + rabbitMqVhost;
     var rabbitConnectionString = $"amqp://{rabbitMqUser}:{rabbitMqPass}@{rabbitMqHost}{rabbitMqVhost}";
 
     builder.Services.AddServiceBus<OrderDbContext>("order", rabbitConnectionString, consumers =>
