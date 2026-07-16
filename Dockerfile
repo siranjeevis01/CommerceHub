@@ -6,6 +6,9 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
+# Directory.Build.props provides TargetFramework, Nullable, etc.
+COPY ["backend/Directory.Build.props", "backend/"]
+
 # Shared infrastructure projects
 COPY ["backend/src/SharedKernel/CommerceHub.SharedKernel.csproj", "backend/src/SharedKernel/"]
 COPY ["backend/src/Infrastructure/CommerceHub.Infrastructure.csproj", "backend/src/Infrastructure/"]
