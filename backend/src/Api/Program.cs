@@ -156,7 +156,8 @@ var allowedOrigins = corsSection.GetSection("AllowedOrigins").Get<string[]>()
 var envOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS");
 if (!string.IsNullOrWhiteSpace(envOrigins))
 {
-    allowedOrigins = envOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    var envList = envOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    allowedOrigins = [.. allowedOrigins, .. envList];
 }
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
@@ -380,6 +381,7 @@ var app = builder.Build();
 app.UseGlobalExceptionHandler();
 app.UseResponseCompression();
 app.UseForwardedHeaders();
+app.UseApiRouteRewrites();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

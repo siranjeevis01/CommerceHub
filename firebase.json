@@ -2,22 +2,33 @@
   "hosting": {
     "public": "frontend/dist/shell",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      { "source": "/admin/remoteEntry.js", "destination": "/admin/remoteEntry.js" },
-      { "source": "/vendor/remoteEntry.js", "destination": "/vendor/remoteEntry.js" },
-      { "source": "/storefront/remoteEntry.js", "destination": "/storefront/remoteEntry.js" },
-      { "source": "/admin/**", "destination": "/index.html" },
-      { "source": "/vendor/**", "destination": "/index.html" },
-      { "source": "/storefront/**", "destination": "/index.html" },
-      { "source": "/auth/**", "destination": "/index.html" },
-      { "source": "/profile/**", "destination": "/index.html" },
-      { "source": "/cart", "destination": "/index.html" },
-      { "source": "/home", "destination": "/index.html" },
-      { "source": "**", "destination": "/index.html" }
-    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
     "headers": [
       {
-        "source": "**/*.@(css|js|json|woff2|ttf|eot|ico|svg|png|jpg|jpeg|gif|webp)",
+        "source": "**/*.js",
+        "headers": [
+          { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [
+          { "key": "Content-Type", "value": "text/css; charset=utf-8" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        "source": "**/*.@(woff2|woff|ttf|eot)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      },
+      {
+        "source": "**/*.@(json|svg|png|jpg|jpeg|gif|webp|ico)",
         "headers": [
           { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
         ]
@@ -28,9 +39,30 @@
           { "key": "X-Content-Type-Options", "value": "nosniff" },
           { "key": "X-Frame-Options", "value": "DENY" },
           { "key": "X-XSS-Protection", "value": "1; mode=block" },
-          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
         ]
       }
+    ],
+    "rewrites": [
+      { "source": "/admin/remoteEntry.js", "destination": "/admin/remoteEntry.js" },
+      { "source": "/vendor/remoteEntry.js", "destination": "/vendor/remoteEntry.js" },
+      { "source": "/storefront/remoteEntry.js", "destination": "/storefront/remoteEntry.js" },
+      { "source": "/admin/**", "destination": "/index.html" },
+      { "source": "/vendor/**", "destination": "/index.html" },
+      { "source": "/storefront/**", "destination": "/index.html" },
+      { "source": "/auth/**", "destination": "/index.html" },
+      { "source": "/profile/**", "destination": "/index.html" },
+      { "source": "/cart/**", "destination": "/index.html" },
+      { "source": "/wishlist/**", "destination": "/index.html" },
+      { "source": "/orders/**", "destination": "/index.html" },
+      { "source": "/search/**", "destination": "/index.html" },
+      { "source": "/checkout/**", "destination": "/index.html" },
+      { "source": "/home", "destination": "/index.html" },
+      { "source": "/products/**", "destination": "/index.html" },
+      { "source": "/categories/**", "destination": "/index.html" },
+      { "source": "/vendors/**", "destination": "/index.html" },
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }
