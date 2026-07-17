@@ -24,4 +24,7 @@
     <ProjectReference Include="..\Application\CommerceHub.Modules.Identity.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Identity.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

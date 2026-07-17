@@ -1599,6 +1599,7 @@
       "commercehub.modules.product.presentation": {
         "type": "Project",
         "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
           "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
           "AutoMapper": "[16.2.0, )",
           "CommerceHub.Modules.Product.Application": "[2.0.0, )",

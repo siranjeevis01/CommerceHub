@@ -28,4 +28,7 @@
     <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Notification.Infrastructure.csproj" />
     <ProjectReference Include="..\Domain\CommerceHub.Modules.Notification.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

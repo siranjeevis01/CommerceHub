@@ -28,4 +28,7 @@
     <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Cms.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

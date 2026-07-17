@@ -31,4 +31,7 @@
     <ProjectReference Include="..\Infrastructure\CommerceHub.Modules.Order.Infrastructure.csproj" />
     <ProjectReference Include="..\Domain\CommerceHub.Modules.Order.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

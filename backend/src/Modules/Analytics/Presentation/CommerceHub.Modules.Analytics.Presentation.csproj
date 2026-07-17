@@ -33,4 +33,7 @@
     <ProjectReference Include="..\..\..\ServiceDefaults\CommerceHub.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Messaging\CommerceHub.Shared.Messaging.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>
