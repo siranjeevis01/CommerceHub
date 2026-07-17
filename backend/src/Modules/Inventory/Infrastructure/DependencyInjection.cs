@@ -13,6 +13,7 @@ public static class DependencyInjection
         var connStr = configuration.GetConnectionString("Inventory")
             ?? Environment.GetEnvironmentVariable("INVENTORY_DB_CONNECTION")
             ?? throw new InvalidOperationException("Inventory database connection string missing");
+        if (!connStr.Contains("SslMode")) connStr += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         services.AddDbContext<InventoryDbContext>(options =>
             options.UseMySQL(connStr, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));
         services.AddScoped<IInventoryDbContext>(sp => sp.GetRequiredService<InventoryDbContext>());

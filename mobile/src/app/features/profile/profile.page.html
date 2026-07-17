@@ -1,0 +1,66 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="header-title">Profile</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="avatar-ring">
+      <div class="avatar">
+        <span class="initials">{{ initials }}</span>
+      </div>
+      <div class="avatar-glow"></div>
+    </div>
+    <h2 class="user-name">{{ fullName }}</h2>
+    <p class="user-email">{{ user?.email || 'guest@example.com' }}</p>
+    <span class="user-role" *ngIf="user?.roles?.length">{{ user!.roles[0] }}</span>
+  </div>
+
+  <!-- Theme Switcher -->
+  <div class="section glass-card">
+    <div class="section-header">
+      <ion-icon name="color-palette-outline"></ion-icon>
+      <h3>Theme</h3>
+    </div>
+    <div class="theme-grid">
+      <div
+        *ngFor="let theme of themes"
+        class="theme-chip"
+        [class.active]="currentTheme === theme.name"
+        (click)="selectTheme(theme.name)"
+      >
+        <ion-icon [name]="theme.icon"></ion-icon>
+        <span>{{ theme.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Items -->
+  <div class="menu-list">
+    <div
+      *ngFor="let item of menuItems"
+      class="menu-item glass-card-row"
+      (click)="navigateTo(item.route)"
+    >
+      <div class="menu-icon-wrapper" [style.background]="item.color + '18'">
+        <ion-icon [name]="item.icon" [style.color]="item.color"></ion-icon>
+      </div>
+      <span class="menu-label">{{ item.label }}</span>
+      <ion-icon name="chevron-forward" class="menu-arrow"></ion-icon>
+    </div>
+  </div>
+
+  <!-- Logout -->
+  <div class="logout-section">
+    <ion-button expand="block" class="logout-btn" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Logout
+    </ion-button>
+  </div>
+
+  <p class="version-text">v1.0.0</p>
+</ion-content>

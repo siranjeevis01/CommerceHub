@@ -1,0 +1,239 @@
+<div>
+  <ion-header class="ion-no-border">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/auth/login" text="" icon="chevron-back-outline" class="back-btn"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Sign Up</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="auth-content" [fullscreen]="true">
+    <div class="auth-container">
+      <!-- Decorative background -->
+      <div class="bg-orb bg-orb--1"></div>
+      <div class="bg-orb bg-orb--2"></div>
+      <div class="grid-overlay"></div>
+
+      <!-- Progress Bar -->
+      <div class="progress-section animate-in">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getStepProgress()"></div>
+        </div>
+        <div class="step-info">
+          <span class="step-label">Step {{ currentStep }} of {{ totalSteps }}</span>
+          <span class="step-desc" *ngIf="currentStep === 1">Personal Information</span>
+          <span class="step-desc" *ngIf="currentStep === 2">Security Details</span>
+        </div>
+      </div>
+
+      <!-- Brand -->
+      <div class="brand-section animate-in animate-delay-1">
+        <div class="logo-ring">
+          <div class="logo-icon">
+            <ion-icon name="storefront-outline" class="logo-svg"></ion-icon>
+          </div>
+        </div>
+        <h1 class="brand-title">Join CommerceHub</h1>
+        <p class="brand-subtitle">Create your account and start selling</p>
+      </div>
+
+      <!-- Register Card -->
+      <div class="glass-card animate-in animate-delay-2">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+          <!-- Step 1: Personal Info -->
+          <div class="form-step" *ngIf="currentStep === 1">
+            <!-- First Name -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['firstName'].touched && f['firstName'].invalid">
+                <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="firstName"
+                  type="text"
+                  placeholder="First name"
+                  autocomplete="given-name"
+                ></ion-input>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['firstName'].touched && f['firstName'].errors">
+                <span *ngIf="f['firstName'].errors?.['required']">First name is required</span>
+                <span *ngIf="f['firstName'].errors?.['minlength']">At least 2 characters</span>
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['lastName'].touched && f['lastName'].invalid">
+                <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="lastName"
+                  type="text"
+                  placeholder="Last name"
+                  autocomplete="family-name"
+                ></ion-input>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['lastName'].touched && f['lastName'].errors">
+                <span *ngIf="f['lastName'].errors?.['required']">Last name is required</span>
+                <span *ngIf="f['lastName'].errors?.['minlength']">At least 2 characters</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['email'].touched && f['email'].invalid">
+                <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="email"
+                  type="email"
+                  placeholder="Email address"
+                  autocomplete="email"
+                  inputmode="email"
+                ></ion-input>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['email'].touched && f['email'].errors">
+                <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                <span *ngIf="f['email'].errors?.['email']">Enter a valid email</span>
+              </div>
+            </div>
+
+            <!-- Next Button -->
+            <ion-button
+              expand="block"
+              type="button"
+              class="submit-btn"
+              (click)="nextStep()"
+            >
+              Continue
+              <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+
+          <!-- Step 2: Security -->
+          <div class="form-step" *ngIf="currentStep === 2">
+            <!-- Phone -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['phone'].touched && f['phone'].invalid">
+                <ion-icon name="call-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="phone"
+                  type="tel"
+                  placeholder="Phone number"
+                  autocomplete="tel"
+                  inputmode="tel"
+                ></ion-input>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['phone'].touched && f['phone'].errors">
+                <span *ngIf="f['phone'].errors?.['required']">Phone number is required</span>
+                <span *ngIf="f['phone'].errors?.['pattern']">Enter a valid phone number</span>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['password'].touched && f['password'].invalid">
+                <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  placeholder="Password"
+                  autocomplete="new-password"
+                ></ion-input>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  class="toggle-password"
+                  (click)="togglePassword()"
+                  tappable
+                >
+                  <ion-icon
+                    [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                    slot="icon-only"
+                  ></ion-icon>
+                </ion-button>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['password'].touched && f['password'].errors">
+                <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+                <span *ngIf="f['password'].errors?.['minlength']">Minimum 8 characters</span>
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="input-group">
+              <ion-item class="futuristic-input" [class.field-invalid]="f['confirmPassword'].touched && f['confirmPassword'].invalid">
+                <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+                <ion-input
+                  formControlName="confirmPassword"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  placeholder="Confirm password"
+                  autocomplete="new-password"
+                ></ion-input>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  class="toggle-password"
+                  (click)="toggleConfirmPassword()"
+                  tappable
+                >
+                  <ion-icon
+                    [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+                    slot="icon-only"
+                  ></ion-icon>
+                </ion-button>
+              </ion-item>
+              <div class="validation-msg" *ngIf="f['confirmPassword'].touched && f['confirmPassword'].errors">
+                <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</span>
+              </div>
+            </div>
+
+            <!-- Terms -->
+            <div class="terms-section">
+              <label class="checkbox-label">
+                <ion-checkbox formControlName="acceptTerms" class="futuristic-checkbox"></ion-checkbox>
+                <span class="terms-text">
+                  I agree to the <a class="terms-link">Terms of Service</a> and <a class="terms-link">Privacy Policy</a>
+                </span>
+              </label>
+              <div class="validation-msg" *ngIf="f['acceptTerms'].touched && f['acceptTerms'].errors">
+                <span *ngIf="f['acceptTerms'].errors?.['required']">You must accept the terms</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="step-actions">
+              <ion-button
+                expand="block"
+                fill="outline"
+                type="button"
+                class="back-step-btn"
+                (click)="previousStep()"
+              >
+                <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+                Back
+              </ion-button>
+              <ion-button
+                expand="block"
+                type="submit"
+                class="submit-btn submit-btn--create"
+                [disabled]="isSubmitting"
+                [class.btn-loading]="isSubmitting"
+              >
+                <span *ngIf="!isSubmitting">Create Account</span>
+                <span *ngIf="isSubmitting" class="btn-loader">
+                  <ion-spinner name="crescent"></ion-spinner>
+                  Creating...
+                </span>
+              </ion-button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Sign In Link -->
+      <div class="auth-footer animate-in animate-delay-3">
+        <p class="footer-text">
+          Already have an account?
+          <a class="footer-link" (click)="navigateToLogin()" tappable>Sign in</a>
+        </p>
+      </div>
+    </div>
+  </ion-content>
+</div>

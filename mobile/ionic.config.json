@@ -1,0 +1,12 @@
+{
+  "name": "CommerceHub",
+  "integrations": {
+    "android": {
+      "allowMixedCommerce": true
+    },
+    "ios": {
+      "allowsArbitraryDomains": true
+    }
+  },
+  "capacitor": {}
+}

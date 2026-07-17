@@ -9,8 +9,9 @@ public class AnalyticsDbContextFactory : IDesignTimeDbContextFactory<AnalyticsDb
     {
         var optionsBuilder = new DbContextOptionsBuilder<AnalyticsDbContext>();
         var conn = Environment.GetEnvironmentVariable("ANALYTICS_DB_CONNECTION")
-            ?? "Host=localhost;Port=5432;Database=commercehub_analytics;Username=postgres;Password=";
-        optionsBuilder.UseNpgsql(conn);
+            ?? "server=localhost;database=commercehub_analytics;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
+        optionsBuilder.UseMySQL(conn);
         return new AnalyticsDbContext(optionsBuilder.Options);
     }
 }

@@ -13,6 +13,7 @@ public static class DependencyInjection
         var connStr = configuration.GetConnectionString("Vendor")
             ?? Environment.GetEnvironmentVariable("VENDOR_DB_CONNECTION")
             ?? throw new InvalidOperationException("Vendor database connection string missing");
+        if (!connStr.Contains("SslMode")) connStr += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         services.AddDbContext<VendorDbContext>(options =>
             options.UseMySQL(connStr, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));
         services.AddScoped<IVendorDbContext>(sp => sp.GetRequiredService<VendorDbContext>());

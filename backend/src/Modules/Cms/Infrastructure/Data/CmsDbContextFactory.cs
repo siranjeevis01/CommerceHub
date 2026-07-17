@@ -10,6 +10,7 @@ public class CmsDbContextFactory : IDesignTimeDbContextFactory<CmsDbContext>
         var optionsBuilder = new DbContextOptionsBuilder<CmsDbContext>();
         var conn = Environment.GetEnvironmentVariable("CMS_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_cms;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new CmsDbContext(optionsBuilder.Options);
     }

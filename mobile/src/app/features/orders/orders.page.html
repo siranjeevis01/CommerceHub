@@ -1,0 +1,95 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="header-title">My Orders</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="loadOrders($event)">
+    <ion-refresher-content pullingIcon="chevron-down" refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Status Tabs -->
+  <div class="tabs-scroll">
+    <div class="status-tabs">
+      <button
+        *ngFor="let tab of statusTabs"
+        class="status-tab"
+        [class.active]="selectedTab === tab.key"
+        (click)="selectTab(tab.key)"
+      >
+        {{ tab.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-skeleton" *ngIf="isLoading && orders.length === 0">
+    <div class="skeleton-card" *ngFor="let i of [1, 2, 3]">
+      <div class="skeleton-line w60"></div>
+      <div class="skeleton-line w40"></div>
+      <div class="skeleton-line w80"></div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && filteredOrders.length === 0">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="receipt-outline"></ion-icon>
+    </div>
+    <h3>No orders found</h3>
+    <p *ngIf="selectedTab === 'all'">You haven't placed any orders yet</p>
+    <p *ngIf="selectedTab !== 'all'">No {{ selectedTab }} orders</p>
+  </div>
+
+  <!-- Order Cards -->
+  <div class="orders-list" *ngIf="filteredOrders.length > 0">
+    <div
+      *ngFor="let order of filteredOrders; trackBy: trackByOrderId"
+      class="order-card glass-card"
+      (click)="viewOrder(order)"
+    >
+      <div class="order-header">
+        <div class="order-number">
+          <span class="label">Order</span>
+          <span class="number">#{{ order.orderNumber }}</span>
+        </div>
+        <span
+          class="status-badge"
+          [style.background]="getStatusColor(order.status) + '20'"
+          [style.color]="getStatusColor(order.status)"
+        >
+          <ion-icon [name]="getStatusIcon(order.status)"></ion-icon>
+          {{ order.status }}
+        </span>
+      </div>
+
+      <div class="order-date">{{ order.createdAt | date:'mediumDate' }}</div>
+
+      <div class="order-items-preview">
+        <div class="item-thumbs">
+          <img
+            *ngFor="let item of order.items?.slice(0, 3)"
+            [src]="item.imageUrl"
+            [alt]="item.productName"
+            class="item-thumb"
+          />
+          <span class="more-items" *ngIf="(order.items?.length ?? 0) > 3">
+            +{{ (order.items?.length ?? 0) - 3 }}
+          </span>
+        </div>
+        <div class="order-item-names">
+          {{ getItemNames(order) }}
+          <span *ngIf="(order.items?.length ?? 0) > 2"> +{{ (order.items?.length ?? 0) - 2 }} more</span>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <span class="order-total">{{ order.totalAmount | currency }}</span>
+        <ion-icon name="chevron-forward" class="arrow"></ion-icon>
+      </div>
+    </div>
+  </div>
+</ion-content>

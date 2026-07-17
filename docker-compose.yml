@@ -9,7 +9,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./deploy/init-mysql.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/init-mysql.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - commercehub-network
     healthcheck:
@@ -70,7 +70,7 @@ services:
   commercehub-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     container_name: commercehub-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -116,6 +116,30 @@ services:
     networks:
       - commercehub-network
     restart: always
+
+  commercehub-web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: commercehub-web
+    ports:
+      - "4200:8080"
+    depends_on:
+      - commercehub-api
+    networks:
+      - commercehub-network
+
+  commercehub-mobile:
+    build:
+      context: ./mobile
+      dockerfile: Dockerfile
+    container_name: commercehub-mobile
+    ports:
+      - "8100:8080"
+    depends_on:
+      - commercehub-api
+    networks:
+      - commercehub-network
 
 networks:
   commercehub-network:

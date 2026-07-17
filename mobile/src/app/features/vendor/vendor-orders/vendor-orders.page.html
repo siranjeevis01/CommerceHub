@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="loadOrders(); $event.target.complete()">
+    <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="orders.length; else noOrders">
+    <ion-item *ngFor="let order of orders">
+      <ion-label>
+        <h2>{{ order.orderNumber }}</h2>
+        <p>{{ order.createdAt | date:'short' }}</p>
+        <p>{{ order.totalAmount | currency }}</p>
+      </ion-label>
+      <ion-badge [color]="getStatusColor(order.status)" slot="end">{{ order.status }}</ion-badge>
+    </ion-item>
+  </ion-list>
+  <ng-template #noOrders>
+    <ion-text class="ion-text-center ion-padding" color="medium">
+      <p>No orders yet</p>
+    </ion-text>
+  </ng-template>
+</ion-content>

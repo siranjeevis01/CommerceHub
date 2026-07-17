@@ -10,6 +10,7 @@ public class OrderStateDbContextFactory : IDesignTimeDbContextFactory<OrderState
         var optionsBuilder = new DbContextOptionsBuilder<OrderStateDbContext>();
         var conn = Environment.GetEnvironmentVariable("ORDER_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_order;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new OrderStateDbContext(optionsBuilder.Options);
     }

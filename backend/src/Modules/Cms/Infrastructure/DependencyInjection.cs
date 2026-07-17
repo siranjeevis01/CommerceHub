@@ -12,6 +12,7 @@ public static class DependencyInjection
         var connStr = configuration.GetConnectionString("Cms")
             ?? Environment.GetEnvironmentVariable("CMS_DB_CONNECTION")
             ?? throw new InvalidOperationException("CMS database connection string missing");
+        if (!connStr.Contains("SslMode")) connStr += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         services.AddDbContext<CmsDbContext>(options =>
             options.UseMySQL(connStr, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));
         return services;

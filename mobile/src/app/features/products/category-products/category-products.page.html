@@ -1,0 +1,142 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="category-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" text="" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ categoryName || 'Products' }}</ion-title>
+    <ion-buttons slot="end">
+      <button class="sort-toggle-btn" (click)="toggleSortOptions()">
+        <ion-icon name="funnel-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="category-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+      refreshingText="Refreshing..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Sort Bar -->
+  <div class="sort-bar">
+    <div class="sort-chips-scroll">
+      <button
+        *ngFor="let opt of sortOptions; trackBy: trackBySort"
+        class="sort-chip"
+        [class.active]="selectedSort === opt.value"
+        (click)="selectSort(opt.value)"
+      >
+        <ion-icon [name]="opt.icon"></ion-icon>
+        {{ opt.label }}
+      </button>
+    </div>
+    <div class="results-count" *ngIf="!isLoading">
+      {{ totalProducts }} products
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="products-grid" *ngIf="!isLoading">
+    <div
+      *ngFor="let product of products; trackBy: trackByProduct"
+      class="product-card"
+      (click)="navigateToProduct(product)"
+    >
+      <div class="product-image-wrap">
+        <img
+          *ngIf="product.imageUrl || product.mainImageUrl"
+          [src]="product.mainImageUrl || product.imageUrl"
+          [alt]="product.name"
+          class="product-image"
+        />
+        <div *ngIf="!product.imageUrl && !product.mainImageUrl" class="product-placeholder">
+          <ion-icon name="bag-handle-outline"></ion-icon>
+        </div>
+        <span class="discount-badge" *ngIf="getDiscountPercent(product) > 0">
+          -{{ getDiscountPercent(product) }}%
+        </span>
+        <button class="fav-btn" (click)="$event.stopPropagation()">
+          <ion-icon name="heart-outline"></ion-icon>
+        </button>
+      </div>
+      <div class="product-body">
+        <h4 class="product-name">{{ product.name }}</h4>
+        <div class="product-rating" *ngIf="product.ratings">
+          <ion-icon
+            *ngFor="let star of getRatingArray(product.ratings)"
+            [name]="star === 1 ? 'star' : 'star-outline'"
+            class="star-icon"
+          ></ion-icon>
+          <span class="rating-text">{{ product.ratings?.toFixed(1) }}</span>
+        </div>
+        <div class="product-footer">
+          <div class="pricing">
+            <span class="price">{{ formatPrice(product.price) }}</span>
+            <span class="compare" *ngIf="product.comparePrice">{{ formatPrice(product.comparePrice) }}</span>
+          </div>
+          <button class="add-cart-btn" (click)="addToCart($event, product)">
+            <ion-icon name="add-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && products.length === 0">
+    <div class="empty-state-content">
+      <div class="empty-state-icon">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+      </div>
+      <h3>No Products Found</h3>
+      <p>There are no products in this category yet.</p>
+    </div>
+  </div>
+
+  <!-- Load More -->
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" *ngIf="hasMore && !isLoading">
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Sort Panel Overlay -->
+  <div class="sort-overlay" *ngIf="showSortOptions" (click)="closeSortPanel()">
+    <div class="sort-panel" (click)="$event.stopPropagation()">
+      <div class="sort-panel-header">
+        <h4>Sort By</h4>
+        <button class="sort-close-btn" (click)="closeSortPanel()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </div>
+      <div class="sort-options-list">
+        <button
+          *ngFor="let opt of sortOptions; trackBy: trackBySort"
+          class="sort-option"
+          [class.active]="selectedSort === opt.value"
+          (click)="selectSort(opt.value)"
+        >
+          <ion-icon [name]="opt.icon"></ion-icon>
+          <span>{{ opt.label }}</span>
+          <ion-icon name="checkmark" class="sort-check" *ngIf="selectedSort === opt.value"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="skeleton-grid">
+    <div class="skeleton-product" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line wide"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line medium"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</ion-content>

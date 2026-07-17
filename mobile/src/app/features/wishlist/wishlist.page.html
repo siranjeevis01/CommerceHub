@@ -1,0 +1,70 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="header-title">Wishlist</span>
+      <span class="item-count" *ngIf="products.length">{{ products.length }} items</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="loadWishlist($event)">
+    <ion-refresher-content pullingIcon="chevron-down" refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && products.length === 0">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="heart-outline"></ion-icon>
+    </div>
+    <h3>Your wishlist is empty</h3>
+    <p>Save items you love for later</p>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-grid" *ngIf="isLoading">
+    <div class="skeleton-card" *ngFor="let i of [1, 2, 3, 4]">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-line w70"></div>
+      <div class="skeleton-line w50"></div>
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="product-grid" *ngIf="products.length > 0">
+    <div
+      *ngFor="let product of products; trackBy: trackByProductId"
+      class="product-card"
+      (click)="viewProduct(product)"
+    >
+      <div class="card-image-wrapper">
+        <img [src]="product.imageUrl" [alt]="product.name" class="card-image" />
+        <div class="discount-badge" *ngIf="getDiscountPercent(product) > 0">
+          -{{ getDiscountPercent(product) }}%
+        </div>
+        <button class="remove-btn" (click)="removeFromWishlist(product); $event.stopPropagation()">
+          <ion-icon name="heart"></ion-icon>
+        </button>
+      </div>
+      <div class="card-body">
+        <span class="card-brand" *ngIf="product.brandName">{{ product.brandName }}</span>
+        <h4 class="card-name">{{ product.name }}</h4>
+        <div class="card-pricing">
+          <span class="current-price">{{ product.price | currency }}</span>
+          <span class="compare-price" *ngIf="product.comparePrice && product.comparePrice > product.price">
+            {{ product.comparePrice | currency }}
+          </span>
+        </div>
+        <div class="card-rating" *ngIf="product.ratings > 0">
+          <ion-icon name="star"></ion-icon>
+          <span>{{ product.ratings }}</span>
+          <span class="review-count">({{ product.reviewCount }})</span>
+        </div>
+        <button class="add-to-cart-btn" (click)="addToCart(product); $event.stopPropagation()">
+          <ion-icon name="cart-outline"></ion-icon>
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</ion-content>

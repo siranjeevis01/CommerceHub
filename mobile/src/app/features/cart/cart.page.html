@@ -1,0 +1,116 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="header-title">My Cart</span>
+      <span class="item-count" *ngIf="items.length">{{ items.length }} items</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="items.length === 0">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="cart-outline"></ion-icon>
+    </div>
+    <h3>Your cart is empty</h3>
+    <p>Looks like you haven't added anything yet</p>
+    <ion-button class="cta-button" (click)="continueShopping()">
+      <ion-icon name="bag-add-outline" slot="start"></ion-icon>
+      Start Shopping
+    </ion-button>
+  </div>
+
+  <!-- Cart Items -->
+  <div class="cart-content" *ngIf="items.length > 0">
+    <div class="items-list">
+      <ion-item-sliding *ngFor="let item of items; trackBy: trackByProductId" class="cart-sliding">
+        <ion-item lines="none" class="cart-item-card">
+          <ion-thumbnail slot="start" class="item-thumbnail">
+            <img [src]="item.imageUrl" [alt]="item.name" />
+          </ion-thumbnail>
+          <ion-label class="item-info">
+            <h3 class="item-name">{{ item.name }}</h3>
+            <p class="item-price">{{ item.unitPrice | currency }}</p>
+            <div class="quantity-stepper">
+              <button class="qty-btn minus" (click)="decrementQty(item)" [disabled]="item.quantity <= 0">
+                <ion-icon name="remove"></ion-icon>
+              </button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button class="qty-btn plus" (click)="incrementQty(item)">
+                <ion-icon name="add"></ion-icon>
+              </button>
+            </div>
+          </ion-label>
+          <div class="item-total">
+            <span class="total-price">{{ item.totalPrice | currency }}</span>
+          </div>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeItem(item)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+
+    <!-- Coupon Section -->
+    <div class="coupon-section glass-card">
+      <div class="coupon-header">
+        <ion-icon name="pricetag-outline"></ion-icon>
+        <span>Have a coupon?</span>
+      </div>
+      <form [formGroup]="couponForm" (ngSubmit)="applyCoupon()" class="coupon-form">
+        <ion-input
+          formControlName="code"
+          placeholder="Enter coupon code"
+          class="coupon-input"
+          mode="md"
+        ></ion-input>
+        <ion-button
+          type="submit"
+          fill="solid"
+          class="apply-btn"
+          [disabled]="couponForm.invalid"
+        >
+          Apply
+        </ion-button>
+      </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="summary-card glass-card">
+      <h3 class="summary-title">Order Summary</h3>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>{{ subtotal | currency }}</span>
+      </div>
+      <div class="summary-row discount" *ngIf="discount > 0">
+        <span>Discount</span>
+        <span class="discount-amount">-{{ discount | currency }}</span>
+      </div>
+      <div class="summary-row shipping">
+        <span>Shipping</span>
+        <span class="free-shipping">Free</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span class="total-value">{{ total | currency }}</span>
+      </div>
+    </div>
+
+    <!-- Checkout Button -->
+    <div class="checkout-section">
+      <ion-button
+        expand="block"
+        class="checkout-btn"
+        (click)="goToCheckout()"
+      >
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        Proceed to Checkout
+        <span class="checkout-total">{{ total | currency }}</span>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

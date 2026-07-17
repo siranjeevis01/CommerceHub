@@ -1,0 +1,159 @@
+<div>
+  <ion-header class="ion-no-border">
+    <ion-toolbar>
+      <ion-title></ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="auth-content" [fullscreen]="true">
+    <div class="auth-container">
+      <!-- Decorative background elements -->
+      <div class="bg-orb bg-orb--1"></div>
+      <div class="bg-orb bg-orb--2"></div>
+      <div class="bg-orb bg-orb--3"></div>
+      <div class="grid-overlay"></div>
+
+      <!-- Logo & Branding -->
+      <div class="brand-section animate-in">
+        <div class="logo-ring">
+          <div class="logo-icon">
+            <ion-icon name="storefront-outline" class="logo-svg"></ion-icon>
+          </div>
+        </div>
+        <h1 class="brand-title">CommerceHub</h1>
+        <p class="brand-subtitle">Welcome back to your marketplace</p>
+      </div>
+
+      <!-- Login Card -->
+      <div class="glass-card animate-in animate-delay-1">
+        <div class="card-header">
+          <h2 class="card-title">Sign In</h2>
+          <p class="card-subtitle">Enter your credentials to continue</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+          <!-- Email Field -->
+          <div class="input-group">
+            <ion-item class="futuristic-input" [class.field-invalid]="f['email'].touched && f['email'].invalid">
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                formControlName="email"
+                type="email"
+                placeholder="Email address"
+                autocomplete="email"
+                inputmode="email"
+              ></ion-input>
+            </ion-item>
+            <div class="validation-msg" *ngIf="f['email'].touched && f['email'].errors">
+              <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+              <span *ngIf="f['email'].errors?.['email']">Enter a valid email</span>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="input-group">
+            <ion-item class="futuristic-input" [class.field-invalid]="f['password'].touched && f['password'].invalid">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Password"
+                autocomplete="current-password"
+              ></ion-input>
+              <ion-button
+                slot="end"
+                fill="clear"
+                class="toggle-password"
+                (click)="togglePassword()"
+                tappable
+              >
+                <ion-icon
+                  [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                  slot="icon-only"
+                ></ion-icon>
+              </ion-button>
+            </ion-item>
+            <div class="validation-msg" *ngIf="f['password'].touched && f['password'].errors">
+              <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+              <span *ngIf="f['password'].errors?.['minlength']">Minimum 6 characters</span>
+            </div>
+          </div>
+
+          <!-- Remember Me / Forgot Password Row -->
+          <div class="form-options">
+            <label class="checkbox-label">
+              <ion-checkbox formControlName="rememberMe" class="futuristic-checkbox"></ion-checkbox>
+              <span>Remember me</span>
+            </label>
+            <a class="forgot-link" (click)="navigateToForgotPassword()" tappable>
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <ion-button
+            expand="block"
+            type="submit"
+            class="submit-btn"
+            [disabled]="isSubmitting"
+            [class.btn-loading]="isSubmitting"
+          >
+            <span *ngIf="!isSubmitting">Sign In</span>
+            <span *ngIf="isSubmitting" class="btn-loader">
+              <ion-spinner name="crescent"></ion-spinner>
+              Signing in...
+            </span>
+          </ion-button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">or continue with</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-buttons">
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="social-btn social-btn--google"
+            (click)="socialLogin('google')"
+          >
+            <ion-icon name="logo-google" slot="start"></ion-icon>
+            Google
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="social-btn social-btn--apple"
+            (click)="socialLogin('apple')"
+          >
+            <ion-icon name="logo-apple" slot="start"></ion-icon>
+            Apple
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="social-btn social-btn--facebook"
+            (click)="socialLogin('facebook')"
+          >
+            <ion-icon name="logo-facebook" slot="start"></ion-icon>
+            Facebook
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Sign Up Link -->
+      <div class="auth-footer animate-in animate-delay-2">
+        <p class="footer-text">
+          Don't have an account?
+          <a class="footer-link" (click)="navigateToRegister()" tappable>Sign up</a>
+        </p>
+      </div>
+    </div>
+  </ion-content>
+</div>

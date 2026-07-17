@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>My Products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="loadProducts(); $event.target.complete()">
+    <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="products.length; else noProducts">
+    <ion-item *ngFor="let product of products" [detail]="true" button>
+      <ion-thumbnail slot="start">
+        <img [src]="product.mainImageUrl || product.imageUrl" [alt]="product.name" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.price | currency }} &middot; Stock: {{ product.stockQuantity }}</p>
+      </ion-label>
+      <ion-toggle [checked]="product.isActive" (ionChange)="toggleActive(product)" slot="end"></ion-toggle>
+    </ion-item>
+  </ion-list>
+  <ng-template #noProducts>
+    <ion-text class="ion-text-center ion-padding" color="medium">
+      <p>No products yet</p>
+    </ion-text>
+  </ng-template>
+</ion-content>

@@ -15,6 +15,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Product")
             ?? Environment.GetEnvironmentVariable("PRODUCT_DB_CONNECTION")
             ?? throw new InvalidOperationException("Product database connection string missing");
+        if (!connectionString.Contains("SslMode")) connectionString += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<ProductDbContext>(options =>
             options.UseMySQL(connectionString,

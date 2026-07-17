@@ -14,6 +14,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Payment")
             ?? Environment.GetEnvironmentVariable("PAYMENT_DB_CONNECTION")
             ?? throw new InvalidOperationException("Payment database connection string missing");
+        if (!connectionString.Contains("SslMode")) connectionString += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<PaymentDbContext>(options =>
             options.UseMySQL(connectionString,

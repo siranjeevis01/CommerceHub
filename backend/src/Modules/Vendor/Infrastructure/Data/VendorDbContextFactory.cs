@@ -10,6 +10,7 @@ public class VendorDbContextFactory : IDesignTimeDbContextFactory<VendorDbContex
         var optionsBuilder = new DbContextOptionsBuilder<VendorDbContext>();
         var conn = Environment.GetEnvironmentVariable("VENDOR_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_vendor;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new VendorDbContext(optionsBuilder.Options);
     }

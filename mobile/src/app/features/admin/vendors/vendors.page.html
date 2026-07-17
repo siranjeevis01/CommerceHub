@@ -1,0 +1,154 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="admin-toolbar">
+    <ion-title>Vendor Management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+      refreshingText="Refreshing..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Search -->
+  <div class="search-container">
+    <div class="search-glass">
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search vendors..."
+        [value]="searchQuery"
+        (input)="onSearchInput($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Status Filters -->
+  <div class="filter-section">
+    <div class="filter-chips">
+      <button
+        *ngFor="let status of statusFilters; trackBy: trackByFilter"
+        class="filter-chip"
+        [class.active]="selectedStatus === status.value"
+        (click)="selectStatus(status.value)"
+      >
+        <ion-icon [name]="status.icon"></ion-icon>
+        {{ status.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Vendor List -->
+  <div class="vendors-list" *ngIf="!isLoading">
+    <div
+      *ngFor="let vendor of filteredVendors; trackBy: trackByVendor"
+      class="vendor-card glass-card"
+    >
+      <!-- Vendor Header -->
+      <div class="vendor-header">
+        <div class="vendor-logo-wrap">
+          <img [src]="vendor.logoUrl" [alt]="vendor.storeName" class="vendor-logo" *ngIf="vendor.logoUrl" />
+          <div class="vendor-logo-placeholder" *ngIf="!vendor.logoUrl">
+            <ion-icon name="storefront-outline"></ion-icon>
+          </div>
+          <span
+            class="status-dot"
+            [style.background]="getStatusColor(vendor.status)"
+            [style.box-shadow]="'0 0 8px ' + getStatusColor(vendor.status) + '60'"
+          ></span>
+        </div>
+        <div class="vendor-info">
+          <div class="vendor-name-row">
+            <span class="vendor-name">{{ vendor.storeName }}</span>
+            <span
+              class="status-badge"
+              [style.color]="getStatusColor(vendor.status)"
+              [style.background]="getStatusColor(vendor.status) + '18'"
+            >
+              {{ vendor.status }}
+            </span>
+          </div>
+          <span class="vendor-email">{{ vendor.email }}</span>
+          <span class="vendor-phone" *ngIf="vendor.phone">{{ vendor.phone }}</span>
+        </div>
+      </div>
+
+      <!-- Vendor Description -->
+      <p class="vendor-description" *ngIf="vendor.description">{{ vendor.description }}</p>
+
+      <!-- Vendor Stats -->
+      <div class="vendor-stats">
+        <div class="stat-item">
+          <ion-icon name="cube-outline"></ion-icon>
+          <span>{{ vendor.productCount }} products</span>
+        </div>
+        <div class="stat-item" *ngIf="vendor.rating > 0">
+          <ion-icon name="star-outline"></ion-icon>
+          <span>{{ vendor.rating.toFixed(1) }} rating</span>
+        </div>
+        <div class="stat-item" *ngIf="vendor.address">
+          <ion-icon name="location-outline"></ion-icon>
+          <span>{{ vendor.address }}</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="vendor-actions" *ngIf="vendor.status === 'pending'">
+        <button class="action-btn reject-btn" (click)="rejectVendor(vendor)">
+          <ion-icon name="close-circle-outline"></ion-icon>
+          Reject
+        </button>
+        <button class="action-btn approve-btn" (click)="approveVendor(vendor)">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          Approve
+        </button>
+      </div>
+
+      <div class="vendor-actions" *ngIf="vendor.status === 'approved'">
+        <button class="action-btn reject-btn full" (click)="rejectVendor(vendor)">
+          <ion-icon name="ban-outline"></ion-icon>
+          Revoke Access
+        </button>
+      </div>
+
+      <div class="vendor-actions" *ngIf="vendor.status === 'rejected'">
+        <button class="action-btn approve-btn full" (click)="approveVendor(vendor)">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          Re-approve
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredVendors.length === 0">
+      <div class="empty-state-content">
+        <div class="empty-state-icon">
+          <ion-icon name="storefront-outline"></ion-icon>
+        </div>
+        <h3>No Vendors Found</h3>
+        <p>{{ searchQuery ? 'Try a different search' : 'No vendors match this filter' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="skeleton-container">
+    <div class="skeleton-search"></div>
+    <div class="skeleton-filters">
+      <div class="skeleton-chip" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
+    <div class="skeleton-vendor" *ngFor="let i of [1,2,3]">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-text-group">
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</ion-content>

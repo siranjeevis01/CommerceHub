@@ -10,6 +10,7 @@ public class ProductDbContextFactory : IDesignTimeDbContextFactory<ProductDbCont
         var optionsBuilder = new DbContextOptionsBuilder<ProductDbContext>();
         var conn = Environment.GetEnvironmentVariable("PRODUCT_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_product;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new ProductDbContext(optionsBuilder.Options);
     }

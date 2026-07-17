@@ -1,0 +1,19 @@
+.admin-tab-bar {
+  --background: #1e293b;
+  --border: none;
+  --padding-bottom: env(safe-area-inset-bottom);
+
+  ion-tab-button {
+    --color: #64748b;
+    --color-selected: #6366f1;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+
+    &.tab-selected {
+      ion-icon {
+        filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+      }
+    }
+  }
+}

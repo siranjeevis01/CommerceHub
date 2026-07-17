@@ -28,7 +28,7 @@ jobs:
     needs: deploy-backend
     environment:
       name: production
-      url: ${{ vars.FRONTEND_URL }}
+      url: https://commercehub-siranjeevis01.web.app
 
     steps:
       - name: Checkout
@@ -54,6 +54,40 @@ jobs:
       - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@v13
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting --project web
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+  deploy-mobile-web:
+    name: Deploy Mobile Web to Firebase
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+    environment:
+      name: production-mobile
+      url: https://commerce-mobile-siranjeevis01.web.app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Build mobile app
+        working-directory: mobile
+        run: npx ng build --configuration production
+
+      - name: Deploy mobile to Firebase Hosting
+        uses: w9jds/firebase-action@v13
+        with:
+          args: deploy --only hosting --project mobile --config firebase.mobile.json
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

@@ -1,0 +1,255 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="detail-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" text="" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="icon-btn" (click)="shareProduct()">
+        <ion-icon name="share-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="detail-content" [fullscreen]="true">
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading" class="skeleton-container">
+    <div class="skeleton-gallery"></div>
+    <div class="skeleton-body">
+      <div class="skeleton-line wide"></div>
+      <div class="skeleton-line medium"></div>
+      <div class="skeleton-line short"></div>
+      <div class="skeleton-block"></div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && product">
+    <!-- Image Gallery -->
+    <div class="gallery-section">
+      <div
+        #gallerySlider
+        class="gallery-slider"
+        (scroll)="onImageScroll($event)"
+      >
+        <div
+          *ngFor="let img of galleryImages; trackBy: trackByImage"
+          class="gallery-slide"
+        >
+          <img *ngIf="img" [src]="img" [alt]="product.name" class="gallery-image" />
+          <div *ngIf="!img" class="gallery-placeholder">
+            <ion-icon name="image-outline"></ion-icon>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-dots">
+        <span
+          *ngFor="let img of galleryImages; let i = index; trackBy: trackByImage"
+          class="gallery-dot"
+          [class.active]="i === currentImageIndex"
+          (click)="scrollToImage(i)"
+        ></span>
+      </div>
+      <span class="gallery-counter">{{ currentImageIndex + 1 }} / {{ galleryImages.length }}</span>
+      <span class="discount-badge" *ngIf="discountPercent > 0">-{{ discountPercent }}%</span>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info glass-card">
+      <div class="product-badges">
+        <span class="brand-badge" *ngIf="product.brandName">{{ product.brandName }}</span>
+        <span class="category-badge" *ngIf="product.categoryName">{{ product.categoryName }}</span>
+      </div>
+
+      <h1 class="product-name">{{ product.name }}</h1>
+
+      <div class="product-rating-row">
+        <div class="stars-row">
+          <ion-icon
+            *ngFor="let star of getRatingArray(product.ratings)"
+            [name]="star === 1 ? 'star' : 'star-outline'"
+            class="star-icon"
+          ></ion-icon>
+          <span class="rating-number">{{ product.ratings?.toFixed(1) || '0.0' }}</span>
+        </div>
+        <span class="review-count" *ngIf="product.reviewCount">{{ product.reviewCount }} reviews</span>
+      </div>
+
+      <div class="product-pricing">
+        <span class="current-price">{{ formatPrice(currentPrice) }}</span>
+        <span class="compare-price" *ngIf="comparePrice">{{ formatPrice(comparePrice) }}</span>
+        <span class="discount-tag" *ngIf="discountPercent > 0">Save {{ discountPercent }}%</span>
+      </div>
+
+      <!-- Stock Status -->
+      <div class="stock-status" [class.in-stock]="inStock" [class.out-of-stock]="!inStock">
+        <ion-icon [name]="inStock ? 'checkmark-circle-outline' : 'close-circle-outline'"></ion-icon>
+        {{ inStock ? (currentStock <= 10 ? 'Only ' + currentStock + ' left!' : 'In Stock') : 'Out of Stock' }}
+      </div>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="variants-section glass-card" *ngIf="hasColorVariants">
+      <h3 class="variant-title">Color</h3>
+      <div class="variant-chips">
+        <button
+          *ngFor="let color of getUniqueColors(); trackBy: trackByColor"
+          class="color-chip"
+          [class.selected]="selectedColor === color"
+          (click)="onColorSelect(color)"
+        >
+          <span class="color-swatch" [style.background]="color"></span>
+          <span class="color-label">{{ color }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Size Variants -->
+    <div class="variants-section glass-card" *ngIf="hasSizeVariants">
+      <h3 class="variant-title">Size</h3>
+      <div class="variant-chips">
+        <button
+          *ngFor="let size of getSizesForColor(selectedColor); trackBy: trackBySize"
+          class="size-chip"
+          [class.selected]="selectedSize === size"
+          (click)="onSizeSelect(size)"
+        >
+          {{ size }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Quantity -->
+    <div class="quantity-section glass-card">
+      <h3 class="variant-title">Quantity</h3>
+      <div class="quantity-control">
+        <button class="qty-btn" (click)="decrementQuantity()" [disabled]="quantity <= 1">
+          <ion-icon name="remove-outline"></ion-icon>
+        </button>
+        <span class="qty-value">{{ quantity }}</span>
+        <button class="qty-btn" (click)="incrementQuantity()" [disabled]="quantity >= currentStock">
+          <ion-icon name="add-outline"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description-section glass-card">
+      <h3 class="variant-title">Description</h3>
+      <p class="product-description" [class.expanded]="showFullDescription">
+        {{ product.description || product.shortDescription || 'No description available.' }}
+      </p>
+      <button class="toggle-desc" (click)="showFullDescription = !showFullDescription" *ngIf="(product.description?.length ?? 0) > 150">
+        {{ showFullDescription ? 'Show Less' : 'Read More' }}
+        <ion-icon [name]="showFullDescription ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags-section" *ngIf="product.tags?.length">
+      <span class="tag" *ngFor="let tag of product.tags">{{ tag }}</span>
+    </div>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+      <div class="section-header glass-card">
+        <h3 class="section-title">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          Reviews ({{ reviews.length }})
+        </h3>
+        <button class="write-review-btn" (click)="toggleReviewForm()">
+          <ion-icon [name]="showReviewForm ? 'close-outline' : 'create-outline'"></ion-icon>
+          {{ showReviewForm ? 'Cancel' : 'Write Review' }}
+        </button>
+      </div>
+
+      <!-- Review Form -->
+      <div class="review-form glass-card" *ngIf="showReviewForm">
+        <div class="star-selector">
+          <span class="star-label">Your Rating</span>
+          <div class="star-buttons">
+            <button
+              *ngFor="let star of [1,2,3,4,5]"
+              class="star-btn"
+              [class.filled]="star <= reviewRating"
+              (click)="setReviewRating(star)"
+            >
+              <ion-icon [name]="star <= reviewRating ? 'star' : 'star-outline'"></ion-icon>
+            </button>
+          </div>
+        </div>
+        <input
+          class="review-input"
+          type="text"
+          placeholder="Review title (optional)"
+          [(ngModel)]="reviewTitle"
+        />
+        <textarea
+          class="review-textarea"
+          placeholder="Share your thoughts about this product..."
+          [(ngModel)]="reviewComment"
+          rows="4"
+        ></textarea>
+        <button class="submit-review-btn" (click)="submitReview()" [disabled]="reviewRating === 0">
+          <ion-icon name="send-outline"></ion-icon>
+          Submit Review
+        </button>
+      </div>
+
+      <!-- Review List -->
+      <div class="review-list">
+        <div class="review-card glass-card" *ngFor="let review of reviews; trackBy: trackByReview">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">
+                {{ review.userName?.charAt(0)?.toUpperCase() || 'U' }}
+              </div>
+              <div class="reviewer-text">
+                <span class="reviewer-name">{{ review.userName }}</span>
+                <span class="review-date">{{ getTimeAgo(review.createdAt) }}</span>
+              </div>
+            </div>
+            <div class="review-stars">
+              <ion-icon
+                *ngFor="let star of getRatingArray(review.rating)"
+                [name]="star === 1 ? 'star' : 'star-outline'"
+                class="star-icon-sm"
+              ></ion-icon>
+            </div>
+          </div>
+          <h4 class="review-title" *ngIf="review.title">{{ review.title }}</h4>
+          <p class="review-comment">{{ review.comment }}</p>
+        </div>
+
+        <!-- No Reviews -->
+        <div class="no-reviews" *ngIf="reviews.length === 0 && !showReviewForm">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          <span>No reviews yet. Be the first to review!</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- Sticky Bottom Bar -->
+  <div class="bottom-bar" *ngIf="!isLoading && product">
+    <button
+      class="add-cart-btn"
+      (click)="addToCart()"
+      [disabled]="!inStock || isAddingToCart"
+    >
+      <ion-spinner name="crescent" *ngIf="isAddingToCart"></ion-spinner>
+      <ion-icon name="cart-outline" *ngIf="!isAddingToCart"></ion-icon>
+      Add to Cart
+    </button>
+    <button
+      class="buy-now-btn"
+      (click)="buyNow()"
+      [disabled]="!inStock || isBuyingNow"
+    >
+      <ion-spinner name="crescent" *ngIf="isBuyingNow"></ion-spinner>
+      <ion-icon name="flash-outline" *ngIf="!isBuyingNow"></ion-icon>
+      Buy Now
+    </button>
+  </div>
+</ion-content>

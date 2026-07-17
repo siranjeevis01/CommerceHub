@@ -1,0 +1,253 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="admin-toolbar">
+    <ion-title>Admin Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="refresh-btn" (click)="loadDashboard()">
+        <ion-icon name="refresh-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+      refreshingText="Refreshing..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="dashboard-container" *ngIf="!isLoading">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <div class="welcome-glow"></div>
+      <div class="welcome-content">
+        <span class="welcome-label">Command Center</span>
+        <h2 class="welcome-title">Platform Overview</h2>
+        <p class="welcome-subtitle">Monitor and manage your marketplace</p>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card glass-card" style="--accent: #6366f1;">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="wallet-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Sales</span>
+          <span class="stat-value">{{ formatCurrency(stats.totalSales) }}</span>
+          <span class="stat-change positive" *ngIf="stats.revenueGrowth > 0">
+            <ion-icon name="trending-up-outline"></ion-icon>
+            +{{ stats.revenueGrowth }}%
+          </span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card" style="--accent: #0ea5e9;">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="cart-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Orders</span>
+          <span class="stat-value">{{ formatNumber(stats.totalOrders) }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card" style="--accent: #10b981;">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Users</span>
+          <span class="stat-value">{{ formatNumber(stats.totalUsers) }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card" style="--accent: #8b5cf6;">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="storefront-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Vendors</span>
+          <span class="stat-value">{{ formatNumber(stats.totalVendors) }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card" style="--accent: #f59e0b;">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Products</span>
+          <span class="stat-value">{{ formatNumber(stats.totalProducts) }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card alert-card" style="--accent: #ef4444;" *ngIf="stats.pendingVendorApprovals > 0">
+        <div class="stat-icon-wrapper pulse">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Pending Approvals</span>
+          <span class="stat-value">{{ stats.pendingVendorApprovals }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Vendor Approvals -->
+    <section class="section" *ngIf="pendingVendors.length > 0">
+      <div class="section-header">
+        <h3 class="section-title">
+          <ion-icon name="hourglass-outline"></ion-icon>
+          Pending Vendor Approvals
+        </h3>
+        <span class="badge-count">{{ pendingVendors.length }}</span>
+      </div>
+
+      <div class="vendor-approval-list">
+        <div class="vendor-card glass-card" *ngFor="let vendor of pendingVendors; trackBy: trackByVendor">
+          <div class="vendor-header">
+            <img [src]="vendor.logoUrl" [alt]="vendor.storeName" class="vendor-avatar" *ngIf="vendor.logoUrl" />
+            <div class="vendor-avatar-placeholder" *ngIf="!vendor.logoUrl">
+              <ion-icon name="storefront-outline"></ion-icon>
+            </div>
+            <div class="vendor-info">
+              <span class="vendor-name">{{ vendor.storeName }}</span>
+              <span class="vendor-email">{{ vendor.email }}</span>
+              <span class="vendor-location" *ngIf="vendor.address">
+                <ion-icon name="location-outline"></ion-icon>
+                {{ vendor.address }}
+              </span>
+            </div>
+          </div>
+          <p class="vendor-description">{{ vendor.description }}</p>
+          <div class="vendor-actions">
+            <button class="action-btn reject-btn" (click)="rejectVendor(vendor)">
+              <ion-icon name="close-circle-outline"></ion-icon>
+              Reject
+            </button>
+            <button class="action-btn approve-btn" (click)="approveVendor(vendor)">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Orders -->
+    <section class="section" *ngIf="recentOrders.length > 0">
+      <div class="section-header">
+        <h3 class="section-title">
+          <ion-icon name="time-outline"></ion-icon>
+          Recent Orders
+        </h3>
+      </div>
+
+      <div class="order-list">
+        <div class="order-card glass-card" *ngFor="let order of recentOrders; trackBy: trackByOrder">
+          <div class="order-row">
+            <div class="order-main">
+              <span class="order-number">#{{ order.orderNumber }}</span>
+              <span class="order-date">{{ getTimeAgo(order.createdAt) }}</span>
+            </div>
+            <div class="order-right">
+              <span class="order-amount">${{ order.totalAmount.toFixed(2) }}</span>
+              <span
+                class="order-status"
+                [style.color]="getStatusColor(order.status)"
+                [style.background]="getStatusColor(order.status) + '18'"
+              >
+                {{ order.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Activity Feed -->
+    <section class="section" *ngIf="recentActivity.length > 0">
+      <div class="section-header">
+        <h3 class="section-title">
+          <ion-icon name="pulse-outline"></ion-icon>
+          Activity Feed
+        </h3>
+      </div>
+
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let activity of recentActivity; trackBy: trackByActivity">
+          <div class="activity-dot" [style.background]="activity.color"></div>
+          <div class="activity-content">
+            <span class="activity-title">{{ activity.title }}</span>
+            <span class="activity-detail">{{ activity.detail }}</span>
+          </div>
+          <span class="activity-time" *ngIf="activity.time">{{ getTimeAgo(activity.time) }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Health -->
+    <section class="section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          Platform Health
+        </h3>
+      </div>
+
+      <div class="health-grid">
+        <div class="health-card glass-card">
+          <ion-icon name="people-outline" class="health-icon" style="color: #10b981;"></ion-icon>
+          <div class="health-info">
+            <span class="health-label">Active Today</span>
+            <span class="health-value">{{ formatNumber(stats.activeUsersToday) }}</span>
+          </div>
+        </div>
+        <div class="health-card glass-card">
+          <ion-icon name="cube-outline" class="health-icon" style="color: #0ea5e9;"></ion-icon>
+          <div class="health-info">
+            <span class="health-label">Total Products</span>
+            <span class="health-value">{{ formatNumber(stats.totalProducts) }}</span>
+          </div>
+        </div>
+        <div class="health-card glass-card">
+          <ion-icon name="storefront-outline" class="health-icon" style="color: #8b5cf6;"></ion-icon>
+          <div class="health-info">
+            <span class="health-label">Active Vendors</span>
+            <span class="health-value">{{ formatNumber(stats.totalVendors) }}</span>
+          </div>
+        </div>
+        <div class="health-card glass-card">
+          <ion-icon name="checkmark-done-outline" class="health-icon" style="color: #f59e0b;"></ion-icon>
+          <div class="health-info">
+            <span class="health-label">Order Fulfillment</span>
+            <span class="health-value">98.2%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="skeleton-container">
+    <div class="skeleton-banner"></div>
+    <div class="skeleton-stats-grid">
+      <div class="skeleton-stat" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+    <div class="skeleton-section">
+      <div class="skeleton-line wide"></div>
+      <div class="skeleton-card-row" *ngFor="let i of [1,2,3]">
+        <div class="skeleton-circle"></div>
+        <div class="skeleton-text-group">
+          <div class="skeleton-line medium"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -20,6 +20,7 @@ using CommerceHub.Modules.Analytics.Infrastructure;
 using CommerceHub.Modules.Ai.Infrastructure;
 using CommerceHub.Shared.Messaging.Extensions;
 using CommerceHub.Infrastructure.Persistence;
+using CommerceHub.Api.Seeder;
 using CommerceHub.Modules.Identity.Infrastructure.Data;
 using CommerceHub.Modules.Product.Infrastructure.Data;
 using CommerceHub.Modules.Payment.Infrastructure.Data;
@@ -304,6 +305,9 @@ builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<CmsDbContext>>
 builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<AnalyticsDbContext>>();
 builder.Services.AddTransient<IDbInitializer, DatabaseInitializer<AIAgentDbContext>>();
 
+// ========== DATABASE SEEDER ==========
+builder.Services.AddScoped<DatabaseSeeder>();
+
 // ========== MASSTRANSIT / RABBITMQ ==========
 var rabbitMqHost = builder.Configuration.GetSection("RabbitMQ")["Host"]
     ?? Environment.GetEnvironmentVariable("RABBITMQ_HOST");
@@ -362,46 +366,12 @@ var app = builder.Build();
     {
         try
         {
-            var identityCtx = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-            if (!await identityCtx.Users.AnyAsync())
-            {
-                var seedOpts = builder.Configuration.GetSection(SeedOptions.SectionName).Get<SeedOptions>() ?? new SeedOptions();
-                var roles = new[] { "Admin", "Vendor", "Customer", "Support" };
-                var roleEntities = roles.Select(r => new CommerceHub.Modules.Identity.Domain.Entities.Role
-                {
-                    Name = r,
-                    Description = $"{r} role",
-                    CreatedAt = DateTime.UtcNow
-                }).ToList();
-                identityCtx.Roles.AddRange(roleEntities);
-                await identityCtx.SaveChangesAsync();
-
-                var adminUser = new CommerceHub.Modules.Identity.Domain.Entities.User
-                {
-                    Email = seedOpts.AdminEmail,
-                    Username = "admin",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedOpts.AdminPassword),
-                    FirstName = "Admin",
-                    LastName = "User",
-                    UserType = "Admin",
-                    EmailConfirmed = true,
-                    CreatedAt = DateTime.UtcNow
-                };
-                identityCtx.Users.Add(adminUser);
-                await identityCtx.SaveChangesAsync();
-
-                identityCtx.UserRoles.Add(new CommerceHub.Modules.Identity.Domain.Entities.UserRole
-                {
-                    UserId = adminUser.Id,
-                    RoleId = roleEntities.First(r => r.Name == "Admin").Id
-                });
-                await identityCtx.SaveChangesAsync();
-                logger.LogInformation("Identity seeded: admin user created ({Email})", seedOpts.AdminEmail);
-            }
+            var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+            await seeder.SeedAllAsync();
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Identity seeding failed");
+            logger.LogWarning(ex, "Database seeding failed");
         }
     }
 }
@@ -433,6 +403,7 @@ app.UseSecurityHeaders();
 // ========== ENDPOINTS ==========
 app.MapControllers().CacheOutput("Products");
 app.MapHub<NotificationHub>("/hubs/notification");
+app.MapTrackingHub();
 app.MapServiceDefaultsHealthChecks();
 app.UseHangfireDashboard();
 app.MapGet("/", () => Results.Ok(new

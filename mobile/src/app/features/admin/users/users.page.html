@@ -1,0 +1,142 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="admin-toolbar">
+    <ion-title>User Management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+      refreshingText="Refreshing..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-glass">
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search by name or email..."
+        [value]="searchQuery"
+        (input)="onSearchInput($event)"
+      />
+      <button class="search-clear" *ngIf="searchQuery" (click)="searchQuery = ''; loadUsers()">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Role Filters -->
+  <div class="filter-section">
+    <div class="filter-chips">
+      <button
+        *ngFor="let role of roleFilters; trackBy: trackByRole"
+        class="filter-chip"
+        [class.active]="selectedRole === role.value"
+        (click)="selectRole(role.value)"
+      >
+        <ion-icon [name]="role.icon"></ion-icon>
+        {{ role.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="results-info" *ngIf="!isLoading">
+    <span class="results-count">{{ filteredUsers.length }} user{{ filteredUsers.length !== 1 ? 's' : '' }}</span>
+    <span class="results-query" *ngIf="searchQuery"> matching "{{ searchQuery }}"</span>
+  </div>
+
+  <!-- Users List -->
+  <div class="users-list" *ngIf="!isLoading">
+    <div
+      *ngFor="let user of filteredUsers; trackBy: trackByUser"
+      class="user-card glass-card"
+    >
+      <div class="user-header">
+        <div class="user-avatar" [style.border-color]="getRoleColor(user)">
+          <span class="avatar-initials" *ngIf="!user.vendorId">{{ getInitials(user) }}</span>
+          <ion-icon name="storefront-outline" *ngIf="user.vendorId"></ion-icon>
+        </div>
+        <div class="user-info">
+          <div class="user-name-row">
+            <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+            <span
+              class="role-badge"
+              [style.color]="getRoleColor(user)"
+              [style.background]="getRoleColor(user) + '18'"
+            >
+              {{ getRoleLabel(user) }}
+            </span>
+          </div>
+          <span class="user-email">{{ user.email }}</span>
+          <span class="user-phone" *ngIf="user.phoneNumber">{{ user.phoneNumber }}</span>
+        </div>
+        <div class="user-status-dot" [class.active]="user.isActive" [class.blocked]="!user.isActive"></div>
+      </div>
+
+      <div class="user-meta">
+        <div class="meta-item">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Joined {{ getTimeAgo(user.createdAt) }}</span>
+        </div>
+        <div class="meta-item">
+          <ion-icon [name]="user.isActive ? 'checkmark-circle-outline' : 'ban-outline'"></ion-icon>
+          <span [class]="user.isActive ? 'status-active' : 'status-blocked'">
+            {{ user.isActive ? 'Active' : 'Blocked' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="user-actions">
+        <button
+          class="action-btn"
+          [class.block]="user.isActive"
+          [class.unblock]="!user.isActive"
+          (click)="toggleBlockUser(user)"
+        >
+          <ion-icon [name]="user.isActive ? 'lock-closed-outline' : 'lock-open-outline'"></ion-icon>
+          {{ user.isActive ? 'Block' : 'Unblock' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredUsers.length === 0 && !isLoading">
+      <div class="empty-state-content">
+        <div class="empty-state-icon">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <h3>No Users Found</h3>
+        <p>{{ searchQuery ? 'Try adjusting your search query' : 'No users available yet' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load More -->
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" *ngIf="hasMore">
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="skeleton-container">
+    <div class="skeleton-search"></div>
+    <div class="skeleton-filters">
+      <div class="skeleton-chip" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
+    <div class="skeleton-user" *ngFor="let i of [1,2,3,4,5]">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-text-group">
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line tiny"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</ion-content>

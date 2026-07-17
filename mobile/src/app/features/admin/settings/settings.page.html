@@ -1,0 +1,123 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="admin-toolbar">
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="admin-content" [fullscreen]="true">
+  <div class="settings-container">
+
+    <!-- Theme Picker -->
+    <div class="section-group">
+      <div class="section-label">Appearance</div>
+      <div class="theme-card glass-card">
+        <div class="theme-header">
+          <ion-icon name="color-palette-outline"></ion-icon>
+          <div class="theme-info">
+            <span class="theme-title">Theme</span>
+            <span class="theme-subtitle">Customize the look and feel</span>
+          </div>
+        </div>
+        <div class="theme-grid">
+          <button
+            *ngFor="let theme of themeService.availableThemes"
+            class="theme-option"
+            [class.active]="currentTheme === theme.name"
+            (click)="setTheme(theme.name)"
+          >
+            <div class="theme-preview" [attr.data-theme]="theme.name">
+              <ion-icon [name]="theme.icon"></ion-icon>
+            </div>
+            <span class="theme-label">{{ theme.label }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Settings -->
+    <div class="section-group" *ngFor="let category of settingsCategories">
+      <div class="section-label">{{ category }}</div>
+
+      <div class="settings-list">
+        <div
+          *ngFor="let setting of getSettingsByCategory(category); trackBy: trackBySetting"
+          class="setting-card glass-card"
+        >
+          <div class="setting-row" *ngIf="setting.type === 'toggle'">
+            <div class="setting-info">
+              <ion-icon [name]="setting.icon" class="setting-icon"></ion-icon>
+              <div class="setting-text">
+                <span class="setting-label">{{ setting.label }}</span>
+                <span class="setting-desc">{{ setting.description }}</span>
+              </div>
+            </div>
+            <ion-toggle
+              [checked]="setting.value"
+              (ionChange)="updateSetting(setting, $event.detail.checked)"
+              class="futuristic-toggle"
+            ></ion-toggle>
+          </div>
+
+          <div class="setting-row" *ngIf="setting.type === 'input'">
+            <div class="setting-info full-width">
+              <ion-icon [name]="setting.icon" class="setting-icon"></ion-icon>
+              <div class="setting-text">
+                <span class="setting-label">{{ setting.label }}</span>
+                <span class="setting-desc">{{ setting.description }}</span>
+              </div>
+            </div>
+            <div class="setting-input-wrap">
+              <input
+                class="setting-input"
+                [value]="setting.value"
+                (input)="onInputValue(setting, $event)"
+              />
+            </div>
+          </div>
+
+          <div class="setting-row" *ngIf="setting.type === 'select'">
+            <div class="setting-info full-width">
+              <ion-icon [name]="setting.icon" class="setting-icon"></ion-icon>
+              <div class="setting-text">
+                <span class="setting-label">{{ setting.label }}</span>
+                <span class="setting-desc">{{ setting.description }}</span>
+              </div>
+            </div>
+            <div class="setting-select-wrap">
+              <ion-select
+                [value]="setting.value"
+                (ionChange)="onSelectValue(setting, $event)"
+                interface="action-sheet"
+                class="futuristic-select"
+              >
+                <ion-select-option
+                  *ngFor="let opt of setting.options"
+                  [value]="opt.value"
+                >
+                  {{ opt.label }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="save-section">
+      <button class="save-btn" (click)="saveSettings()" [disabled]="isLoading">
+        <ion-icon name="checkmark-circle-outline" *ngIf="!isLoading"></ion-icon>
+        <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        {{ isLoading ? 'Saving...' : 'Save Settings' }}
+      </button>
+    </div>
+
+    <!-- App Info -->
+    <div class="app-info">
+      <span class="app-name">CommerceHub Admin</span>
+      <span class="app-version">v1.0.0</span>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>

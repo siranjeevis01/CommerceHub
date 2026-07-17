@@ -1,7 +1,4 @@
 {
-  "firestore": {
-    "rules": "firestore.rules"
-  },
   "hosting": {
     "public": "frontend/dist/shell",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
@@ -35,8 +32,5 @@
         ]
       }
     ]
-  },
-  "storage": {
-    "rules": "storage.rules"
   }
 }

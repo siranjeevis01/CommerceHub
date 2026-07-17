@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Vendor Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="loadDashboard(); $event.target.complete()">
+    <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <ion-icon name="cash-outline" color="success"></ion-icon>
+      <span class="stat-value">{{ summary.totalSales | currency }}</span>
+      <span class="stat-label">Total Sales</span>
+    </div>
+    <div class="stat-card">
+      <ion-icon name="cart-outline" color="primary"></ion-icon>
+      <span class="stat-value">{{ summary.totalOrders }}</span>
+      <span class="stat-label">Total Orders</span>
+    </div>
+    <div class="stat-card">
+      <ion-icon name="cube-outline" color="tertiary"></ion-icon>
+      <span class="stat-value">{{ summary.totalProducts }}</span>
+      <span class="stat-label">Products</span>
+    </div>
+    <div class="stat-card">
+      <ion-icon name="time-outline" color="warning"></ion-icon>
+      <span class="stat-value">{{ summary.pendingOrders }}</span>
+      <span class="stat-label">Pending Orders</span>
+    </div>
+  </div>
+
+  <h3 class="section-title">Recent Orders</h3>
+  <ion-list *ngIf="recentOrders.length; else noOrders">
+    <ion-item *ngFor="let order of recentOrders" [detail]="true" button>
+      <ion-label>
+        <h2>{{ order.orderNumber }}</h2>
+        <p>{{ order.createdAt | date:'short' }}</p>
+      </ion-label>
+      <ion-badge [color]="getStatusColor(order.status)" slot="end">{{ order.status }}</ion-badge>
+      <ion-note slot="end">{{ order.totalAmount | currency }}</ion-note>
+    </ion-item>
+  </ion-list>
+  <ng-template #noOrders>
+    <ion-text class="ion-text-center ion-padding" color="medium">
+      <p>No recent orders</p>
+    </ion-text>
+  </ng-template>
+</ion-content>

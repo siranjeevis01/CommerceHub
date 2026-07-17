@@ -12,9 +12,10 @@ public static class DependencyInjection
         var connStr = configuration.GetConnectionString("Analytics")
             ?? Environment.GetEnvironmentVariable("ANALYTICS_DB_CONNECTION")
             ?? throw new InvalidOperationException("Analytics database connection string missing");
+        if (!connStr.Contains("SslMode")) connStr += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<AnalyticsDbContext>(options =>
-            options.UseNpgsql(connStr, npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(5)));
+            options.UseMySQL(connStr, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));
 
         return services;
     }

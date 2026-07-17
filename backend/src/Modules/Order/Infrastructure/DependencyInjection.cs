@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CommerceHub.Modules.Order.Application.Common.Interfaces;
 using CommerceHub.Modules.Order.Infrastructure.Data;
+using CommerceHub.Modules.Order.Infrastructure.BackgroundJobs;
 
 namespace CommerceHub.Modules.Order.Infrastructure;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Order")
             ?? Environment.GetEnvironmentVariable("ORDER_DB_CONNECTION")
             ?? throw new InvalidOperationException("Order database connection string missing");
+        if (!connectionString.Contains("SslMode")) connectionString += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<OrderDbContext>(options =>
             options.UseMySQL(connectionString,
@@ -24,6 +26,8 @@ public static class DependencyInjection
 
         services.AddScoped<IOrderDbContext>(sp => sp.GetRequiredService<OrderDbContext>());
         services.AddScoped<IOrderNumberGenerator, OrderNumberGenerator>();
+
+        services.AddHostedService<OrderTimeoutService>();
 
         return services;
     }

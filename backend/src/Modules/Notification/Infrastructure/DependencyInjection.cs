@@ -6,6 +6,7 @@ using CommerceHub.Modules.Notification.Infrastructure.Persistence;
 using CommerceHub.Modules.Notification.Infrastructure.Repositories;
 using CommerceHub.Modules.Notification.Infrastructure.Services;
 using CommerceHub.Modules.Notification.Infrastructure.Hubs;
+using CommerceHub.Modules.Notification.Infrastructure.BackgroundJobs;
 
 namespace CommerceHub.Modules.Notification.Infrastructure;
 
@@ -16,6 +17,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Notification")
             ?? Environment.GetEnvironmentVariable("NOTIFICATION_DB_CONNECTION")
             ?? throw new InvalidOperationException("Notification database connection string is not configured.");
+        if (!connectionString.Contains("SslMode")) connectionString += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<NotificationDbContext>(options =>
             options.UseMySQL(connectionString,
@@ -30,6 +32,9 @@ public static class DependencyInjection
         services.AddScoped<IPushNotificationService, PushNotificationService>();
         services.AddScoped<IUserLookupService, UserLookupService>();
         services.AddSingleton<INotificationHub, NotificationService>();
+
+        services.AddHostedService<EmailQueueService>();
+
         return services;
     }
 }

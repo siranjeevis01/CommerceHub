@@ -1,0 +1,236 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="search-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home" text="" icon="chevron-back-outline" class="back-btn"></ion-back-button>
+    </ion-buttons>
+    <div class="search-input-wrapper">
+      <ion-icon name="search-outline" class="search-input-icon"></ion-icon>
+      <ion-input
+        class="search-input"
+        [value]="searchQuery"
+        placeholder="Search products..."
+        (ionInput)="onSearchInput($event)"
+        [debounce]="300"
+        autofocus
+      ></ion-input>
+      <button
+        class="search-clear-btn"
+        *ngIf="searchQuery.length > 0"
+        (click)="onSearchClear()"
+      >
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="search-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="filter-chips-scroll">
+      <!-- All chip -->
+      <button
+        class="filter-chip"
+        [class.active]="!selectedCategory"
+        (click)="clearCategory()"
+      >
+        <ion-icon name="apps-outline"></ion-icon>
+        All
+      </button>
+
+      <!-- Category chips -->
+      <button
+        *ngFor="let cat of categories; trackBy: trackByCategory"
+        class="filter-chip"
+        [class.active]="selectedCategory === cat.id"
+        (click)="selectCategory(cat)"
+      >
+        {{ cat.name }}
+      </button>
+    </div>
+
+    <div class="filter-actions">
+      <button class="sort-btn" (click)="toggleSortOptions()">
+        <ion-icon name="swap-vertical-outline"></ion-icon>
+        <span class="sort-label">{{ (sortOptions | slice:0:0)[0]?.label }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sort Dropdown -->
+  <div class="sort-dropdown" *ngIf="showSortOptions">
+    <div class="sort-backdrop" (click)="showSortOptions = false"></div>
+    <div class="sort-panel">
+      <div class="sort-panel-header">
+        <h4>Sort By</h4>
+        <button class="sort-close" (click)="showSortOptions = false">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+      <div class="sort-options">
+        <button
+          *ngFor="let option of sortOptions; trackBy: trackBySort"
+          class="sort-option"
+          [class.active]="selectedSort === option.value"
+          (click)="selectSort(option.value)"
+        >
+          <ion-icon [name]="option.icon"></ion-icon>
+          <span>{{ option.label }}</span>
+          <ion-icon
+            name="checkmark-circle"
+            class="sort-check"
+            *ngIf="selectedSort === option.value"
+          ></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filters -->
+  <div class="active-filters" *ngIf="selectedCategory">
+    <div class="active-filter-tag">
+      <span>{{ selectedCategoryName || 'Category' }}</span>
+      <button (click)="clearCategory()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="results-info" *ngIf="totalResults > 0 && !isLoading">
+    <span class="results-count">{{ totalResults }} results found</span>
+    <span class="results-query" *ngIf="searchQuery">for "{{ searchQuery }}"</span>
+  </div>
+
+  <!-- Empty State: No query yet -->
+  <div class="empty-state" *ngIf="!isLoading && results.length === 0 && !searchQuery && !selectedCategory">
+    <div class="empty-state-content">
+      <div class="empty-state-icon">
+        <ion-icon name="search-outline"></ion-icon>
+      </div>
+      <h3>Discover Products</h3>
+      <p>Search for your favorite products or browse categories above</p>
+
+      <!-- Recent Searches -->
+      <div class="recent-searches" *ngIf="recentSearches.length > 0">
+        <h4>Recent Searches</h4>
+        <div class="recent-list">
+          <div
+            *ngFor="let term of recentSearches"
+            class="recent-item"
+          >
+            <button class="recent-term" (click)="searchRecent(term)">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ term }}
+            </button>
+            <button class="recent-remove" (click)="removeRecent(term)">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div class="empty-state" *ngIf="!isLoading && results.length === 0 && (searchQuery || selectedCategory)">
+    <div class="empty-state-content">
+      <div class="empty-state-icon no-results">
+        <ion-icon name="search-outline"></ion-icon>
+      </div>
+      <h3>No Results Found</h3>
+      <p>Try a different search term or browse categories</p>
+    </div>
+  </div>
+
+  <!-- Results Grid -->
+  <div class="results-grid" *ngIf="results.length > 0">
+    <div
+      *ngFor="let product of results; trackBy: trackByProduct"
+      class="search-product-card"
+      (click)="navigateToProduct(product)"
+    >
+      <div class="search-card-image">
+        <img
+          *ngIf="product.imageUrl"
+          [src]="product.imageUrl"
+          [alt]="product.name"
+        />
+        <div *ngIf="!product.imageUrl" class="search-card-placeholder">
+          <ion-icon name="bag-handle-outline"></ion-icon>
+        </div>
+        <span class="search-card-discount" *ngIf="getDiscountPercent(product) > 0">
+          -{{ getDiscountPercent(product) }}%
+        </span>
+        <button class="search-fav-btn" (click)="$event.stopPropagation()">
+          <ion-icon name="heart-outline"></ion-icon>
+        </button>
+      </div>
+      <div class="search-card-body">
+        <h4 class="search-card-name">{{ product.name }}</h4>
+        <div class="search-card-rating" *ngIf="product.ratings">
+          <div class="stars">
+            <ion-icon
+              *ngFor="let star of getRatingArray(product.ratings)"
+              [name]="star === 1 ? 'star' : 'star-outline'"
+              class="star-icon"
+            ></ion-icon>
+          </div>
+          <span class="rating-text">{{ product.ratings }}</span>
+        </div>
+        <div class="search-card-footer">
+          <div class="search-card-pricing">
+            <span class="search-card-price">{{ formatPrice(product.price) }}</span>
+            <span class="search-card-original" *ngIf="product.comparePrice">
+              {{ formatPrice(product.comparePrice) }}
+            </span>
+          </div>
+          <button
+            class="search-add-cart"
+            (click)="addToCart($event, product)"
+            aria-label="Add to cart"
+          >
+            <ion-icon name="add-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-more" *ngIf="isLoading && results.length > 0">
+    <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+  </div>
+
+  <!-- Initial Skeleton -->
+  <div class="skeleton-grid" *ngIf="isLoading && results.length === 0">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="skeleton-card-image"></div>
+      <div class="skeleton-card-body">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line tiny"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infinite Scroll Trigger -->
+  <ion-infinite-scroll
+    (ionInfinite)="loadMore($event)"
+    [disabled]="!hasMore"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="crescent"
+      loadingText="Loading more..."
+    ></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <div class="bottom-spacer"></div>
+</ion-content>

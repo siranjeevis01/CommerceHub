@@ -45,11 +45,16 @@ node_modules/
 frontend/node_modules/
 frontend/.angular/
 frontend/dist/
+mobile/node_modules/
+mobile/.angular/
+mobile/www/
 
 # Temp files
 *.tmp
 *.temp
 
-# Backup files
+# Build output files
 *.sql
-*.backup
+
+# Tool projects
+backend/tools/

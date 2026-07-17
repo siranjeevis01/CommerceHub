@@ -14,6 +14,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Ai")
             ?? Environment.GetEnvironmentVariable("AI_DB_CONNECTION")
             ?? throw new InvalidOperationException("AI Agent database connection string missing");
+        if (!connectionString.Contains("SslMode")) connectionString += ";SslMode=Required;AllowPublicKeyRetrieval=true";
 
         services.AddDbContext<AIAgentDbContext>(options =>
             options.UseMySQL(connectionString, mysqlOptions => mysqlOptions.EnableRetryOnFailure(5)));

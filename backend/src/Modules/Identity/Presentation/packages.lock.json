@@ -262,6 +262,15 @@
         "resolved": "8.3.3",
         "contentHash": "Qwtjfc7msYm3JERdm/2ejyvuys0GVkzh9p7BnD+gi0m8ugu1+S0Wm/pLV0k9AiM3w77ubNdss8NdzHMYxvJcpA=="
       },
+      "MassTransit.EntityFrameworkCore": {
+        "type": "Transitive",
+        "resolved": "8.3.3",
+        "contentHash": "y9/TFEPCA9By57z3EhcJBoDXZQH8LyLk7IvxgdQzDsC5e98/kv6JoA3IpfhuSeJvwBVLG2Z+jnx9pocDOuXo+g==",
+        "dependencies": {
+          "MassTransit": "8.3.3",
+          "Microsoft.EntityFrameworkCore.Relational": "9.0.0"
+        }
+      },
       "MediatR": {
         "type": "Transitive",
         "resolved": "12.4.1",
@@ -748,10 +757,10 @@
       },
       "OpenTelemetry.Instrumentation.AspNetCore": {
         "type": "Transitive",
-        "resolved": "1.9.0",
-        "contentHash": "x4HuWBw1rbWZUh5j8/GpXz3xa7JnrTuKne+ACmBqvcoO/rNGkG7HayRruwoQ7gf52xpMtRGr4gxlhLW8eU0EiQ==",
+        "resolved": "1.10.1",
+        "contentHash": "UaQKgFHtr92YISPHd8ASk/HjDukaaRTVr9YvNywPfqZ9x7+bptGGJQK/2ntTHRiFsJdNHJRXLt28dOFp0TGb9Q==",
         "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.9.0, 2.0.0)"
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.10.0, 2.0.0)"
         }
       },
       "OpenTelemetry.Instrumentation.EntityFrameworkCore": {
@@ -765,13 +774,18 @@
       },
       "OpenTelemetry.Instrumentation.Http": {
         "type": "Transitive",
-        "resolved": "1.9.0",
-        "contentHash": "+ZXppf8Qxz3OdC803T8fB6i8iSscc8PsxMnM/JizSOYmkz+8vGiScEiaBBBFNZtMh2KpA0q+qxwnSwQUkbvzog==",
+        "resolved": "1.11.0",
+        "contentHash": "1ncYPNmMaYNPX664uo3FlmSVGETBKQbBvarbGgB5ZynERTFmCsZ7UqefvVe3vnPYOIAGOjbMAbprYF2BfMielg==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "8.0.0",
-          "Microsoft.Extensions.Options": "8.0.0",
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.9.0, 2.0.0)"
+          "Microsoft.Extensions.Configuration": "9.0.0",
+          "Microsoft.Extensions.Options": "9.0.0",
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.11.1, 2.0.0)"
         }
+      },
+      "Otp.NET": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "UXjZ80T6BfVACJWmEcz4UFZ93hwX3STKojKvVpPk3qUhubjnLwIiZMsI4Hh91HhYxC0JlatNdNrVK2wkv4O9/Q=="
       },
       "Pipelines.Sockets.Unofficial": {
         "type": "Transitive",
@@ -906,10 +920,10 @@
       },
       "StackExchange.Redis": {
         "type": "Transitive",
-        "resolved": "2.7.4",
-        "contentHash": "lD6a0lGOCyV9iuvObnzStL74EDWAyK31w6lS+Md9gIz1eP4U6KChDIflzTdtrktxlvVkeOvPtkaYOcm4qjbHSw==",
+        "resolved": "2.9.17",
+        "contentHash": "Enpv0bfMP6SRownWx1CmaHantT9626Z6QSdHOidKlm0zLrBaPe7ueQf5phJH6Zkf3lDe5rr6JvXAgEP1ogijug==",
         "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Pipelines.Sockets.Unofficial": "2.2.8"
         }
       },
@@ -985,6 +999,26 @@
         "resolved": "0.8.6",
         "contentHash": "iP4jVLQoQmUjMU88g1WObiNr6YKZGvh4aOXn3yOJsHqZsflwRsxZPcIBvNXgjXO3vQKSLctXGLTpcBPLnWPS8A=="
       },
+      "commercehub.infrastructure": {
+        "type": "Project",
+        "dependencies": {
+          "CommerceHub.SharedKernel": "[2.0.0, )",
+          "Hangfire.Core": "[1.8.16, )",
+          "Hangfire.InMemory": "[1.0.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.EntityFrameworkCore": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "Microsoft.EntityFrameworkCore": "[10.0.0, )",
+          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "[1.10.0, )",
+          "OpenTelemetry.Extensions.Hosting": "[1.10.0, )",
+          "OpenTelemetry.Instrumentation.AspNetCore": "[1.10.1, )",
+          "OpenTelemetry.Instrumentation.EntityFrameworkCore": "[1.0.0-beta.9, )",
+          "OpenTelemetry.Instrumentation.Http": "[1.11.0, )",
+          "Serilog": "[4.1.0, )",
+          "StackExchange.Redis": "[2.9.17, )",
+          "prometheus-net": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.identity.application": {
         "type": "Project",
         "dependencies": {
@@ -996,7 +1030,8 @@
           "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
           "MassTransit": "[8.3.3, )",
           "MediatR": "[12.4.1, )",
-          "Microsoft.EntityFrameworkCore": "[10.0.0, )"
+          "Microsoft.EntityFrameworkCore": "[10.0.0, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.0, )"
         }
       },
       "commercehub.modules.identity.domain": {
@@ -1009,12 +1044,15 @@
         "type": "Project",
         "dependencies": {
           "BCrypt.Net-Next": "[4.0.3, )",
+          "CommerceHub.Infrastructure": "[2.0.0, )",
           "CommerceHub.Modules.Identity.Application": "[2.0.0, )",
           "CommerceHub.Modules.Identity.Domain": "[2.0.0, )",
           "CommerceHub.SharedKernel": "[2.0.0, )",
           "MassTransit": "[8.3.3, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )",
+          "Otp.NET": "[1.4.1, )",
           "System.IdentityModel.Tokens.Jwt": "[8.4.0, )"
         }
       },

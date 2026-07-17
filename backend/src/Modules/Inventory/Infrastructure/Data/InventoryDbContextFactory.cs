@@ -10,6 +10,7 @@ public class InventoryDbContextFactory : IDesignTimeDbContextFactory<InventoryDb
         var optionsBuilder = new DbContextOptionsBuilder<InventoryDbContext>();
         var conn = Environment.GetEnvironmentVariable("INVENTORY_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_inventory;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new InventoryDbContext(optionsBuilder.Options);
     }

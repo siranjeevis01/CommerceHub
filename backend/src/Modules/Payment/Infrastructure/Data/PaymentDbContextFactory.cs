@@ -10,6 +10,7 @@ public class PaymentDbContextFactory : IDesignTimeDbContextFactory<PaymentDbCont
         var optionsBuilder = new DbContextOptionsBuilder<PaymentDbContext>();
         var conn = Environment.GetEnvironmentVariable("PAYMENT_DB_CONNECTION")
             ?? "server=localhost;database=commercehub_payment;user=root;password=root";
+        if (!conn.Contains("SslMode")) conn += ";SslMode=Required;AllowPublicKeyRetrieval=true";
         optionsBuilder.UseMySQL(conn);
         return new PaymentDbContext(optionsBuilder.Options);
     }

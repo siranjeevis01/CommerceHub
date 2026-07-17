@@ -11,12 +11,16 @@
     <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.7" />
     <PackageReference Include="MassTransit" Version="8.3.3" />
+    <PackageReference Include="EPPlus" Version="7.5.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\CommerceHub.Modules.Analytics.Domain.csproj" />
     <ProjectReference Include="..\..\..\SharedKernel\CommerceHub.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Contracts\CommerceHub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Messaging\CommerceHub.Shared.Messaging.csproj" />
+    <ProjectReference Include="..\..\Order\Application\CommerceHub.Modules.Order.Application.csproj" />
   </ItemGroup>
 </Project>
 

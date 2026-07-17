@@ -1,0 +1,139 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/orders" text="" icon="chevron-back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Order Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading -->
+  <div class="loading-skeleton" *ngIf="isLoading">
+    <div class="skeleton-block h200"></div>
+    <div class="skeleton-block h120"></div>
+    <div class="skeleton-block h160"></div>
+  </div>
+
+  <div *ngIf="!isLoading && order">
+    <!-- Order Header -->
+    <div class="order-header glass-card">
+      <div class="order-id-row">
+        <div>
+          <span class="label">Order</span>
+          <span class="order-number">#{{ order.orderNumber }}</span>
+        </div>
+        <span
+          class="status-pill"
+          [style.background]="getStatusColor(order.status) + '20'"
+          [style.color]="getStatusColor(order.status)"
+        >
+          {{ order.status }}
+        </span>
+      </div>
+      <p class="order-date">Placed on {{ order.createdAt | date:'medium' }}</p>
+    </div>
+
+    <!-- Status Timeline -->
+    <div class="timeline-card glass-card">
+      <h3 class="card-title">Order Timeline</h3>
+      <div class="timeline">
+        <div
+          *ngFor="let step of timelineSteps; let last = last"
+          class="timeline-step"
+          [class]="getTimelineStatus(step.key)"
+        >
+          <div class="step-indicator">
+            <div class="step-dot">
+              <ion-icon [name]="step.icon"></ion-icon>
+            </div>
+            <div class="step-line" *ngIf="!last"></div>
+          </div>
+          <div class="step-content">
+            <span class="step-label">{{ step.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Info -->
+    <div class="tracking-card glass-card" *ngIf="order.tracking?.length">
+      <h3 class="card-title">
+        <ion-icon name="navigate-outline"></ion-icon>
+        Tracking
+      </h3>
+      <div class="tracking-item" *ngFor="let track of order.tracking">
+        <div class="tracking-dot"></div>
+        <div class="tracking-info">
+          <span class="tracking-status">{{ track.status }}</span>
+          <span class="tracking-note">{{ track.note }}</span>
+          <span class="tracking-date">{{ track.updatedAt | date:'short' }}</span>
+          <span class="tracking-number" *ngIf="track.trackingNumber">
+            {{ track.carrier }}: {{ track.trackingNumber }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="items-card glass-card">
+      <h3 class="card-title">Items</h3>
+      <div class="order-item" *ngFor="let item of order.items">
+        <img [src]="item.imageUrl" [alt]="item.productName" class="item-thumb" />
+        <div class="item-details">
+          <span class="item-name">{{ item.productName }}</span>
+          <span class="item-meta">Qty: {{ item.quantity }} &times; {{ item.unitPrice | currency }}</span>
+        </div>
+        <span class="item-subtotal">{{ item.subtotal | currency }}</span>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-card glass-card">
+      <h3 class="card-title">Order Summary</h3>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>{{ order.subtotal | currency }}</span>
+      </div>
+      <div class="summary-row" *ngIf="order.discount > 0">
+        <span>Discount</span>
+        <span class="discount">-{{ order.discount | currency }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>{{ order.shippingCost === 0 ? 'Free' : (order.shippingCost | currency) }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Tax</span>
+        <span>{{ order.tax | currency }}</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span class="total-amount">{{ order.totalAmount | currency }}</span>
+      </div>
+    </div>
+
+    <!-- Payment & Address Info -->
+    <div class="info-card glass-card">
+      <div class="info-row">
+        <div class="info-block">
+          <span class="info-label">Payment</span>
+          <span class="info-value">{{ order.paymentMethod }}</span>
+          <span
+            class="payment-status"
+            [style.color]="getPaymentStatusColor()"
+          >
+            {{ order.paymentStatus }}
+          </span>
+        </div>
+        <div class="info-block">
+          <span class="info-label">Delivery Address</span>
+          <span class="info-value">{{ order.shippingAddress }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+</ion-content>

@@ -1,0 +1,321 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="home-toolbar">
+    <ion-buttons slot="start">
+      <div class="greeting-block">
+        <span class="greeting-label">Hello,</span>
+        <span class="greeting-name">{{ user.firstName || 'Guest' }} &#x1F44B;</span>
+      </div>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="icon-btn" (click)="navigateToSearch()">
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  class="home-content"
+  [fullscreen]="true"
+  (ionScroll)="onScroll($event)"
+>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle"
+      refreshingSpinner="crescent"
+      pullingText="Pull to refresh"
+      refreshingText="Refreshing..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Search Bar -->
+  <div class="search-bar-container" (click)="navigateToSearch()">
+    <div class="search-bar-glass">
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+      <span class="search-placeholder">Search products, brands, categories...</span>
+      <div class="search-mic-icon">
+        <ion-icon name="mic-outline"></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banners / Carousel -->
+  <section class="banner-section" *ngIf="banners.length > 0">
+    <div
+      #bannerSlider
+      class="banner-slider"
+      (scroll)="onBannerScroll($event)"
+    >
+      <div
+        *ngFor="let banner of banners; trackBy: trackByBanner"
+        class="banner-slide"
+        [style.background]="banner.gradient || 'linear-gradient(135deg, #6366f1, #8b5cf6)'"
+      >
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+          <span class="banner-tag">Limited Offer</span>
+          <h2 class="banner-title">{{ banner.title }}</h2>
+          <p class="banner-subtitle">{{ banner.subtitle }}</p>
+          <button class="banner-cta">
+            Shop Now
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        </div>
+        <div class="banner-decoration">
+          <div class="deco-circle deco-1"></div>
+          <div class="deco-circle deco-2"></div>
+          <div class="deco-circle deco-3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="banner-dots">
+      <span
+        *ngFor="let banner of banners; let i = index"
+        class="dot"
+        [class.active]="i === bannerIndex"
+      ></span>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories-section" *ngIf="categories.length > 0">
+    <div class="section-header">
+      <h3 class="section-title">
+        <ion-icon name="grid-outline"></ion-icon>
+        Categories
+      </h3>
+      <button class="see-all-btn" (click)="navigateToSearch()">
+        See All
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+    <div class="categories-scroll">
+      <div
+        *ngFor="let category of categories; trackBy: trackByCategory"
+        class="category-chip"
+        (click)="navigateToCategory(category)"
+      >
+        <div class="category-icon-wrapper">
+          <img
+            *ngIf="category.imageUrl"
+            [src]="category.imageUrl"
+            [alt]="category.name"
+            class="category-image"
+          />
+          <ion-icon
+            *ngIf="!category.imageUrl"
+            [name]="category.icon || 'bag-handle-outline'"
+            class="category-icon"
+          ></ion-icon>
+        </div>
+        <span class="category-name">{{ category.name }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flash Deals -->
+  <section class="flash-deals-section" *ngIf="flashDeals.length > 0">
+    <div class="section-header">
+      <div class="section-title-row">
+        <h3 class="section-title flash-title">
+          <ion-icon name="flash-outline" class="flash-icon"></ion-icon>
+          Flash Deals
+        </h3>
+        <div class="countdown-badge">
+          <span class="countdown-block">{{ flashDealTimeLeft.hours | number:'2.0-0' }}</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-block">{{ flashDealTimeLeft.minutes | number:'2.0-0' }}</span>
+          <span class="countdown-sep">:</span>
+          <span class="countdown-block">{{ flashDealTimeLeft.seconds | number:'2.0-0' }}</span>
+        </div>
+      </div>
+      <button class="see-all-btn" (click)="navigateToFlashDeals()">
+        See All
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+    <div class="flash-deals-scroll">
+      <div
+        *ngFor="let product of flashDeals; trackBy: trackByProduct"
+        class="flash-card"
+        (click)="navigateToProduct(product)"
+      >
+        <div class="flash-card-image">
+          <img
+            *ngIf="product.imageUrl"
+            [src]="product.imageUrl"
+            [alt]="product.name"
+          />
+          <div *ngIf="!product.imageUrl" class="flash-card-placeholder">
+            <ion-icon name="flash-outline"></ion-icon>
+          </div>
+          <span class="flash-discount" *ngIf="getDiscountPercent(product) > 0">
+            -{{ getDiscountPercent(product) }}%
+          </span>
+        </div>
+        <div class="flash-card-info">
+          <h4 class="flash-card-name">{{ product.name }}</h4>
+          <div class="flash-card-pricing">
+            <span class="flash-card-price">{{ formatPrice(product.price) }}</span>
+            <span class="flash-card-original" *ngIf="product.comparePrice">
+              {{ formatPrice(product.comparePrice) }}
+            </span>
+          </div>
+          <div class="flash-card-rating" *ngIf="product.ratings">
+            <ion-icon
+              *ngFor="let star of getRatingArray(product.ratings)"
+              [name]="star === 1 ? 'star' : 'star-outline'"
+              class="star-icon"
+            ></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-section" *ngIf="featuredProducts.length > 0">
+    <div class="section-header">
+      <h3 class="section-title">
+        <ion-icon name="diamond-outline"></ion-icon>
+        Featured Products
+      </h3>
+      <button class="see-all-btn" (click)="navigateToSearch()">
+        See All
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+    <div class="products-grid">
+      <div
+        *ngFor="let product of featuredProducts; trackBy: trackByProduct"
+        class="product-card"
+        (click)="navigateToProduct(product)"
+      >
+        <div class="product-card-image">
+          <img
+            *ngIf="product.imageUrl"
+            [src]="product.imageUrl"
+            [alt]="product.name"
+          />
+          <div *ngIf="!product.imageUrl" class="product-card-placeholder">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+          </div>
+          <span class="product-discount" *ngIf="getDiscountPercent(product) > 0">
+            -{{ getDiscountPercent(product) }}%
+          </span>
+          <button class="product-fav-btn" (click)="$event.stopPropagation()">
+            <ion-icon name="heart-outline"></ion-icon>
+          </button>
+        </div>
+        <div class="product-card-body">
+          <h4 class="product-card-name">{{ product.name }}</h4>
+          <div class="product-card-rating" *ngIf="product.ratings">
+            <div class="stars">
+              <ion-icon
+                *ngFor="let star of getRatingArray(product.ratings)"
+                [name]="star === 1 ? 'star' : 'star-outline'"
+                class="star-icon"
+              ></ion-icon>
+            </div>
+            <span class="rating-text">{{ product.ratings }}</span>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-pricing">
+              <span class="product-price">{{ formatPrice(product.price) }}</span>
+              <span class="product-original" *ngIf="product.comparePrice">
+                {{ formatPrice(product.comparePrice) }}
+              </span>
+            </div>
+            <button
+              class="add-to-cart-btn"
+              (click)="addToCart($event, product)"
+              aria-label="Add to cart"
+            >
+              <ion-icon name="add-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommended Products -->
+  <section class="recommended-section" *ngIf="recommendedProducts.length > 0">
+    <div class="section-header">
+      <h3 class="section-title">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        Recommended For You
+      </h3>
+    </div>
+    <div class="products-grid">
+      <div
+        *ngFor="let product of recommendedProducts; trackBy: trackByProduct"
+        class="product-card"
+        (click)="navigateToProduct(product)"
+      >
+        <div class="product-card-image">
+          <img
+            *ngIf="product.imageUrl"
+            [src]="product.imageUrl"
+            [alt]="product.name"
+          />
+          <div *ngIf="!product.imageUrl" class="product-card-placeholder">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+          </div>
+          <span class="product-discount" *ngIf="getDiscountPercent(product) > 0">
+            -{{ getDiscountPercent(product) }}%
+          </span>
+          <button class="product-fav-btn" (click)="$event.stopPropagation()">
+            <ion-icon name="heart-outline"></ion-icon>
+          </button>
+        </div>
+        <div class="product-card-body">
+          <h4 class="product-card-name">{{ product.name }}</h4>
+          <div class="product-card-rating" *ngIf="product.ratings">
+            <div class="stars">
+              <ion-icon
+                *ngFor="let star of getRatingArray(product.ratings)"
+                [name]="star === 1 ? 'star' : 'star-outline'"
+                class="star-icon"
+              ></ion-icon>
+            </div>
+            <span class="rating-text">{{ product.ratings }}</span>
+          </div>
+          <div class="product-card-footer">
+            <div class="product-pricing">
+              <span class="product-price">{{ formatPrice(product.price) }}</span>
+              <span class="product-original" *ngIf="product.comparePrice">
+                {{ formatPrice(product.comparePrice) }}
+              </span>
+            </div>
+            <button
+              class="add-to-cart-btn"
+              (click)="addToCart($event, product)"
+              aria-label="Add to cart"
+            >
+              <ion-icon name="add-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading" class="skeleton-container">
+    <div class="skeleton-banner"></div>
+    <div class="skeleton-categories">
+      <div class="skeleton-category" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    </div>
+    <div class="skeleton-section-title"></div>
+    <div class="skeleton-products-grid">
+      <div class="skeleton-product" *ngFor="let i of [1,2,3,4]">
+        <div class="skeleton-product-image"></div>
+        <div class="skeleton-product-text"></div>
+        <div class="skeleton-product-text short"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-spacer"></div>
+</ion-content>

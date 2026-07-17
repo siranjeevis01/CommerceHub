@@ -6,11 +6,13 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
+      - "mobile/**"
   pull_request:
     branches: [main]
     paths:
       - "backend/**"
       - "frontend/**"
+      - "mobile/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -95,3 +97,35 @@ jobs:
               exit 1
             fi
           done
+
+  mobile-build:
+    name: Mobile (Ionic) Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Build mobile app
+        working-directory: mobile
+        run: npx ng build --configuration production
+        env:
+          NODE_ENV: production
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-build
+          path: mobile/www/
+          retention-days: 7

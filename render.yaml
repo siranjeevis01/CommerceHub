@@ -2,21 +2,17 @@ services:
   - type: web
     name: commercehub-api
     runtime: docker
-    dockerfilePath: Dockerfile
+    dockerfilePath: docker/Dockerfile
     plan: free
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ASPNETCORE_URLS
         value: "http://+:8080"
-      - key: JWT_KEY
-        sync: false
       - key: JWT_ISSUER
         value: CommerceHub
       - key: JWT_AUDIENCE
         value: CommerceHubClient
-      - key: ALLOWED_ORIGINS
-        value: "https://commercehub-siranjeevis01.web.app"
       - key: RABBITMQ_HOST
         sync: false
       - key: RABBITMQ_USER
@@ -26,6 +22,8 @@ services:
       - key: RABBITMQ_VHOST
         sync: false
       - key: REDIS_CONNECTION_STRING
+        sync: false
+      - key: JWT_KEY
         sync: false
       - key: IDENTITY_DB_CONNECTION
         sync: false
@@ -49,12 +47,8 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
-      - key: MEILISEARCH_URL
-        sync: false
-      - key: MEILISEARCH_API_KEY
-        sync: false
       - key: SMTP_HOST
-        value: "smtp.gmail.com"
+        value: smtp.gmail.com
       - key: SMTP_PORT
         value: "587"
       - key: SMTP_USER
@@ -78,12 +72,14 @@ services:
       - key: UPI_ID
         sync: false
       - key: UPI_MERCHANT_NAME
-        sync: false
+        value: CommerceHub
       - key: SEED__ENABLED
         value: "true"
       - key: SEED__ADMINEMAIL
-        value: "admin@commercehub.com"
+        sync: false
       - key: SEED__ADMINPASSWORD
         sync: false
+      - key: ALLOWED_ORIGINS
+        value: "https://commercehub-siranjeevis01.web.app,https://commerce-mobile-siranjeevis01.web.app,http://localhost:4200,http://localhost:8100"
     healthCheckPath: /health
     autoDeploy: true

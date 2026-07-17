@@ -28,9 +28,9 @@
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer": {
         "type": "Direct",
-        "requested": "[10.0.0, )",
-        "resolved": "10.0.0",
-        "contentHash": "0BgDfT1GoZnzjJOBwx5vFMK5JtqsTEas9pCEwd1/KKxNUAqFmreN60WeUoF+CsmSd9tOQuqWedvdBo/QqHuNTQ==",
+        "requested": "[10.0.7, )",
+        "resolved": "10.0.7",
+        "contentHash": "g8klpd7OFJfJOq1EJKcBO8C8I8Dp0QUWoKDPUvvJYe+xunVyBHq6YxfF2CAc6+rkniV25iaWl+6RK87c25n4lA==",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         }
@@ -139,6 +139,19 @@
         "resolved": "2.6.2",
         "contentHash": "7oWOcvnntmMKNzDLsdxAYqApt+AjpRpP2CShjMfIa3umZ42UQMvH0tl1qAliYPNYO6vTdcGMqnRrCPmsfzTI1w=="
       },
+      "Elastic.Clients.Elasticsearch": {
+        "type": "Transitive",
+        "resolved": "8.17.1",
+        "contentHash": "H1TI5dMB/si8GzoEy17sgjzr8frO+nURIjfgoHFg3AOGugbvPwm4FzCNLk+R++vdPOmsQ3wS0NZPH3VufP4HcQ==",
+        "dependencies": {
+          "Elastic.Transport": "0.5.7"
+        }
+      },
+      "Elastic.Transport": {
+        "type": "Transitive",
+        "resolved": "0.5.7",
+        "contentHash": "0VQhS6RauOqydF1bUs7nqpk9u8X2Sa2O7djiioD5b/jWf/cX6S7GcmlWzqvm2j1a+np1Q79B2SwEFOI2zMkcbw=="
+      },
       "Elasticsearch.Net": {
         "type": "Transitive",
         "resolved": "7.17.5",
@@ -182,6 +195,15 @@
         "type": "Transitive",
         "resolved": "11.11.0",
         "contentHash": "cyIVdQBwSipxWG8MA3Rqox7iNbUNUTK5bfJi9tIdm4CAfH71Oo5ABLP4/QyrUwuakqpUEPGtE43BDddvEehuYw=="
+      },
+      "FluentValidation.AspNetCore": {
+        "type": "Transitive",
+        "resolved": "11.3.0",
+        "contentHash": "jtFVgKnDFySyBlPS8bZbTKEEwJZnn11rXXJ2SQnjDhZ56rQqybBg9Joq4crRLz3y0QR8WoOq4iE4piV81w/Djg==",
+        "dependencies": {
+          "FluentValidation": "11.5.1",
+          "FluentValidation.DependencyInjectionExtensions": "11.5.1"
+        }
       },
       "FluentValidation.DependencyInjectionExtensions": {
         "type": "Transitive",
@@ -780,6 +802,11 @@
           "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.11.1, 2.0.0)"
         }
       },
+      "Otp.NET": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "UXjZ80T6BfVACJWmEcz4UFZ93hwX3STKojKvVpPk3qUhubjnLwIiZMsI4Hh91HhYxC0JlatNdNrVK2wkv4O9/Q=="
+      },
       "Pipelines.Sockets.Unofficial": {
         "type": "Transitive",
         "resolved": "2.2.8",
@@ -1124,17 +1151,36 @@
           "MySql.EntityFrameworkCore": "[10.0.7, )"
         }
       },
+      "commercehub.modules.ai.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "CommerceHub.Modules.Ai.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Ai.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
+          "MediatR": "[12.4.1, )",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.7, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.analytics.application": {
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[16.2.0, )",
           "CommerceHub.Modules.Analytics.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Order.Application": "[2.0.0, )",
           "CommerceHub.Shared.Contracts": "[2.0.0, )",
           "CommerceHub.Shared.Messaging": "[2.0.0, )",
           "CommerceHub.SharedKernel": "[2.0.0, )",
+          "EPPlus": "[7.5.2, )",
           "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
           "MassTransit": "[8.3.3, )",
-          "MediatR": "[12.4.1, )"
+          "MediatR": "[12.4.1, )",
+          "Microsoft.EntityFrameworkCore": "[10.0.7, )"
         }
       },
       "commercehub.modules.analytics.domain": {
@@ -1149,7 +1195,7 @@
           "EPPlus": "[7.5.2, )",
           "MassTransit": "[8.3.3, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, )",
+          "MySql.EntityFrameworkCore": "[10.0.7, )",
           "QuestPDF": "[2024.12.0, )"
         }
       },
@@ -1201,6 +1247,24 @@
           "StackExchange.Redis": "[2.9.17, )"
         }
       },
+      "commercehub.modules.cart.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "CommerceHub.Modules.Cart.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Cart.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Cart.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "CommerceHub.Shared.Messaging": "[2.0.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "MediatR": "[12.4.1, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.cms.application": {
         "type": "Project",
         "dependencies": {
@@ -1227,6 +1291,22 @@
           "StackExchange.Redis": "[2.9.17, )"
         }
       },
+      "commercehub.modules.cms.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "AutoMapper": "[16.2.0, )",
+          "CommerceHub.Modules.Cms.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Cms.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
+          "MediatR": "[12.4.1, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.identity.application": {
         "type": "Project",
         "dependencies": {
@@ -1251,13 +1331,32 @@
         "type": "Project",
         "dependencies": {
           "BCrypt.Net-Next": "[4.0.3, )",
+          "CommerceHub.Infrastructure": "[2.0.0, )",
           "CommerceHub.Modules.Identity.Application": "[2.0.0, )",
           "CommerceHub.Modules.Identity.Domain": "[2.0.0, )",
           "CommerceHub.SharedKernel": "[2.0.0, )",
           "MassTransit": "[8.3.3, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )",
+          "Otp.NET": "[1.4.1, )",
           "System.IdentityModel.Tokens.Jwt": "[8.4.0, )"
+        }
+      },
+      "commercehub.modules.identity.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "CommerceHub.Modules.Identity.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Identity.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Identity.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "FluentValidation.AspNetCore": "[11.3.0, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.0, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
         }
       },
       "commercehub.modules.inventory.application": {
@@ -1286,6 +1385,24 @@
           "MassTransit": "[8.3.3, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )"
+        }
+      },
+      "commercehub.modules.inventory.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "CommerceHub.Modules.Inventory.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Inventory.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "CommerceHub.Shared.Messaging": "[2.0.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "MediatR": "[12.4.1, )",
+          "Microsoft.EntityFrameworkCore.Design": "[10.0.7, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
         }
       },
       "commercehub.modules.notification.application": {
@@ -1372,6 +1489,26 @@
           "MySql.EntityFrameworkCore": "[10.0.7, )"
         }
       },
+      "commercehub.modules.order.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "AutoMapper": "[16.2.0, )",
+          "CommerceHub.Modules.Order.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Order.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Order.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.EntityFrameworkCore": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "MediatR": "[12.4.1, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.payment.application": {
         "type": "Project",
         "dependencies": {
@@ -1382,7 +1519,8 @@
           "CommerceHub.SharedKernel": "[2.0.0, )",
           "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
           "MassTransit": "[8.3.3, )",
-          "MediatR": "[12.4.1, )"
+          "MediatR": "[12.4.1, )",
+          "QuestPDF": "[2024.12.0, )"
         }
       },
       "commercehub.modules.payment.domain": {
@@ -1458,6 +1596,29 @@
           "StackExchange.Redis": "[2.9.17, )"
         }
       },
+      "commercehub.modules.product.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "AutoMapper": "[16.2.0, )",
+          "CommerceHub.Modules.Product.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Product.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Product.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "CommerceHub.SharedKernel": "[2.0.0, )",
+          "Elastic.Clients.Elasticsearch": "[8.17.1, )",
+          "FluentValidation.AspNetCore": "[11.3.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[11.11.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.EntityFrameworkCore": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "MediatR": "[12.4.1, )",
+          "Microsoft.EntityFrameworkCore.Design": "[10.0.7, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
+        }
+      },
       "commercehub.modules.vendor.application": {
         "type": "Project",
         "dependencies": {
@@ -1484,6 +1645,26 @@
           "MassTransit": "[8.3.3, )",
           "Microsoft.EntityFrameworkCore": "[10.0.7, )",
           "MySql.EntityFrameworkCore": "[10.0.7, )"
+        }
+      },
+      "commercehub.modules.vendor.presentation": {
+        "type": "Project",
+        "dependencies": {
+          "Asp.Versioning.Mvc": "[8.1.0, )",
+          "Asp.Versioning.Mvc.ApiExplorer": "[8.1.0, )",
+          "AutoMapper": "[16.2.0, )",
+          "CommerceHub.Modules.Vendor.Application": "[2.0.0, )",
+          "CommerceHub.Modules.Vendor.Domain": "[2.0.0, )",
+          "CommerceHub.Modules.Vendor.Infrastructure": "[2.0.0, )",
+          "CommerceHub.ServiceDefaults": "[2.0.0, )",
+          "CommerceHub.Shared.Messaging": "[2.0.0, )",
+          "MassTransit": "[8.3.3, )",
+          "MassTransit.RabbitMQ": "[8.3.3, )",
+          "MediatR": "[12.4.1, )",
+          "Microsoft.EntityFrameworkCore.Design": "[10.0.7, )",
+          "Serilog.AspNetCore": "[9.0.0, )",
+          "Swashbuckle.AspNetCore": "[7.2.0, )",
+          "prometheus-net.AspNetCore": "[8.2.1, )"
         }
       },
       "commercehub.servicedefaults": {
