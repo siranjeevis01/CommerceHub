@@ -221,7 +221,18 @@ builder.Services.AddOutputCache(options =>
 });
 
 // ========== API VERSIONING + SWAGGER ==========
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(CommerceHub.Modules.Identity.Presentation.Controllers.AuthController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Product.Presentation.Controllers.ProductController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Order.Presentation.Controllers.OrderController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Cart.Presentation.Controllers.CartController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Payment.Presentation.Controllers.PaymentController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Vendor.Presentation.Controllers.VendorController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Inventory.Presentation.Controllers.InventoryController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Notification.Presentation.Controllers.NotificationController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Cms.Presentation.Controllers.MenuController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Analytics.Presentation.Controllers.AnalyticsController).Assembly)
+    .AddApplicationPart(typeof(CommerceHub.Modules.Ai.Presentation.Controllers.ChatController).Assembly);
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
