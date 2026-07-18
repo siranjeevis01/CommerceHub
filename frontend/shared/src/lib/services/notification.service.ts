@@ -7,7 +7,7 @@ import { environment } from '@env/environment';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private hubConnection!: signalR.HubConnection;
+  private hubConnection: signalR.HubConnection | null = null;
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   notifications$ = this.notificationsSubject.asObservable();
   private unreadCountSubject = new BehaviorSubject<number>(0);
@@ -45,7 +45,10 @@ export class NotificationService {
   }
 
   private stopConnection(): void {
-    this.hubConnection?.stop();
+    if (this.hubConnection) {
+      this.hubConnection.stop().catch(() => {});
+      this.hubConnection = null;
+    }
   }
 
   markAllAsRead(): void {

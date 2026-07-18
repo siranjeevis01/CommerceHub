@@ -248,6 +248,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "CommerceHub API", Version = "v1", Description = "CommerceHub multi-vendor e-commerce modular monolith API" });
     options.CustomSchemaIds(t => t.FullName?.Replace("CommerceHub.", "").Replace("+", "."));
+    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "binary" });
 });
 
 // ========== MODULE REGISTRATION ==========
