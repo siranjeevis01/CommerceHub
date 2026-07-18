@@ -24,10 +24,10 @@ public class VendorDocumentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetDocuments(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetDocuments()
     {
         var userId = GetCurrentUserId();
-        var result = await _documentService.GetDocumentsAsync(userId, cancellationToken);
+        var result = await _documentService.GetDocumentsAsync(userId, CancellationToken.None);
         return Ok(new { Success = true, Data = result });
     }
 
@@ -35,22 +35,21 @@ public class VendorDocumentController : ControllerBase
     [DisableRequestSizeLimit]
     public async Task<IActionResult> UploadDocument(
         [FromForm] string documentType,
-        [FromForm] IFormFile file,
-        CancellationToken cancellationToken)
+        [FromForm] IFormFile file)
     {
         if (file is null || file.Length == 0)
             return BadRequest(new { Success = false, Message = "No file uploaded" });
 
         var userId = GetCurrentUserId();
         using var stream = file.OpenReadStream();
-        var result = await _documentService.UploadDocumentAsync(userId, documentType, stream, file.FileName, cancellationToken);
+        var result = await _documentService.UploadDocumentAsync(userId, documentType, stream, file.FileName, CancellationToken.None);
         return Ok(new { Success = true, Data = result });
     }
 
     [HttpDelete("{documentId}")]
-    public async Task<IActionResult> DeleteDocument(int documentId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteDocument(int documentId)
     {
-        var success = await _documentService.DeleteDocumentAsync(documentId, cancellationToken);
+        var success = await _documentService.DeleteDocumentAsync(documentId, CancellationToken.None);
         if (!success)
             return NotFound(new { Success = false, Message = "Document not found" });
 

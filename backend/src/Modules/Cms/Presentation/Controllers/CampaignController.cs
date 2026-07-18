@@ -19,8 +19,18 @@ public class CampaignController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Campaign campaign)
+    public async Task<IActionResult> Create([FromBody] CreateCampaignRequest request)
     {
+        var campaign = new Campaign
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Type = request.DiscountType,
+            DiscountPercentage = request.DiscountValue,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            IsActive = request.IsActive
+        };
         _db.Campaigns.Add(campaign);
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = campaign });
@@ -28,15 +38,17 @@ public class CampaignController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Campaign updated)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateCampaignRequest request)
     {
         var campaign = await _db.Campaigns.FindAsync(id);
         if (campaign == null) return NotFound();
-        campaign.Name = updated.Name;
-        campaign.DiscountPercentage = updated.DiscountPercentage;
-        campaign.FixedDiscount = updated.FixedDiscount;
-        campaign.StartDate = updated.StartDate;
-        campaign.EndDate = updated.EndDate;
+        campaign.Name = request.Name;
+        campaign.Description = request.Description;
+        campaign.Type = request.DiscountType;
+        campaign.DiscountPercentage = request.DiscountValue;
+        campaign.StartDate = request.StartDate;
+        campaign.EndDate = request.EndDate;
+        campaign.IsActive = request.IsActive;
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = campaign });
     }
@@ -52,3 +64,7 @@ public class CampaignController : ControllerBase
         return Ok(new { Success = true, Message = "Campaign deleted" });
     }
 }
+
+public record CreateCampaignRequest(string Name, string? Description, string DiscountType, decimal? DiscountValue, decimal? MinimumOrderAmount, DateTime StartDate, DateTime EndDate, bool IsActive);
+
+public record UpdateCampaignRequest(int Id, string Name, string? Description, string DiscountType, decimal? DiscountValue, decimal? MinimumOrderAmount, DateTime StartDate, DateTime EndDate, bool IsActive);

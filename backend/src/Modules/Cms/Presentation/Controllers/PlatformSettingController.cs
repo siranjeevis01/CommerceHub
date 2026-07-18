@@ -19,8 +19,14 @@ public class PlatformSettingController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] PlatformSetting setting)
+    public async Task<IActionResult> Create([FromBody] CreatePlatformSettingRequest request)
     {
+        var setting = new PlatformSetting
+        {
+            Key = request.Key,
+            Value = request.Value,
+            Description = request.Description
+        };
         _db.PlatformSettings.Add(setting);
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = setting });
@@ -28,13 +34,18 @@ public class PlatformSettingController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] PlatformSetting updated)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdatePlatformSettingRequest request)
     {
         var setting = await _db.PlatformSettings.FindAsync(id);
         if (setting == null) return NotFound();
-        setting.Value = updated.Value;
-        setting.Description = updated.Description;
+        setting.Value = request.Value;
+        setting.Description = request.Description;
+        setting.IsActive = request.IsEnabled;
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = setting });
     }
 }
+
+public record CreatePlatformSettingRequest(string Key, string Value, string? Description);
+
+public record UpdatePlatformSettingRequest(int Id, string Value, string? Description, bool IsEnabled);

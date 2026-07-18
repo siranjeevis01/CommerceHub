@@ -19,8 +19,13 @@ public class CommissionController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CommissionConfig config)
+    public async Task<IActionResult> Create([FromBody] CreateCommissionConfigRequest request)
     {
+        var config = new CommissionConfig
+        {
+            TargetId = request.VendorId,
+            Rate = request.CommissionRate
+        };
         _db.Commissions.Add(config);
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = config });
@@ -28,14 +33,16 @@ public class CommissionController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CommissionConfig updated)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateCommissionConfigRequest request)
     {
         var config = await _db.Commissions.FindAsync(id);
         if (config == null) return NotFound();
-        config.Rate = updated.Rate;
-        config.Name = updated.Name;
-        config.Type = updated.Type;
+        config.Rate = request.CommissionRate;
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = config });
     }
 }
+
+public record CreateCommissionConfigRequest(int? VendorId, decimal CommissionRate, decimal? MinimumPayoutAmount, string? PaymentTerms);
+
+public record UpdateCommissionConfigRequest(int Id, int? VendorId, decimal CommissionRate, decimal? MinimumPayoutAmount, string? PaymentTerms);

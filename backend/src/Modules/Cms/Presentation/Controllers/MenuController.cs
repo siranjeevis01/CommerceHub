@@ -22,8 +22,16 @@ public class MenuController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Menu menu)
+    public async Task<IActionResult> Create([FromBody] CreateMenuRequest request)
     {
+        var menu = new Menu
+        {
+            Name = request.Name,
+            DisplayOrder = request.DisplayOrder,
+            Icon = request.Icon,
+            Route = request.Url,
+            ParentMenuId = request.ParentMenuId
+        };
         _db.Menus.Add(menu);
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = menu });
@@ -31,16 +39,15 @@ public class MenuController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Menu updated)
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuRequest request)
     {
         var menu = await _db.Menus.FindAsync(id);
         if (menu == null) return NotFound();
-        menu.Name = updated.Name;
-        menu.Icon = updated.Icon;
-        menu.Route = updated.Route;
-        menu.DisplayOrder = updated.DisplayOrder;
-        menu.IsVisible = updated.IsVisible;
-        menu.ParentMenuId = updated.ParentMenuId;
+        menu.Name = request.Name;
+        menu.Icon = request.Icon;
+        menu.Route = request.Url;
+        menu.DisplayOrder = request.DisplayOrder;
+        menu.ParentMenuId = request.ParentMenuId;
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = menu });
     }
@@ -56,3 +63,7 @@ public class MenuController : ControllerBase
         return Ok(new { Success = true, Message = "Menu deleted" });
     }
 }
+
+public record CreateMenuRequest(string Name, int DisplayOrder, string? Icon, string? Url, int? ParentMenuId);
+
+public record UpdateMenuRequest(int Id, string Name, int DisplayOrder, string? Icon, string? Url, int? ParentMenuId);

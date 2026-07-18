@@ -264,15 +264,16 @@ CommerceHub.Modules.Order.Application.DependencyInjection.AddApplication(builder
 builder.Services.AddOrderInfrastructure(builder.Configuration);
 
 // Cart Module - Use Redis if available, fallback to InMemory
-var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"]
-    ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING");
-if (!string.IsNullOrWhiteSpace(redisConnectionString))
+var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING")
+    ?? builder.Configuration.GetSection("Redis")["ConnectionString"];
+if (!string.IsNullOrWhiteSpace(redisConnectionString) && !redisConnectionString.Contains("${"))
 {
     builder.Services.AddCartInfrastructure(redisConnectionString);
     Log.Information("Cart module using Redis backend");
 }
 else
 {
+    builder.Services.AddDistributedMemoryCache();
     builder.Services.AddCartInfrastructure();
     Log.Warning("Cart module using InMemory backend (Redis not configured)");
 }

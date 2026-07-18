@@ -19,8 +19,14 @@ public class FeatureToggleController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] FeatureToggle toggle)
+    public async Task<IActionResult> Create([FromBody] CreateFeatureToggleRequest request)
     {
+        var toggle = new FeatureToggle
+        {
+            Key = request.Key,
+            Description = request.Description,
+            Enabled = request.IsEnabled
+        };
         _db.FeatureToggles.Add(toggle);
         await _db.SaveChangesAsync();
         return Ok(new { Success = true, Data = toggle });
@@ -37,3 +43,7 @@ public class FeatureToggleController : ControllerBase
         return Ok(new { Success = true, Data = toggle });
     }
 }
+
+public record CreateFeatureToggleRequest(string Name, string Key, string? Description, string? DefaultValue, bool IsEnabled);
+
+public record UpdateFeatureToggleRequest(int Id, string Name, string Key, string? Description, string? DefaultValue, bool IsEnabled);
