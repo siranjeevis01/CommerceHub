@@ -263,7 +263,8 @@ builder.Services.AddProductInfrastructure(builder.Configuration);
 CommerceHub.Modules.Order.Application.DependencyInjection.AddApplication(builder.Services);
 builder.Services.AddOrderInfrastructure(builder.Configuration);
 
-// Cart Module - Use Redis if available, fallback to InMemory
+// Cart Module
+CommerceHub.Modules.Cart.Application.DependencyInjection.AddApplication(builder.Services);
 var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING")
     ?? builder.Configuration.GetSection("Redis")["ConnectionString"];
 if (!string.IsNullOrWhiteSpace(redisConnectionString) && !redisConnectionString.Contains("${"))
