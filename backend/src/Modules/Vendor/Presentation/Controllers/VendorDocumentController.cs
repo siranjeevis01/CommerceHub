@@ -33,6 +33,7 @@ public class VendorDocumentController : ControllerBase
 
     [HttpPost]
     [DisableRequestSizeLimit]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> UploadDocument(
         [FromForm] string documentType,
         [FromForm] IFormFile file)

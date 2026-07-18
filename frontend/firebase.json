@@ -67,6 +67,8 @@
       { "source": "/checkout/**", "destination": "/index.html" },
       { "source": "/orders/**", "destination": "/index.html" },
       { "source": "/auth/**", "destination": "/index.html" },
+      { "source": "/api/**", "destination": "/api/**" },
+      { "source": "/assets/**", "destination": "/assets/**" },
       { "source": "**", "destination": "/index.html" }
     ]
   }
