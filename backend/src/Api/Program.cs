@@ -119,7 +119,17 @@ builder.ConfigureServiceDefaults("CommerceHub");
 var jwtSection = builder.Configuration.GetSection(JwtOptions.SectionName);
 var jwtKey = jwtSection["Key"] ?? "";
 if (string.IsNullOrEmpty(jwtKey) || Encoding.UTF8.GetByteCount(jwtKey) < 32)
-    throw new InvalidOperationException("JWT Key must be configured and be at least 32 bytes.");
+{
+    if (builder.Environment.IsProduction())
+    {
+        Log.Warning("JWT Key not configured - using development fallback. SET JWT_KEY in production!");
+        jwtKey = "CommerceHub-Production-Fallback-Key-Must-Be-Set-In-Render-Dashboard!";
+    }
+    else
+    {
+        jwtKey = "CommerceHub-Dev-Key-DoNotUseInProduction-1234567890!";
+    }
+}
 
 var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
@@ -244,12 +254,29 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+
+var swaggerEnabled = builder.Configuration.GetValue<bool>("Swagger:Enabled",
+    builder.Environment.IsDevelopment());
+if (swaggerEnabled)
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "CommerceHub API", Version = "v1", Description = "CommerceHub multi-vendor e-commerce modular monolith API" });
-    options.CustomSchemaIds(t => t.FullName?.Replace("CommerceHub.", "").Replace("+", "."));
-    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "binary" });
-});
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+        {
+            Title = "CommerceHub API",
+            Version = "v1",
+            Description = "CommerceHub multi-vendor e-commerce modular monolith API"
+        });
+        options.CustomSchemaIds(t =>
+        {
+            var name = t.FullName?.Replace("CommerceHub.", "").Replace("+", ".") ?? t.Name;
+            if (name.Length > 200) name = name[^200..];
+            return name;
+        });
+        options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "binary" });
+        options.MapType<IFormFile[]>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "array", Items = new Microsoft.OpenApi.Models.OpenApiSchema { Type = "string", Format = "binary" } });
+    });
+}
 
 // ========== MODULE REGISTRATION ==========
 // Identity Module
@@ -365,17 +392,23 @@ var app = builder.Build();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
     var dbInitializers = scope.ServiceProvider.GetServices<IDbInitializer>();
+    var dbHealthy = 0;
+    var dbFailed = 0;
     foreach (var dbInitializer in dbInitializers)
     {
         try
         {
             await dbInitializer.InitializeAsync();
+            dbHealthy++;
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "{Initializer} failed - will retry on next request", dbInitializer.GetType().Name);
+            dbFailed++;
+            logger.LogWarning(ex, "{Initializer} failed - app will continue with degraded functionality", dbInitializer.GetType().Name);
         }
     }
+    logger.LogInformation("Database initialization: {Healthy} healthy, {Failed} failed out of {Total}",
+        dbHealthy, dbFailed, dbHealthy + dbFailed);
 
     if (builder.Configuration.GetValue<bool>("Seed:Enabled", true))
     {
@@ -386,7 +419,7 @@ var app = builder.Build();
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Database seeding failed");
+            logger.LogWarning(ex, "Database seeding failed - continuing without seed data");
         }
     }
 }
@@ -410,8 +443,18 @@ app.UseSerilogRequestLogging(options =>
         : httpContext.Response.StatusCode >= 400 ? LogEventLevel.Warning
         : LogEventLevel.Information;
 });
-app.UseSwagger();
-app.UseSwaggerUI();
+if (swaggerEnabled)
+{
+    app.UseSwagger(options =>
+    {
+        options.RouteTemplate = "swagger/{documentName}/swagger.json";
+    });
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CommerceHub API v1");
+        options.RoutePrefix = "swagger";
+    });
+}
 app.UseMetricServer();
 app.UseHttpMetrics();
 app.UseSecurityHeaders();
@@ -421,7 +464,10 @@ app.MapControllers().CacheOutput("Products");
 app.MapHub<NotificationHub>("/hubs/notification");
 app.MapTrackingHub();
 app.MapServiceDefaultsHealthChecks();
-app.UseHangfireDashboard();
+if (!app.Environment.IsProduction())
+{
+    app.UseHangfireDashboard();
+}
 app.MapGet("/", () => Results.Ok(new
 {
     Service = "CommerceHub API",

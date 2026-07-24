@@ -51,6 +51,39 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Verify MFE outputs
+        working-directory: frontend
+        run: |
+          echo "=== Verifying MFE build outputs ==="
+          for mfe in admin vendor storefront; do
+            if [ -f "dist/$mfe/remoteEntry.js" ]; then
+              echo "OK: dist/$mfe/remoteEntry.js exists"
+            else
+              echo "ERROR: dist/$mfe/remoteEntry.js MISSING"
+              exit 1
+            fi
+          done
+
+          echo "=== Verifying shell dist ==="
+          if [ -f "dist/shell/index.html" ]; then
+            echo "OK: dist/shell/index.html exists"
+          else
+            echo "ERROR: dist/shell/index.html MISSING"
+            exit 1
+          fi
+
+          echo "=== Verifying MFEs in shell dist ==="
+          for mfe in admin vendor storefront; do
+            if [ -f "dist/shell/$mfe/remoteEntry.js" ]; then
+              echo "OK: dist/shell/$mfe/remoteEntry.js exists"
+            else
+              echo "ERROR: dist/shell/$mfe/remoteEntry.js MISSING"
+              exit 1
+            fi
+          done
+
+          echo "=== All verifications passed ==="
+
       - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@v13
         with:

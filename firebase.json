@@ -6,6 +6,22 @@
     "trailingSlash": false,
     "headers": [
       {
+        "source": "/index.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" },
+          { "key": "Expires", "value": "0" }
+        ]
+      },
+      {
+        "source": "**/remoteEntry.js",
+        "headers": [
+          { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+          { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=600" },
+          { "key": "Access-Control-Allow-Origin", "value": "*" }
+        ]
+      },
+      {
         "source": "**/*.js",
         "headers": [
           { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },

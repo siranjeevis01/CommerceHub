@@ -7,11 +7,13 @@ public class GlobalExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+    private readonly IHostEnvironment _env;
 
-    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
+    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger, IHostEnvironment env)
     {
         _next = next;
         _logger = logger;
+        _env = env;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -27,19 +29,31 @@ public class GlobalExceptionHandlerMiddleware
         {
             _logger.LogError(ex, "Unhandled exception on {Method} {Path}", context.Request.Method, context.Request.Path);
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            context.Response.ContentType = "application/problem+json";
-
-            var problem = new
+            if (!context.Response.HasStarted)
             {
-                type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                title = "An unexpected error occurred",
-                status = 500,
-                instance = context.Request.Path,
-                detail = ex.Message
-            };
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.ContentType = "application/problem+json";
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
+                var problem = new Dictionary<string, object?>
+                {
+                    ["type"] = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+                    ["title"] = "An unexpected error occurred",
+                    ["status"] = 500,
+                    ["instance"] = context.Request.Path,
+                };
+
+                if (_env.IsDevelopment())
+                {
+                    problem["detail"] = ex.Message;
+                    problem["stackTrace"] = ex.StackTrace?.Split('\n').Take(5).ToArray();
+                }
+                else
+                {
+                    problem["detail"] = "An internal server error occurred. Please try again later.";
+                }
+
+                await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
+            }
         }
     }
 }

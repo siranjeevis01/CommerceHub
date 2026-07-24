@@ -4,9 +4,9 @@ const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV ===
 
 module.exports = withModuleFederationPlugin({
   remotes: isProd ? {
-    admin: '/admin/remoteEntry.js',
-    vendor: '/vendor/remoteEntry.js',
-    storefront: '/storefront/remoteEntry.js',
+    admin: 'admin/remoteEntry.js',
+    vendor: 'vendor/remoteEntry.js',
+    storefront: 'storefront/remoteEntry.js',
   } : {
     admin: 'http://localhost:4201/remoteEntry.js',
     vendor: 'http://localhost:4202/remoteEntry.js',

@@ -81,5 +81,7 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         value: "https://commercehub-siranjeevis01.web.app,https://commerce-mobile-siranjeevis01.web.app,http://localhost:4200,http://localhost:8100"
+      - key: Swagger__Enabled
+        value: "true"
     healthCheckPath: /health
     autoDeploy: true
