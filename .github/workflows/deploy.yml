@@ -27,7 +27,6 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend to Firebase
     runs-on: ubuntu-latest
-    needs: deploy-backend
     environment:
       name: production
       url: https://commercehub-siranjeevis01.web.app
@@ -96,7 +95,6 @@ jobs:
   deploy-mobile-web:
     name: Deploy Mobile Web to Firebase
     runs-on: ubuntu-latest
-    needs: deploy-backend
     environment:
       name: production-mobile
       url: https://commerce-mobile-siranjeevis01.web.app
