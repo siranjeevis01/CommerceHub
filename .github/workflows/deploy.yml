@@ -12,6 +12,8 @@ jobs:
   deploy-backend:
     name: Deploy Backend to Render
     runs-on: ubuntu-latest
+    environment:
+      name: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -87,7 +89,7 @@ jobs:
       - name: Deploy to Firebase Hosting
         uses: w9jds/firebase-action@v13
         with:
-          args: deploy --only hosting --project web
+          args: deploy --only hosting --project commercehub-siranjeevis01
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
@@ -121,6 +123,6 @@ jobs:
       - name: Deploy mobile to Firebase Hosting
         uses: w9jds/firebase-action@v13
         with:
-          args: deploy --only hosting --project mobile --config firebase.mobile.json
+          args: deploy --only hosting --project commerce-mobile-siranjeevis01 --config firebase.mobile.json
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
